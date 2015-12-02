@@ -1,4 +1,4 @@
-package org.usfirst.ftc.exampleteam.yourcodehere;
+package org.swerverobotics.ftc417.yourcodehere;
 
 import android.content.Context;
 import android.media.MediaPlayer;
@@ -19,7 +19,7 @@ import com.qualcomm.ftcrobotcontroller.opmodes.*;
  * important thing is the annotations with which they are decorated.
  *
  * As we've written things here, the code resides in an Android module named 'YourCodeHere' which
- * contains a package named 'org.usfirst.ftc.exampleteam.yourcodehere'. If you wish to change that,
+ * contains a package named 'org.swerverobotics.ftc417.yourcodehere'. If you wish to change that,
  * or to create multiple such modules with different names, that's pretty straightforward: you can
  * begin by copying the entire YourCodeHere folder, then renaming the src\main\java\org\...\yourcodehere
  * path to reflect your new package name, whatever that might be. That new package name will also
