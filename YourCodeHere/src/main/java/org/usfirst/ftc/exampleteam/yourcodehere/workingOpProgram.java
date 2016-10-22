@@ -6,10 +6,10 @@
 package org.usfirst.ftc.exampleteam.yourcodehere;
 
 //Import necessary items
-import com. qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com. qualcomm.robotcore.hardware.*;
-import org. swerverobotics.library.*;
-import org. swerverobotics.library.interfaces.*;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.*;
+import org.swerverobotics.library.*;
+import org.swerverobotics.library.interfaces.*;
 
 
 @TeleOp(name="workingOpProgram") //Name the class
