@@ -1,27 +1,25 @@
+//This is the main remote control program for FTC Velocity Vortex 2016
+//Authors: FTC team [11212??], The Lexington Legoheads
+//In case of questions email anupendra@gmail.com (coach)
+//**********************************************************************************************************
+//Run from the necessary package
 package org.usfirst.ftc.exampleteam.yourcodehere;
 
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.*;
+//Import necessary items
+import com. qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com. qualcomm.robotcore.hardware.*;
+import org. swerverobotics.library.*;
+import org. swerverobotics.library.interfaces.*;
 
-import org.swerverobotics.library.*;
-import org.swerverobotics.library.interfaces.*;
 
-/**
- * A skeletal example of a do-nothing first OpMode. Go ahead and change this code
- * to suit your needs, or create sibling OpModes adjacent to this one in the same
- * Java package.
- */
-@TeleOp(name = "My First OpMode")
-public class MyFirstOpMode extends SynchronousOpMode {
-    /* Declare here any fields you might find useful. */
-    // DcMotor motorLeft = null;
-    // DcMotor motorRight = null;
+@TeleOp(name="workingOpProgram") //Name the class
+public class workingOpProgram extends SynchronousOpMode //CLASS START
+{
     //Define DC Motors
     DcMotor leftMotorFront;
     DcMotor rightMotorFront;
     DcMotor leftMotorBack;
     DcMotor rightMotorBack;
-    DcMotor a;
     //DcMotor elevator;
     //DcMotor spinner;
     //DcMotor shooterLeft;
@@ -30,17 +28,22 @@ public class MyFirstOpMode extends SynchronousOpMode {
     //Define Servo Motors
     Servo doorLeft;
     Servo doorRight;
-    // DcMotor leftMotorFront;
 
     //Define press counts
     //public int aPressCount = 0;
     public int yPressCount = 0;
 
+    //Define floats to be used as joystick and trigger inputs
+    float driveY;
+    float turnX;
+    float leftShift;
+    float rightShift;
+
     //Define servo motor door positions
     final double CLOSED_DOOR_POSITION = 0.0;
     final double OPEN_DOOR_POSITION = 1.0;
-
-    //METHODS BELOW
+    //**********************************************************************************************************
+//METHODS BELOW
     //Create a custom function to count the number of times the button "y" is pressed
     //It toggles button y, so if it has been pressed an odd number of times, the door will be open
     //Otherwise, it will be closed
@@ -56,46 +59,51 @@ public class MyFirstOpMode extends SynchronousOpMode {
             doorRight.setPosition(CLOSED_DOOR_POSITION);
         }
     }
+//Create a custom function to count the number of times the button "a" is pressed
+//It toggles button a, so if it has been pressed an odd number of times, the motor will go forward
+//Otherwise, it will be off
 
-
+    /**
+     * public void toggleButtonA() {
+     * aPressCount = aPressCount + 1;
+     * if (aPressCount % 2 == 1) {
+     * elevator.setPower(1.0);
+     * } else {
+     * elevator.setPower(0.0);
+     * }
+     * }
+     **/
+//***********************************************************************************************************
+//MAIN BELOW
     @Override
-    public void main() throws InterruptedException {
-        /* Initialize our hardware variables. Note that the strings used here as parameters
-         * to 'get' must correspond to the names you assigned during the robot configuration
-         * step you did in the FTC Robot Controller app on the phone.
-         */
-        // this.motorLeft = this.hardwareMap.dcMotor.get("motorLeft");
-        // this.motorRight = this.hardwareMap.dcMotor.get("motorRight");
+    public void main() throws InterruptedException
+    {
         //Get references to the motors from the hardware map
-
-        //Get references to the motors from the hardware map
-        leftMotorFront = hardwareMap.dcMotor.get("left_Front_Drive");
-        rightMotorFront = hardwareMap.dcMotor.get("right_Front_Drive");
-        leftMotorBack = hardwareMap.dcMotor.get("left_Back_Drive");
-        rightMotorFront = hardwareMap.dcMotor.get("right_Back_Drive");
+        leftMotorFront = hardwareMap.dcMotor.get("leftMotorFront");
+        rightMotorFront = hardwareMap.dcMotor.get("rightMotorFront");
+        leftMotorBack = hardwareMap.dcMotor.get("leftMotorBack");
+        rightMotorBack = hardwareMap.dcMotor.get("rightMotorBack");
         //elevator = hardwareMap.dcMotor.get("lift_Ball");
         //spinner = hardwareMap.dcMotor.get("spinner");
-        doorLeft = hardwareMap.servo.get("elevator_Door_Left");
-        doorRight = hardwareMap.servo.get("elevator_Door_Right");
+        doorLeft = hardwareMap.servo.get("doorLeft");
+        doorRight = hardwareMap.servo.get("doorRight");
 
         //Reverse the right motors since it is facing the opposite direction as the left motor
-        rightMotorFront.setDirection(DcMotor.Direction.REVERSE);
-        rightMotorBack.setDirection(DcMotor.Direction.REVERSE);
-
-        // Wait for the game to start
+        leftMotorFront.setDirection(DcMotor.Direction.REVERSE);
+        leftMotorBack.setDirection(DcMotor.Direction.REVERSE);
+//***********************************************************************************************************
+//LOOP BELOW
         waitForStart();
-
-        // Go go gadget robot!
+        //Open loops
         while (opModeIsActive()) {
             if (updateGamepads()) {
-
                 //Set float variables as the inputs from the joystick and the dpad
                 //The negative sign is necessary because pushing the joystick up normally sends the robot backward
                 //Additionally, set float variables as the input from the triggers
-                float driveY = -gamepad1.left_stick_y;
-                float turnX = gamepad1.left_stick_x;
-                float leftShift = gamepad1.left_trigger;
-                float rightShift = gamepad1.right_trigger;
+                driveY = -gamepad1.left_stick_y;
+                turnX = gamepad1.left_stick_x;
+                leftShift = gamepad1.left_trigger;
+                rightShift = gamepad1.right_trigger;
 
 
                 //Set the power of the motors with the joystick inputs
@@ -134,28 +142,36 @@ public class MyFirstOpMode extends SynchronousOpMode {
                     rightMotorFront.setPower(-leftShift);
                     rightMotorBack.setPower(leftShift);
                 }
-                if (leftShift > 0) {
-                    leftMotorFront.setPower(-leftShift);
-                    leftMotorBack.setPower(leftShift);
-                    rightMotorFront.setPower(leftShift);
-                    rightMotorBack.setPower(-leftShift);
-                }
-                else if (rightShift > 0) {
-                    leftMotorFront.setPower(leftShift);
-                    leftMotorBack.setPower(-leftShift);
-                    rightMotorFront.setPower(-leftShift);
-                    rightMotorBack.setPower(leftShift);
-                }
 
+
+                //Attachments code
+
+                //Set the power of the spinner so that it runs for the entire run
+                //spinner.setPower(1.0);
+
+
+                //Set the position of the door in 2 different situations, using the "y" button
+                // The 2nd situation is void
                 if (gamepad2.y) {
                     toggleButtonY();
                 } else { }
 
 
-            }
+                //Set the power of the elevator in 2 different situations, using the "a" button.
+                // The 2nd situation is void
+                //if (gamepad2.a) {
+                //  toggleButtonA();
+                //} else {
+                //}
 
+
+                //Set the power of the football shooter so that it runs for the entire run
+                //shooterLeft.setPower(1.0);
+                //shooterRight.setPower(1.0);
+
+            } //Close inside "if" loop
             telemetry.update();
             idle();
-        }
-    }
-}
+        } //Close outside loop
+    } //Close main
+} //Close class and end program
