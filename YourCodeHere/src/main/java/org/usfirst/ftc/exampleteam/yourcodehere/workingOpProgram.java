@@ -83,8 +83,10 @@ public class workingOpProgram extends SynchronousOpMode //CLASS START
         rightMotorFront = hardwareMap.dcMotor.get("rightMotorFront");
         leftMotorBack = hardwareMap.dcMotor.get("leftMotorBack");
         rightMotorBack = hardwareMap.dcMotor.get("rightMotorBack");
-        //elevator = hardwareMap.dcMotor.get("lift_Ball");
+        //elevator = hardwareMap.dcMotor.get("elevator");
         //spinner = hardwareMap.dcMotor.get("spinner");
+        //shooterLeft = hardwareMap.dcMotor.get("shooterLeft");
+        //shooterRight = hardwareMap.dcMotor.get("shooterRight");
         doorLeft = hardwareMap.servo.get("doorLeft");
         doorRight = hardwareMap.servo.get("doorRight");
 
@@ -137,10 +139,10 @@ public class workingOpProgram extends SynchronousOpMode //CLASS START
                     rightMotorBack.setPower(-leftShift);
                 }
                 else if (rightShift > 0) {
-                    leftMotorFront.setPower(leftShift);
-                    leftMotorBack.setPower(-leftShift);
-                    rightMotorFront.setPower(-leftShift);
-                    rightMotorBack.setPower(leftShift);
+                    leftMotorFront.setPower(rightShift);
+                    leftMotorBack.setPower(-rightShift);
+                    rightMotorFront.setPower(-rightShift);
+                    rightMotorBack.setPower(rightShift);
                 }
 
 
