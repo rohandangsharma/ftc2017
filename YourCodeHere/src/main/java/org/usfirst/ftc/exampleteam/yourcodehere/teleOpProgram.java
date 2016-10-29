@@ -12,8 +12,8 @@ import org.swerverobotics.library.*;
 import org.swerverobotics.library.interfaces.*;
 
 
-@TeleOp(name="workingOpProgram") //Name the class
-public class workingOpProgram extends SynchronousOpMode //CLASS START
+@TeleOp(name="Remote Control Program") //Name the class
+public class teleOpProgram extends SynchronousOpMode //CLASS START
 {
     //Define DC Motors
     DcMotor leftMotorFront;
@@ -36,12 +36,14 @@ public class workingOpProgram extends SynchronousOpMode //CLASS START
     //Define floats to be used as joystick and trigger inputs
     float driveY;
     float turnX;
-    float leftShift;
     float rightShift;
+    float leftShift;
 
     //Define servo motor door positions
-    final double CLOSED_DOOR_POSITION = 0.0;
-    final double OPEN_DOOR_POSITION = 1.0;
+    final double CLOSED_DOOR_POSITION = 0.4;
+    final double OPEN_DOOR_POSITION = 1.2;
+
+
     //**********************************************************************************************************
 //METHODS BELOW
     //Create a custom function to count the number of times the button "y" is pressed
@@ -49,12 +51,15 @@ public class workingOpProgram extends SynchronousOpMode //CLASS START
     //Otherwise, it will be closed
     public void toggleButtonY()
     {
+        doorRight.setDirection(Servo.Direction.REVERSE);
         yPressCount = yPressCount + 1;
         if (yPressCount % 2 == 1) {
+
             doorLeft.setPosition(OPEN_DOOR_POSITION);
             doorRight.setPosition(OPEN_DOOR_POSITION);
         }
         else {
+
             doorLeft.setPosition(CLOSED_DOOR_POSITION);
             doorRight.setPosition(CLOSED_DOOR_POSITION);
         }
@@ -102,10 +107,10 @@ public class workingOpProgram extends SynchronousOpMode //CLASS START
                 //Set float variables as the inputs from the joystick and the dpad
                 //The negative sign is necessary because pushing the joystick up normally sends the robot backward
                 //Additionally, set float variables as the input from the triggers
-                driveY = -gamepad1.left_stick_y;
-                turnX = gamepad1.left_stick_x;
-                leftShift = gamepad1.left_trigger;
-                rightShift = gamepad1.right_trigger;
+                driveY = -gamepad1.left_stick_y / 4;
+                turnX = gamepad1.left_stick_x / 4;
+                leftShift = gamepad1.left_trigger / 4;
+                rightShift = gamepad1.right_trigger / 4;
 
 
                 //Set the power of the motors with the joystick inputs
@@ -117,32 +122,32 @@ public class workingOpProgram extends SynchronousOpMode //CLASS START
 
                 //Set up tank turning on the robot
                 if (turnX > 0) {
-                    leftMotorFront.setPower(turnX);
-                    leftMotorBack.setPower(turnX);
-                    rightMotorFront.setPower(-turnX);
-                    rightMotorBack.setPower(-turnX);
+                    leftMotorFront.setPower(-turnX);
+                    leftMotorBack.setPower(-turnX);
+                    rightMotorFront.setPower(turnX);
+                    rightMotorBack.setPower(turnX);
                 }
                 else if (turnX < 0) {
-                    rightMotorFront.setPower(-turnX);
-                    rightMotorBack.setPower(-turnX);
-                    leftMotorFront.setPower(turnX);
-                    leftMotorBack.setPower(turnX);
+                    rightMotorFront.setPower(turnX);
+                    rightMotorBack.setPower(turnX);
+                    leftMotorFront.setPower(-turnX);
+                    leftMotorBack.setPower(-turnX);
                 }
                 else { }
 
 
                 //Add left and right shift functionality
                 if (leftShift > 0) {
-                    leftMotorFront.setPower(-leftShift);
-                    leftMotorBack.setPower(leftShift);
-                    rightMotorFront.setPower(leftShift);
-                    rightMotorBack.setPower(-leftShift);
+                    leftMotorFront.setPower(leftShift);
+                    leftMotorBack.setPower(-leftShift);
+                    rightMotorFront.setPower(-leftShift);
+                    rightMotorBack.setPower(leftShift);
                 }
                 else if (rightShift > 0) {
-                    leftMotorFront.setPower(rightShift);
-                    leftMotorBack.setPower(-rightShift);
-                    rightMotorFront.setPower(-rightShift);
-                    rightMotorBack.setPower(rightShift);
+                    leftMotorFront.setPower(-rightShift);
+                    leftMotorBack.setPower(rightShift);
+                    rightMotorFront.setPower(rightShift);
+                    rightMotorBack.setPower(-rightShift);
                 }
 
 
