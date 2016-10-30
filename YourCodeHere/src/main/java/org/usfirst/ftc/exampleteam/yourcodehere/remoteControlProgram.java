@@ -13,7 +13,7 @@ import org.swerverobotics.library.interfaces.*;
 
 
 @TeleOp(name="Remote Control Program") //Name the class
-public class teleOpProgram extends SynchronousOpMode //CLASS START
+public class remoteControlProgram extends SynchronousOpMode //CLASS START
 {
     //Define DC Motors
     DcMotor leftMotorFront;
