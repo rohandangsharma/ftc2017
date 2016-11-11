@@ -13,7 +13,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.swerverobotics.library.SynchronousOpMode;
 
 
-@Autonomous(name="Autonumous Program") //Name the class
+@Autonomous(name="Autonomous Program Time") //Name the program
 public class autonomousProgramTime extends SynchronousOpMode //CLASS START
 {
     //Define DC Motors
@@ -27,14 +27,9 @@ public class autonomousProgramTime extends SynchronousOpMode //CLASS START
     //DcMotor shooterRight;
 
     //Define Servo Motors
-    Servo doorLeft = null;
-    Servo doorRight = null;
+    Servo doorLeft;
+    Servo doorRight;
 
-    //Define floats to be used as joystick and trigger inputs
-    float driveY;
-    float turnX;
-    float rightShift;
-    float leftShift;
 
     //Define servo motor door positions
     final double CLOSED_DOOR_POSITION = 0.4;
@@ -44,7 +39,7 @@ public class autonomousProgramTime extends SynchronousOpMode //CLASS START
 //METHODS BELOW
 
     public void driveForward (double power, double time) throws InterruptedException {
-        power = power / 4;
+        power = power / (float) 2.5;
         leftMotorFront.setPower(power);
         leftMotorBack.setPower(power);
         rightMotorFront.setPower(power);
@@ -65,7 +60,7 @@ public class autonomousProgramTime extends SynchronousOpMode //CLASS START
         stopDriving();
     }
 
-    public void leftTurn (double power, double time) throws InterruptedException {
+    public void rightTurn (double power, double time) throws InterruptedException {
         power = power / 4;
         leftMotorFront.setPower(-power);
         leftMotorBack.setPower(-power);
@@ -76,7 +71,7 @@ public class autonomousProgramTime extends SynchronousOpMode //CLASS START
         stopDriving();
     }
 
-    public void rightTurn (double power, double time) throws InterruptedException {
+    public void leftTurn (double power, double time) throws InterruptedException {
         power = power / 4;
         leftMotorFront.setPower(power);
         leftMotorBack.setPower(power);
@@ -153,20 +148,6 @@ public class autonomousProgramTime extends SynchronousOpMode //CLASS START
     //*************************************************************************************************************
 //AUTONOMOUS CODE BELOW
 
-        openDoor();
-        driveForward(1.0, 1.0);
-        closeDoor();
-        driveBackward(1.0, 1.03);
-        driveForward(1.0, 3.0);
-        driveBackward(1.0, 0.5);
-        rightTurn(1.0, 0.5);
-        driveForward(1.0, 4.0);
-        driveBackward(1.0, 0.25);
-        leftShift(1.0, 1.0);
-        driveForward(1.0, 0.25);
-        driveBackward(1.0, 0.5);
-        rightShift(1.0, 2.0);
-        leftTurn(1.0, 0.2);
-        driveForward(1.0, 1.0);
-    } //Close main
+        driveForward(1.0, 100.0);
+            } //Close main
 } //Close class and end program

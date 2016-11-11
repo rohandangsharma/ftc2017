@@ -9,8 +9,6 @@ package org.usfirst.ftc.exampleteam.yourcodehere;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.*;
 import org.swerverobotics.library.*;
-import org.swerverobotics.library.interfaces.*;
-
 
 @TeleOp(name="Remote Control Program") //Name the class
 public class remoteControlProgram extends SynchronousOpMode //CLASS START
@@ -107,10 +105,10 @@ public class remoteControlProgram extends SynchronousOpMode //CLASS START
                 //Set float variables as the inputs from the joystick and the dpad
                 //The negative sign is necessary because pushing the joystick up normally sends the robot backward
                 //Additionally, set float variables as the input from the triggers
-                driveY = -gamepad1.left_stick_y / 4;
-                turnX = gamepad1.left_stick_x / 4;
-                leftShift = gamepad1.left_trigger / 4;
-                rightShift = gamepad1.right_trigger / 4;
+                driveY = -gamepad1.left_stick_y / (float) 2.5;
+                turnX = gamepad1.left_stick_x / (float) 2.5;
+                leftShift = gamepad1.left_trigger / (float) 2.5;
+                rightShift = gamepad1.right_trigger / (float) 2.5;
 
 
                 //Set the power of the motors with the joystick inputs
@@ -162,7 +160,6 @@ public class remoteControlProgram extends SynchronousOpMode //CLASS START
                 if (gamepad2.y) {
                     toggleButtonY();
                 } else { }
-
 
                 //Set the power of the elevator in 2 different situations, using the "a" button.
                 // The 2nd situation is void
