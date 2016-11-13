@@ -8,6 +8,7 @@ package org.usfirst.ftc.exampleteam.yourcodehere;
 
 //Import necessary items
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import org.swerverobotics.library.SynchronousOpMode;
@@ -30,6 +31,9 @@ public class remoteControlProgram extends SynchronousOpMode //CLASS START
     //Define Servo Motors
     Servo doorLeft;
     Servo doorRight;
+
+    //Define Sensors
+    ColorSensor colorSensor;
 
 
     //Define press counts
@@ -173,6 +177,8 @@ public class remoteControlProgram extends SynchronousOpMode //CLASS START
         doorLeft = hardwareMap.servo.get("doorLeft");
         doorRight = hardwareMap.servo.get("doorRight");
 
+        colorSensor = hardwareMap.colorSensor.get("colorSensor");
+
 
         //Reverse the left motors since it is facing the opposite direction as the left motor
         leftMotorFront.setDirection(DcMotor.Direction.REVERSE);
@@ -191,10 +197,10 @@ public class remoteControlProgram extends SynchronousOpMode //CLASS START
                     //The negative signs are necessary as "invert motor" equivalents of last year
                     //Additionally, set float variables as the input from the triggers
                     //Finally, divide all inputs by 2.5, to scale robot speed to a reasonable amount
-                    drive = -gamepad1.left_stick_y / (float) 2.5;
-                    turn = -gamepad1.left_stick_x / (float) 2.5;
-                    leftShift = gamepad1.left_trigger / (float) 2.5;
-                    rightShift = gamepad1.right_trigger / (float) 2.5;
+                    drive = -gamepad1.left_stick_y;
+                    turn = -gamepad1.right_stick_x;
+                    leftShift = gamepad1.left_stick_x;
+                    rightShift = gamepad1.left_stick_x;
 
 
                     //calculate the absolute value of the two joystick inputs
