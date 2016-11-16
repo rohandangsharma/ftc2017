@@ -195,7 +195,7 @@ public class remoteControlProgram extends SynchronousOpMode //CLASS START
                     //Additionally, set float variables as the input from the triggers
                     //Finally, divide all inputs by 2.5, to scale robot speed to a reasonable amount
                     drive = -gamepad1.left_stick_y;
-                    shift = gamepad1.left_stick_x;
+                    shift = -gamepad1.left_stick_x;
                     turn = -gamepad1.right_stick_x;
 
 
@@ -207,29 +207,29 @@ public class remoteControlProgram extends SynchronousOpMode //CLASS START
                     absTurnPower = absoluteValue(turn);
 
 
-                    //Compare the absolute values and run corresponding functions
-                    if ((drive == 0) && (shift ==0))
-                    {
-                        leftMotorFront.setPower(0.0);
-                        leftMotorBack.setPower(0.0);
-                        rightMotorFront.setPower(0.0);
-                        rightMotorBack.setPower(0.0);
-                    }
-                    else if (absDrivePower > absShiftPower)
 
-                    {
-                        //Set the power of the motors with the joystick inputs to drive forwards or backwards
-                        drive(drive);
-                    }
-                    else if (absShiftPower > absDrivePower)
-                    {
-                        //Choose the correct direction to turn, based on joystick input
-                        meccanumShift(shift);
-                    }
-                    else if (absTurnPower > 0)
-                    {
-                        leftOrRightTurn(turn);
-                    }
+                //Compare the absolute values and run corresponding functions
+                    do {
+                        if ((drive == 0) && (shift == 0)) {
+                            leftMotorFront.setPower(0.0);
+                            leftMotorBack.setPower(0.0);
+                            rightMotorFront.setPower(0.0);
+                            rightMotorBack.setPower(0.0);
+                        }
+                        else if (absDrivePower > absShiftPower)
+                        {
+                            //Set the power of the motors with the joystick inputs to drive forwards or backwards
+                            drive(drive);
+                        }
+                        else if (absShiftPower > absDrivePower) {
+                            //Choose the correct direction to turn, based on joystick input
+                            meccanumShift(shift);
+
+                        }
+                        else if (absTurnPower > 0) {
+                            leftOrRightTurn(turn);
+                        }
+                    } while (((drive == 0) && (shift == 0)));
 
 
                 //ATTACHMENTS CODE
