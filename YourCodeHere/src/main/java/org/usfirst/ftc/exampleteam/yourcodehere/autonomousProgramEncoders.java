@@ -10,7 +10,7 @@ package org.usfirst.ftc.exampleteam.yourcodehere;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
-
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import org.swerverobotics.library.SynchronousOpMode;
 
 
@@ -27,19 +27,17 @@ public class autonomousProgramEncoders extends SynchronousOpMode //CLASS START
     //DcMotor shooterLeft;
     //DcMotor shooterRight;
 
-    //Define Servo Motors
-    Servo doorLeft ;
-    Servo doorRight;
+//    //Define Servo Motors
+//    Servo doorLeft ;
+//    Servo doorRight;
 
-    //Define floats to be used as joystick and trigger inputs
-    float driveY;
-    float turnX;
-    float rightShift;
-    float leftShift;
+    //Define Sensors
+//    ColorSensor colorSensor;
 
-    //Define servo motor door positions
-    final double CLOSED_DOOR_POSITION = 0.4;
-    final double OPEN_DOOR_POSITION = 1.2;
+
+//    //Define servo motor door positions
+//    final double CLOSED_DOOR_POSITION = 0.4;
+//    final double OPEN_DOOR_POSITION = 1.2;
 
 //**********************************************************************************************************
 //METHODS BELOW
@@ -54,18 +52,14 @@ public void moveFrontMotors(double powerLeft, double powerRight)
     stopDriving();
 }
 
-public void driveForward(double power, int degrees)
+public void driveForward(float power, int degrees)
 {
-    degrees = degrees / 1;
-    power = (float) power / 1;
-    leftMotorBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-    rightMotorBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-    leftMotorBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-    rightMotorBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    leftMotorBack.setMode(DcMotor.RunMode.RESET_ENCODERS);
+    rightMotorBack.setMode(DcMotor.RunMode.RESET_ENCODERS);
 
-    leftMotorBack.setTargetPosition(degrees);
-    rightMotorBack.setTargetPosition(degrees);
+    leftMotorBack.setTargetPosition(-degrees);
+    rightMotorBack.setTargetPosition(-degrees);
 
     leftMotorBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     rightMotorBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -74,7 +68,12 @@ public void driveForward(double power, int degrees)
     rightMotorBack.setPower(power);
 
     moveFrontMotors(power, power);
+    while ((leftMotorBack.isBusy()) && (rightMotorBack.isBusy()))
+    { }
     stopDriving();
+    leftMotorBack.setMode(DcMotor.RunMode.RUN_USING_ENCODERS);
+    rightMotorBack.setMode(DcMotor.RunMode.RUN_USING_ENCODERS);
+
 }
 
 public void driveBackward( double power, int degrees)
@@ -95,6 +94,8 @@ public void driveBackward( double power, int degrees)
 
     moveFrontMotors(-power, -power);
     stopDriving();
+    leftMotorBack.setMode(DcMotor.RunMode.RUN_USING_ENCODERS);
+    rightMotorBack.setMode(DcMotor.RunMode.RUN_USING_ENCODERS);
 }
 
 public void leftTurn( double power, int degrees)
@@ -188,18 +189,18 @@ public void stopDriving()
 }
 
 
-public void openDoor()
-{
-    doorLeft.setPosition(OPEN_DOOR_POSITION);
-    doorRight.setPosition(OPEN_DOOR_POSITION);
-}
-
-
-public void closeDoor()
-{
-    doorLeft.setPosition(CLOSED_DOOR_POSITION);
-    doorRight.setPosition(CLOSED_DOOR_POSITION);
-}
+//public void openDoor()
+//{
+//    doorLeft.setPosition(OPEN_DOOR_POSITION);
+//    doorRight.setPosition(OPEN_DOOR_POSITION);
+//}
+//
+//
+//public void closeDoor()
+//{
+//    doorLeft.setPosition(CLOSED_DOOR_POSITION);
+//    doorRight.setPosition(CLOSED_DOOR_POSITION);
+//}
 
 
 
@@ -221,17 +222,21 @@ public void closeDoor()
         //spinner = hardwareMap.dcMotor.get("spinner");
         //shooterLeft = hardwareMap.dcMotor.get("shooterLeft");
         //shooterRight = hardwareMap.dcMotor.get("shooterRight");
-        doorLeft = hardwareMap.servo.get("doorLeft");
-        doorRight = hardwareMap.servo.get("doorRight");
+//        doorLeft = hardwareMap.servo.get("doorLeft");
+//        doorRight = hardwareMap.servo.get("doorRight");
+
+        //Get references to the sensors from the hardware map
+//        colorSensor = hardwareMap.colorSensor.get("colorSensor");
 
         //Reverse the right motors since it is facing the opposite direction as the left motor
-        leftMotorFront.setDirection(DcMotor.Direction.REVERSE);
-        leftMotorBack.setDirection(DcMotor.Direction.REVERSE);
+        rightMotorFront.setDirection(DcMotor.Direction.REVERSE);
+        rightMotorBack.setDirection(DcMotor.Direction.REVERSE);
 
     //*************************************************************************************************************
 //AUTONOMOUS CODE BELOW
 
-       driveForward(1.0, 12);
+       driveForward((float) 1.0, 5000);
+
 
     } //Close main
 } //Close class and end program
