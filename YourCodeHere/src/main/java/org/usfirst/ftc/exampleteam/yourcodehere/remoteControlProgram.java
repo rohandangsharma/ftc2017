@@ -32,21 +32,15 @@ public class remoteControlProgram extends SynchronousOpMode //CLASS START
 //    Servo doorRight;
 
 
-
-
     //Define press counts
     //public int aPressCount = 0;
     //public int yPressCount = 0;
 
 
     //Define floats to be used as joystick and trigger inputs
-    float drive;
-    float turn;
-    float shift;
     float absDrivePower;
     float absShiftPower;
     float absTurnPower;
-
 
 
 //    //Define servo motor door positions
@@ -59,14 +53,10 @@ public class remoteControlProgram extends SynchronousOpMode //CLASS START
 
 
     //Calculate the absolute value of the input, in order to make comparisons easier
-    public float absoluteValue(float input)
-    {
-        if (input < 0)
-        {
+    public float absoluteValue(float input) {
+        if (input < 0) {
             input = -input;
-        }
-        else if (input > 0)
-        {
+        } else if (input > 0) {
             input = input;
         }
         return input;
@@ -74,53 +64,59 @@ public class remoteControlProgram extends SynchronousOpMode //CLASS START
 
 
     //Set powers to the motors to make the robot drive forwards and backwards, based on joystick input
-    public void drive(float drive)
+    public void drive()
     {
-        leftMotorFront.setPower(drive);
-        leftMotorBack.setPower(drive);
-        rightMotorFront.setPower(drive);
-        rightMotorBack.setPower(drive);
+        leftMotorFront.setPower(-gamepad1.left_stick_y);
+        leftMotorBack.setPower(-gamepad1.left_stick_y);
+        rightMotorFront.setPower(-gamepad1.left_stick_y);
+        rightMotorBack.setPower(-gamepad1.left_stick_y);
+    }
+
+    public void stopDriving()
+    {
+        leftMotorFront.setPower(0.0);
+        leftMotorBack.setPower(0.0);
+        rightMotorFront.setPower(0.0);
+        rightMotorBack.setPower(0.0);
     }
 
 
     //Set up tank turning on the robot, based on joystick inputs
-    public void leftOrRightTurn(float turn)
-    {
-        if (turn < 0)
+    public void leftOrRightTurn() {
+        if (-gamepad1.right_stick_x < 0)
         {
-            rightMotorFront.setPower(-turn);
-            rightMotorBack.setPower(-turn);
-            leftMotorFront.setPower(turn);
-            leftMotorBack.setPower(turn);
+            rightMotorFront.setPower(gamepad1.right_stick_x);
+            rightMotorBack.setPower(gamepad1.right_stick_x);
+            leftMotorFront.setPower(-gamepad1.right_stick_x);
+            leftMotorBack.setPower(-gamepad1.right_stick_x);
         }
-        else if (turn > 0)
+        else if (-gamepad1.right_stick_x > 0)
         {
-            leftMotorFront.setPower(turn);
-            leftMotorBack.setPower(turn);
-            rightMotorFront.setPower(-turn);
-            rightMotorBack.setPower(-turn);
+            leftMotorFront.setPower(-gamepad1.right_stick_x);
+            leftMotorBack.setPower(-gamepad1.right_stick_x);
+            rightMotorFront.setPower(gamepad1.right_stick_x);
+            rightMotorBack.setPower(gamepad1.right_stick_x);
         }
     }
 
 
     //Add left and right shift functionality
-    public void meccanumShift(float shift)
-    {
-        if (shift > 0)
+    public void meccanumShift() {
+        if (-gamepad1.left_stick_x > 0)
         {
             //Left shift
-            leftMotorFront.setPower(shift);
-            leftMotorBack.setPower(-shift);
-            rightMotorFront.setPower(-shift);
-            rightMotorBack.setPower(shift);
+            leftMotorFront.setPower(-gamepad1.left_stick_x);
+            leftMotorBack.setPower(gamepad1.left_stick_x);
+            rightMotorFront.setPower(gamepad1.left_stick_x);
+            rightMotorBack.setPower(-gamepad1.left_stick_x);
         }
-        else if (shift < 0)
+        else if (-gamepad1.left_stick_x < 0)
         {
             //Right shift
-            leftMotorFront.setPower(-shift);
-            leftMotorBack.setPower(shift);
-            rightMotorFront.setPower(shift);
-            rightMotorBack.setPower(-shift);
+            leftMotorFront.setPower(gamepad1.left_stick_x);
+            leftMotorBack.setPower(-gamepad1.left_stick_x);
+            rightMotorFront.setPower(-gamepad1.left_stick_x);
+            rightMotorBack.setPower(gamepad1.left_stick_x);
         }
     }
 
@@ -146,6 +142,7 @@ public class remoteControlProgram extends SynchronousOpMode //CLASS START
     //Create a custom function to count the number of times the button "a" is pressed
     //It toggles button a, so if it has been pressed an odd number of times, the motor will go forward
     //Otherwise, it will be off
+
     /**
      * public void toggleButtonA()
      * {
@@ -162,8 +159,7 @@ public class remoteControlProgram extends SynchronousOpMode //CLASS START
 //***********************************************************************************************************
 //MAIN BELOW
     @Override
-    public void main() throws InterruptedException
-    {
+    public void main() throws InterruptedException {
         //Get references to the motors from the hardware map
         leftMotorFront = hardwareMap.dcMotor.get("leftMotorFront");
         rightMotorFront = hardwareMap.dcMotor.get("rightMotorFront");
@@ -184,59 +180,51 @@ public class remoteControlProgram extends SynchronousOpMode //CLASS START
 //LOOP BELOW
         waitForStart();
         //Open loops
-        while (opModeIsActive())
-        {
-            if (updateGamepads())
-            {
+        while (opModeIsActive()) {
+            if (updateGamepads()) {
                 //DRIVE MOTORS CODE
 
-                    //Set float variables as the inputs from the joystick and the dpad
-                    //The negative signs are necessary as "invert motor" equivalents of last year
-                    //Additionally, set float variables as the input from the triggers
-                    //Finally, divide all inputs by 2.5, to scale robot speed to a reasonable amount
-                    drive = -gamepad1.left_stick_y;
-                    shift = -gamepad1.left_stick_x;
-                    turn = -gamepad1.right_stick_x;
-
-                    //calculate the absolute value of the two joystick inputs
-                    absDrivePower = absoluteValue(drive);
-                    absShiftPower = absoluteValue(shift);
-                    absTurnPower = absoluteValue(turn);
-
-                //Compare the absolute values and run corresponding functions
-                    do {
-                        //Set float variables as the inputs from the joystick and the dpad
-                        //The negative signs are necessary as "invert motor" equivalents of last year
-                        //Additionally, set float variables as the input from the triggers
-                        //Finally, divide all inputs by 2.5, to scale robot speed to a reasonable amount
-                        drive = -gamepad1.left_stick_y;
-                        shift = -gamepad1.left_stick_x;
-                        turn = -gamepad1.right_stick_x;
-
-                        //calculate the absolute value of the two joystick inputs
-                        absDrivePower = absoluteValue(drive);
-                        absShiftPower = absoluteValue(shift);
-                        absTurnPower = absoluteValue(turn);
-//                        if ((drive == 0) && (shift == 0)) {
-//                            leftMotorFront.setPower(0.0);
-//
-                        if (absDrivePower > absShiftPower)
-                        {
-                            //Set the power of the motors with the joystick inputs to drive forwards or backwards
-                            drive(drive);
-                        }
-                        else if (absShiftPower > absDrivePower) {
-                            //Choose the correct direction to turn, based on joystick input
-                            meccanumShift(shift);
-
-                        }
-                        else if (absTurnPower > 0) {
-                            leftOrRightTurn(turn);
-                        }
-                    } while (((drive != 0) && (shift != 0)));
+                //Set float variables as the inputs from the joystick and the dpad
+                //The negative signs are necessary as "invert motor" equivalents of last year
+                //Additionally, set float variables as the input from the triggers
+                //Finally, divide all inputs by 2.5, to scale robot speed to a reasonable amount
 
 
-                //ATTACHMENTS CODE
+                //calculate the absolute value of the three joystick inputs
+
+                //Compare the absolute values and run corresponding function
+                //Set float variables as the inputs from the joystick and the dpad
+                //The negative signs are necessary as "invert motor" equivalents of last year
+                //Additionally, set float variables as the input from the triggers
+                //Finally, divide all inputs by 2.5, to scale robot speed to a reasonable amount
+
+                //calculate the absolute value of the two joystick inputs
+                absDrivePower = absoluteValue(-gamepad1.left_stick_y);
+                absShiftPower = absoluteValue(-gamepad1.left_stick_x);
+                absTurnPower = absoluteValue(-gamepad1.right_stick_x);
+
+                    if (absDrivePower == absShiftPower)
+                    {
+
+                        stopDriving();
+                    }
+                    else if (absDrivePower > absShiftPower)
+                    {
+                        //Set the power of the motors with the joystick inputs to drive forwards or backwards
+                        drive();
+                    }
+                    else if (absShiftPower > absDrivePower)
+                    {
+                        //Choose the correct direction to turn, based on joystick input
+                        meccanumShift();
+                    }
+                    else if (absTurnPower > 0)
+                    {
+                        leftOrRightTurn();
+                    }
+
+
+                    //ATTACHMENTS CODE
 
                     //Set the power of the spinner so that it runs for the entire run
                     //spinner.setPower(0.5);
@@ -264,9 +252,9 @@ public class remoteControlProgram extends SynchronousOpMode //CLASS START
                     //shooterLeft.setPower(1.0);
                     //shooterRight.setPower(1.0);
 
-            } //Close inside "if" loop
-            telemetry.update();
-            idle();
-        } //Close outside loop
-    } //Close main
-} //Close class and end program
+                } //Close inside "if" loop
+                telemetry.update();
+                idle();
+            } //Close outside loop
+        } //Close main
+    } //Close class and end program
