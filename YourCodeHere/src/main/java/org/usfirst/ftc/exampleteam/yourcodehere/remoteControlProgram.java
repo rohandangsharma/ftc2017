@@ -198,25 +198,29 @@ public class remoteControlProgram extends SynchronousOpMode //CLASS START
                     shift = -gamepad1.left_stick_x;
                     turn = -gamepad1.right_stick_x;
 
-
-
-
                     //calculate the absolute value of the two joystick inputs
                     absDrivePower = absoluteValue(drive);
                     absShiftPower = absoluteValue(shift);
                     absTurnPower = absoluteValue(turn);
 
-
-
                 //Compare the absolute values and run corresponding functions
                     do {
-                        if ((drive == 0) && (shift == 0)) {
-                            leftMotorFront.setPower(0.0);
-                            leftMotorBack.setPower(0.0);
-                            rightMotorFront.setPower(0.0);
-                            rightMotorBack.setPower(0.0);
-                        }
-                        else if (absDrivePower > absShiftPower)
+                        //Set float variables as the inputs from the joystick and the dpad
+                        //The negative signs are necessary as "invert motor" equivalents of last year
+                        //Additionally, set float variables as the input from the triggers
+                        //Finally, divide all inputs by 2.5, to scale robot speed to a reasonable amount
+                        drive = -gamepad1.left_stick_y;
+                        shift = -gamepad1.left_stick_x;
+                        turn = -gamepad1.right_stick_x;
+
+                        //calculate the absolute value of the two joystick inputs
+                        absDrivePower = absoluteValue(drive);
+                        absShiftPower = absoluteValue(shift);
+                        absTurnPower = absoluteValue(turn);
+//                        if ((drive == 0) && (shift == 0)) {
+//                            leftMotorFront.setPower(0.0);
+//
+                        if (absDrivePower > absShiftPower)
                         {
                             //Set the power of the motors with the joystick inputs to drive forwards or backwards
                             drive(drive);
@@ -229,7 +233,7 @@ public class remoteControlProgram extends SynchronousOpMode //CLASS START
                         else if (absTurnPower > 0) {
                             leftOrRightTurn(turn);
                         }
-                    } while (((drive == 0) && (shift == 0)));
+                    } while (((drive != 0) && (shift != 0)));
 
 
                 //ATTACHMENTS CODE

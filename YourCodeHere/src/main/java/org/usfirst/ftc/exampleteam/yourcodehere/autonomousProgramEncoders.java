@@ -9,6 +9,8 @@ package org.usfirst.ftc.exampleteam.yourcodehere;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorController;
+import com.qualcomm.robotcore.hardware.HardwareDevice;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import org.swerverobotics.library.SynchronousOpMode;
@@ -52,14 +54,16 @@ public void moveFrontMotors(double powerLeft, double powerRight)
     stopDriving();
 }
 
+
+
 public void driveForward(float power, int degrees)
 {
 
     leftMotorBack.setMode(DcMotor.RunMode.RESET_ENCODERS);
     rightMotorBack.setMode(DcMotor.RunMode.RESET_ENCODERS);
 
-    leftMotorBack.setTargetPosition(-degrees);
-    rightMotorBack.setTargetPosition(-degrees);
+    leftMotorBack.setTargetPosition(degrees);
+    rightMotorBack.setTargetPosition(degrees);
 
     leftMotorBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     rightMotorBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -71,8 +75,8 @@ public void driveForward(float power, int degrees)
     while ((leftMotorBack.isBusy()) && (rightMotorBack.isBusy()))
     { }
     stopDriving();
-    leftMotorBack.setMode(DcMotor.RunMode.RUN_USING_ENCODERS);
-    rightMotorBack.setMode(DcMotor.RunMode.RUN_USING_ENCODERS);
+    leftMotorBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    rightMotorBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
 }
 
@@ -133,7 +137,7 @@ public void rightTurn( double power, int degrees)
 
     leftMotorBack.setPower(-power);
     rightMotorBack.setPower(power);
-
+    telemetry.addData("Encoder", leftMotorBack.getCurrentPosition());
     moveFrontMotors(-power, power);
     stopDriving();
 }
@@ -235,7 +239,9 @@ public void stopDriving()
     //*************************************************************************************************************
 //AUTONOMOUS CODE BELOW
 
-       driveForward((float) 1.0, 5000);
+       driveForward((float) 1.0, 50);
+        telemetry.addData("Encoder", leftMotorBack.getCurrentPosition());
+        telemetry.update();
 
 
     } //Close main
