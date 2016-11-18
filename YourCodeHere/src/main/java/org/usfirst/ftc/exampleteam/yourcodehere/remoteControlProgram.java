@@ -23,23 +23,22 @@ public class remoteControlProgram extends SynchronousOpMode //CLASS START
     //DcMotor shooterLeft;
     //DcMotor shooterRight;
 
-<<<<<<< HEAD
 
 //    //Define Servo Motors
 //    Servo doorLeft;
 //    Servo doorRight;
-=======
+
     //Define Servo Motors
     Servo doorLeft;
     Servo doorRight;
->>>>>>> parent of d0a29b6... Patched
+
 
     //Define press counts
     //public int aPressCount = 0;
     //public int yPressCount = 0;
 
     //Define floats to be used as joystick and trigger inputs
-<<<<<<< HEAD
+
     float absDrivePower;
     float absShiftPower;
     float absTurnPower;
@@ -144,7 +143,7 @@ public class remoteControlProgram extends SynchronousOpMode //CLASS START
     //Create a custom function to count the number of times the button "a" is pressed
     //It toggles button a, so if it has been pressed an odd number of times, the motor will go forward
     //Otherwise, it will be off
-=======
+
     float driveY;
     float turnX;
     float rightShift;
@@ -160,25 +159,24 @@ public class remoteControlProgram extends SynchronousOpMode //CLASS START
     //Create a custom function to count the number of times the button "y" is pressed
     //It toggles button y, so if it has been pressed an odd number of times, the door will be open
     //Otherwise, it will be closed
-    public void toggleButtonY()
-    {
-        doorRight.setDirection(Servo.Direction.REVERSE);
-        yPressCount = yPressCount + 1;
-        if (yPressCount % 2 == 1) {
-
-            doorLeft.setPosition(OPEN_DOOR_POSITION);
-            doorRight.setPosition(OPEN_DOOR_POSITION);
-        }
-        else {
-
-            doorLeft.setPosition(CLOSED_DOOR_POSITION);
-            doorRight.setPosition(CLOSED_DOOR_POSITION);
-        }
-    }
+//    public void toggleButtonY()
+//    {
+//        doorRight.setDirection(Servo.Direction.REVERSE);
+//        yPressCount = yPressCount + 1;
+//        if (yPressCount % 2 == 1) {
+//
+//            doorLeft.setPosition(OPEN_DOOR_POSITION);
+//            doorRight.setPosition(OPEN_DOOR_POSITION);
+//        }
+//        else {
+//
+//            doorLeft.setPosition(CLOSED_DOOR_POSITION);
+//            doorRight.setPosition(CLOSED_DOOR_POSITION);
+//        }
+//    }
 //Create a custom function to count the number of times the button "a" is pressed
 //It toggles button a, so if it has been pressed an odd number of times, the motor will go forward
 //Otherwise, it will be off
->>>>>>> parent of d0a29b6... Patched
 
     /**
      * public void toggleButtonA() {
@@ -215,7 +213,6 @@ public class remoteControlProgram extends SynchronousOpMode //CLASS START
         //Open loops
         while (opModeIsActive()) {
             if (updateGamepads()) {
-<<<<<<< HEAD
                 //DRIVE MOTORS CODE
 
                 //Set float variables as the inputs from the joystick and the dpad
@@ -285,7 +282,7 @@ public class remoteControlProgram extends SynchronousOpMode //CLASS START
                     //Set the power of the football shooter so that it runs for the entire run
                     //shooterLeft.setPower(1.0);
                     //shooterRight.setPower(1.0);
-=======
+
                 //Set float variables as the inputs from the joystick and the dpad
                 //The negative sign is necessary because pushing the joystick up normally sends the robot backward
                 //Additionally, set float variables as the input from the triggers
@@ -341,9 +338,9 @@ public class remoteControlProgram extends SynchronousOpMode //CLASS START
 
                 //Set the position of the door in 2 different situations, using the "y" button
                 // The 2nd situation is void
-                if (gamepad2.y) {
-                    toggleButtonY();
-                } else { }
+//                if (gamepad2.y) {
+//                    toggleButtonY();
+//                } else { }
 
                 //Set the power of the elevator in 2 different situations, using the "a" button.
                 // The 2nd situation is void
@@ -356,7 +353,7 @@ public class remoteControlProgram extends SynchronousOpMode //CLASS START
                 //Set the power of the football shooter so that it runs for the entire run
                 //shooterLeft.setPower(1.0);
                 //shooterRight.setPower(1.0);
->>>>>>> parent of d0a29b6... Patched
+
 
                 } //Close inside "if" loop
                 telemetry.update();
