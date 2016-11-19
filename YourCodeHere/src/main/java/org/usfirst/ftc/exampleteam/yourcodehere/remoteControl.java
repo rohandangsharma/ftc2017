@@ -12,7 +12,7 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 import org.swerverobotics.library.SynchronousOpMode;
 
 
-@TeleOp(name="teleOp Simple") //Name the class
+@TeleOp(name="teleOp Working") //Name the class
 public class remoteControl extends SynchronousOpMode //CLASS START
 {
     //Define DC Motors
@@ -20,8 +20,8 @@ public class remoteControl extends SynchronousOpMode //CLASS START
     DcMotor rightMotorFront;
     DcMotor leftMotorBack;
     DcMotor rightMotorBack;
-    //DcMotor elevator;
     DcMotor spinner;
+    //DcMotor elevator;
     //DcMotor shooterLeft;
     //DcMotor shooterRight;
 
@@ -42,7 +42,7 @@ public class remoteControl extends SynchronousOpMode //CLASS START
     float rightTurn;
     float leftTurn;
 
-//***********************************************************************************************************
+    //***********************************************************************************************************
 //MAIN BELOW
     @Override
     public void main() throws InterruptedException
@@ -67,10 +67,8 @@ public class remoteControl extends SynchronousOpMode //CLASS START
 //LOOP BELOW
         waitForStart();
         //Open loops
-        while (opModeIsActive())
-        {
-            if (updateGamepads())
-            {
+        while (opModeIsActive()) {
+            if (updateGamepads()) {
                 //Set float variables as the inputs from the joystick and the dpad
                 //The negative sign is necessary because pushing the joystick up normally sends the robot backward
                 //Additionally, set float variables as the input from the triggers
@@ -82,63 +80,39 @@ public class remoteControl extends SynchronousOpMode //CLASS START
 //                functions.drive(drive, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
 
                 //Call drive function from function class
-                if (Math.abs(drive) == Math.abs(shift))
-                {
+                //Do nothing if joystick is stationary
+                if (Math.abs(drive) == Math.abs(shift)) {
                     functions.stopDriving(leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
                 }
-                if (Math.abs(shift) > Math.abs(drive))
-                {
+                //Shift if pushed more on X than Y
+                if (Math.abs(shift) > Math.abs(drive)) {
                     functions.shift(shift, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
                 }
-                if (Math.abs(drive) > Math.abs(shift))
-                {
+                //Drive if joystick pushed more Y than X
+                if (Math.abs(drive) > Math.abs(shift)) {
                     functions.drive(drive, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
                 }
+
+
                 //Access turn functions from function class
-                if (leftTurn > 0)
-                {
+                if (leftTurn > 0) {
                     functions.leftTurn(leftTurn, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
                 }
-                if (rightTurn > 0)
-                {
+                if (rightTurn > 0) {
                     functions.rightTurn(rightTurn, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
                 }
-                
-            //Attachments code
 
-                    //Set the power of the spinner so that it runs for the entire run
-                if (gamepad1.a)
-                {
+                //Attachments code
+                //Set the power of the spinner so that it runs for the entire run
+                if (gamepad1.a) {
                     functions.movesSpinner(spinner, aPressCount);
                 }
-                if (gamepad1.b)
-                {
+                if (gamepad1.b) {
                     functions.stopEverything(leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack, spinner);
                 }
-
-
-                    //Set the power of the elevator in 2 different situations, using the "a" button.
-                    // The 2nd situation is void
-                    //if (gamepad2.a) {
-                    //  toggleButtonA();
-                    //} else {
-                    //}
-
-
-                    //Set the power of the football shooter so that it runs for the entire run
-                    //shooterLeft.setPower(1.0);
-                    //shooterRight.setPower(1.0);
-
-                } //Close inside "if" loop
-
-
-
-
-
-
-
+            } //Close inside "if" loop
             telemetry.update();
-                idle();
-            } //Close outside loop
-        } //Close main
-    } //Close class and end program
+            idle();
+        } //Close outside loop
+    } //Close main
+} //Close class and end program

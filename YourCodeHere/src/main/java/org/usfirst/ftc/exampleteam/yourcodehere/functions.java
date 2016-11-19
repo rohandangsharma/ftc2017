@@ -11,8 +11,7 @@ import org.swerverobotics.library.SynchronousOpMode;
  * Created by sunildesai on 11/18/16.
  */
 
-public class functions
-{
+public class functions {
 
     public static void stopEverything(DcMotor leftMotorFront, DcMotor rightMotorFront, DcMotor leftMotorBack, DcMotor rightMotorBack, DcMotor spinner)
     {
