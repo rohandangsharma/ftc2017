@@ -9,9 +9,7 @@ package org.usfirst.ftc.exampleteam.yourcodehere;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.DcMotor;
-
 import org.swerverobotics.library.SynchronousOpMode;
-
 import java.sql.Time;
 import java.util.concurrent.TimeUnit;
 
@@ -88,8 +86,7 @@ public void driveBackward( double power, int degrees)
 
 public void leftTurn( double power, int degrees)
 {
-    degrees = degrees * 4;
-    power = power / 4;
+
     leftMotorBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     rightMotorBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
@@ -223,7 +220,7 @@ public void stopDriving()
     //*************************************************************************************************************
 //AUTONOMOUS CODE BELOW
 
-       driveForward((float) 1.0, 50);
+       leftShift((float) 1.0, 50);
         telemetry.addData("Encoder", leftMotorBack.getCurrentPosition());
         telemetry.update();
 

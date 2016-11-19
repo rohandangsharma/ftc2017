@@ -10,6 +10,7 @@ package org.usfirst.ftc.exampleteam.yourcodehere;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareDevice;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ColorSensor;
@@ -62,16 +63,16 @@ public void driveForward(float power, int degrees)
     leftMotorBack.setMode(DcMotor.RunMode.RESET_ENCODERS);
     rightMotorBack.setMode(DcMotor.RunMode.RESET_ENCODERS);
 
-    leftMotorBack.setTargetPosition(degrees);
-    rightMotorBack.setTargetPosition(degrees);
+    leftMotorBack.setTargetPosition(-degrees);
+    rightMotorBack.setTargetPosition(-degrees);
 
     leftMotorBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     rightMotorBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-    leftMotorBack.setPower(power);
-    rightMotorBack.setPower(power);
+    leftMotorBack.setPower(-power);
+    rightMotorBack.setPower(-power);
 
-    moveFrontMotors(power, power);
+    moveFrontMotors(-power, -power);
     while ((leftMotorBack.isBusy()) && (rightMotorBack.isBusy()))
     { }
     stopDriving();
@@ -145,13 +146,11 @@ public void rightTurn( double power, int degrees)
 
 public void leftShift (double power, int degrees) throws InterruptedException
 {
-    degrees = degrees * 4;
-    power = power / 4;
     leftMotorBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     rightMotorBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
     leftMotorBack.setTargetPosition(degrees);
-    rightMotorBack.setTargetPosition(degrees);
+    rightMotorBack.setTargetPosition(-degrees);
 
     leftMotorBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     rightMotorBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -159,29 +158,25 @@ public void leftShift (double power, int degrees) throws InterruptedException
     leftMotorBack.setPower(-power);
     rightMotorBack.setPower(power);
 
-    moveFrontMotors(power, -power);
+    moveFrontMotors(-power, power);
     stopDriving();
 }
 
 
-public void rightShift (double power, int degrees) throws InterruptedException
+public void rightShift (float shift, int degrees) throws InterruptedException
 {
-    degrees = degrees / 5;
-    power = power / 4;
+
     leftMotorBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     rightMotorBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
     leftMotorBack.setTargetPosition(degrees);
-    rightMotorBack.setTargetPosition(degrees);
+    rightMotorBack.setTargetPosition(-degrees);
 
     leftMotorBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     rightMotorBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-    leftMotorBack.setPower(power);
-    rightMotorBack.setPower(-power);
+    functions.shift(shift, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
 
-    moveFrontMotors(-power, power);
-    stopDriving();
 }
 
 public void stopDriving()
@@ -239,9 +234,7 @@ public void stopDriving()
     //*************************************************************************************************************
 //AUTONOMOUS CODE BELOW
 
-       driveForward((float) 1.0, 50);
-        telemetry.addData("Encoder", leftMotorBack.getCurrentPosition());
-        telemetry.update();
+        rightShift((float) 1.0, 12000);
 
 
     } //Close main

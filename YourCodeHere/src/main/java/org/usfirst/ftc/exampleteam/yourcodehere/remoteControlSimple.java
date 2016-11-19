@@ -1,4 +1,3 @@
-
 //This is the main remote control program for FTC Velocity Vortex 2016
 //Authors: FTC team [11212??], The Lexington Legoheads
 //In case of questions email anupendra@gmail.com (coach)
@@ -8,14 +7,13 @@ package org.usfirst.ftc.exampleteam.yourcodehere;
 
 //Import necessary items
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import org.swerverobotics.library.SynchronousOpMode;
 
 
-@TeleOp(name="Working teleOp") //Name the class
-public class remoteControl extends SynchronousOpMode //CLASS START
+@TeleOp(name="teleOp Simple") //Name the class
+public class remoteControlSimple extends SynchronousOpMode //CLASS START
 {
     //Define DC Motors
     DcMotor leftMotorFront;
@@ -81,6 +79,7 @@ public class remoteControl extends SynchronousOpMode //CLASS START
      * }
      * }
      **/
+
 //***********************************************************************************************************
 //MAIN BELOW
     @Override
@@ -117,43 +116,25 @@ public class remoteControl extends SynchronousOpMode //CLASS START
 
 
                 //Set the power of the motors with the joystick inputs
-                leftMotorFront.setPower(drive);
-                leftMotorBack.setPower(drive);
-                rightMotorFront.setPower(drive);
-                rightMotorBack.setPower(drive);
+                    functions.drive(drive, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
 
 
                 //Set up tank turning on the robot
-                if (shift > 0) {
-                    leftMotorFront.setPower(-shift);
-                    leftMotorBack.setPower(shift);
-                    rightMotorFront.setPower(shift);
-                    rightMotorBack.setPower(-shift);
-
-
-
+                if (shift != 0)
+                {
+                    functions.shift(shift, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
                 }
-                else if (shift < 0) {
-                    leftMotorFront.setPower(shift);
-                    leftMotorBack.setPower(-shift);
-                    rightMotorFront.setPower(-shift);
-                    rightMotorBack.setPower(shift);
 
-                }
 
 
                 //Add left and right shift functionality
-                if (leftTurn > 0) {
-                    rightMotorFront.setPower(leftTurn);
-                    rightMotorBack.setPower(leftTurn);
-                    leftMotorFront.setPower(-leftTurn);
-                    leftMotorBack.setPower(-leftTurn);
+                if (leftTurn > 0)
+                {
+                    functions.leftTurn(leftTurn, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
                 }
-                else if (rightTurn > 0) {
-                    rightMotorFront.setPower(-rightTurn);
-                    rightMotorBack.setPower(-rightTurn);
-                    leftMotorFront.setPower(rightTurn);
-                    leftMotorBack.setPower(rightTurn);
+                else if (rightTurn > 0)
+                {
+                    functions.rightTurn(rightTurn, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
                 }
 
                 //Attachments code
@@ -164,10 +145,11 @@ public class remoteControl extends SynchronousOpMode //CLASS START
 
                     //Set the position of the door in 2 different situations, using the "y" button
                     // The 2nd situation is void
-                    if (gamepad2.y) {
+                    if (gamepad2.y)
+                    {
                         toggleButtonY();
-                    } else {
                     }
+                    else { }
 
 
                     //Set the power of the elevator in 2 different situations, using the "a" button.
