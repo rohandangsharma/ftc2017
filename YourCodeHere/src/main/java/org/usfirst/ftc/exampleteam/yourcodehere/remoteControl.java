@@ -25,12 +25,13 @@ public class remoteControl extends SynchronousOpMode //CLASS START
     //DcMotor shooterLeft;
     //DcMotor shooterRight;
 
+
     //Define Servo Motors
 //    Servo doorLeft;
 //    Servo doorRight;
 
     //Define Sensors
-    ColorSensor colorSensor;
+    //ColorSensor colorSensor;
 
     //Define press counts
     public int aPressCount = 0;
@@ -58,7 +59,7 @@ public class remoteControl extends SynchronousOpMode //CLASS START
         //shooterRight = hardwareMap.dcMotor.get("shooterRight");
 //        doorLeft = hardwareMap.servo.get("doorLeft");
 //        doorRight = hardwareMap.servo.get("doorRight");
-        colorSensor = hardwareMap.colorSensor.get("colorSensor");
+        //colorSensor = hardwareMap.colorSensor.get("colorSensor");
 
         //Reverse the right motors since it is facing the opposite direction as the left motor
         leftMotorFront.setDirection(DcMotor.Direction.REVERSE);
@@ -67,8 +68,10 @@ public class remoteControl extends SynchronousOpMode //CLASS START
 //LOOP BELOW
         waitForStart();
         //Open loops
-        while (opModeIsActive()) {
-            if (updateGamepads()) {
+        while (opModeIsActive())
+        {
+            if (updateGamepads())
+            {
                 //Set float variables as the inputs from the joystick and the dpad
                 //The negative sign is necessary because pushing the joystick up normally sends the robot backward
                 //Additionally, set float variables as the input from the triggers
@@ -81,33 +84,40 @@ public class remoteControl extends SynchronousOpMode //CLASS START
 
                 //Call drive function from function class
                 //Do nothing if joystick is stationary
-                if (Math.abs(drive) == Math.abs(shift)) {
+                if (Math.abs(drive) == Math.abs(shift))
+                {
                     functions.stopDriving(leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
                 }
                 //Shift if pushed more on X than Y
-                if (Math.abs(shift) > Math.abs(drive)) {
-                    functions.shift(shift, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+                if (Math.abs(shift) > Math.abs(drive))
+                {
+                    functions.shiftTeleop(shift, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
                 }
                 //Drive if joystick pushed more Y than X
-                if (Math.abs(drive) > Math.abs(shift)) {
-                    functions.drive(drive, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+                if (Math.abs(drive) > Math.abs(shift))
+                {
+                    functions.driveTeleop(drive, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
                 }
 
 
                 //Access turn functions from function class
-                if (leftTurn > 0) {
-                    functions.leftTurn(leftTurn, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+                if (leftTurn > 0)
+                {
+                    functions.leftTurnTeleop(leftTurn, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
                 }
-                if (rightTurn > 0) {
-                    functions.rightTurn(rightTurn, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+                if (rightTurn > 0)
+                {
+                    functions.rightTurnTeleop(rightTurn, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
                 }
 
                 //Attachments code
-                //Set the power of the spinner so that it runs for the entire run
-                if (gamepad1.a) {
-                    functions.movesSpinner(spinner, aPressCount);
+                //Set the power of the spinner so that it toggles between forward and backward
+                if (gamepad1.a)
+                {
+                    functions.movesSpinnerTeleop(spinner, aPressCount);
                 }
-                if (gamepad1.b) {
+                if (gamepad1.b)
+                {
                     functions.stopEverything(leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack, spinner);
                 }
             } //Close inside "if" loop

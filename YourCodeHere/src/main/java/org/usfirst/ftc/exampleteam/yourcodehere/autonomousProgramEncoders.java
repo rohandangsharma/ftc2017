@@ -45,167 +45,90 @@ public class autonomousProgramEncoders extends SynchronousOpMode //CLASS START
 //**********************************************************************************************************
 //METHODS BELOW
 
-public void moveFrontMotors(double powerLeft, double powerRight)
-{
-    while ((rightMotorBack.isBusy()) || (leftMotorBack.isBusy()))
-    {
-        leftMotorFront.setPower(powerLeft);
-        rightMotorFront.setPower(powerRight);
-    }
+//public void leftTurn(float power, int degrees)
+//{
+//    leftMotorBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//    rightMotorBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//
+//    leftMotorBack.setTargetPosition(-degrees);
+//    rightMotorBack.setTargetPosition(degrees);
+//
+//    leftMotorBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//    rightMotorBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//
+//    leftMotorBack.setPower(-power);
+//    rightMotorBack.setPower(power);
+//
+//    functions.moveFrontMotorsAutonomous(-power, power, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+//    while ((leftMotorBack.isBusy()) && (rightMotorBack.isBusy()) && (leftMotorFront.isBusy()) && (rightMotorFront.isBusy()))
+//    { }
+//    functions.stopDriving(leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+//}
+//
+//public void rightTurn(float power, int degrees)
+//{
+//    degrees = degrees * 4;
+//    power = power / 4;
+//    leftMotorBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//    rightMotorBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//
+//    leftMotorBack.setTargetPosition(degrees);
+//    rightMotorBack.setTargetPosition(-degrees);
+//
+//    leftMotorBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//    rightMotorBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//
+//    leftMotorBack.setPower(power);
+//    rightMotorBack.setPower(-power);
+//
+//    functions.moveFrontMotorsAutonomous(power, -power, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+//    while ((leftMotorBack.isBusy()) && (rightMotorBack.isBusy()) && (leftMotorFront.isBusy()) && (rightMotorFront.isBusy()))
+//    { }
+//    functions.stopDriving(leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+//}
+//
+//
+//public void leftShift (float shift, int degrees) throws InterruptedException
+//{
+//    leftMotorBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//    rightMotorBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//
+//    leftMotorBack.setTargetPosition(degrees);
+//    rightMotorBack.setTargetPosition(-degrees);
+//
+//    leftMotorBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//    rightMotorBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//
+//    leftMotorBack.setPower(shift);
+//    rightMotorBack.setPower(-shift);
+//
+//    functions.moveFrontMotorsAutonomous(-shift, shift, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+//    while ((leftMotorBack.isBusy()) && (rightMotorBack.isBusy()) && (leftMotorFront.isBusy()) && (rightMotorFront.isBusy()))
+//    { }
+//    functions.stopDriving(leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+//}
+//
+//
+//public void rightShift (float shift, int degrees) throws InterruptedException
+//{
+//    leftMotorBack.setMode(DcMotor.RunMode.RESET_ENCODERS);
+//    rightMotorBack.setMode(DcMotor.RunMode.RESET_ENCODERS);
+//
+//    leftMotorBack.setTargetPosition(-degrees);
+//    rightMotorBack.setTargetPosition(degrees);
+//
+//    leftMotorBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//    rightMotorBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//
+//    leftMotorBack.setPower(-shift);
+//    rightMotorBack.setPower(shift);
+//
+//    functions.moveFrontMotorsAutonomous(shift, -shift, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+//    while ((leftMotorBack.isBusy()) || (rightMotorBack.isBusy()) || (leftMotorFront.isBusy()) || (rightMotorFront.isBusy()))
+//    { }
+//    functions.stopDriving(leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+//}
 
-    while ((!rightMotorBack.isBusy()) || (!leftMotorBack.isBusy()))
-    {
-        leftMotorFront.setPower(0.0);
-        rightMotorFront.setPower(0.0);
-    }
-    stopDriving();
-}
-
-
-
-public void driveForward(float power, int degrees)
-{
-    leftMotorBack.setMode(DcMotor.RunMode.RESET_ENCODERS);
-    rightMotorBack.setMode(DcMotor.RunMode.RESET_ENCODERS);
-
-    leftMotorBack.setTargetPosition(-degrees);
-    rightMotorBack.setTargetPosition(-degrees);
-
-    leftMotorBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-    rightMotorBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-    leftMotorBack.setPower(-power);
-    rightMotorBack.setPower(-power);
-
-    moveFrontMotors(-power, -power);
-    while ((leftMotorBack.isBusy()) && (rightMotorBack.isBusy()) && (leftMotorFront.isBusy()) && (rightMotorFront.isBusy()))
-    { }
-    stopDriving();
-    leftMotorBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-    rightMotorBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-}
-
-public void driveBackward( double power, int degrees)
-{
-    degrees = degrees * 4;
-    power = power / 4;
-    leftMotorBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-    rightMotorBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-    leftMotorBack.setTargetPosition(degrees);
-    rightMotorBack.setTargetPosition(degrees);
-
-    leftMotorBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-    rightMotorBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-    leftMotorBack.setPower(-power);
-    rightMotorBack.setPower(-power);
-
-    moveFrontMotors(-power, -power);
-    while ((leftMotorBack.isBusy()) && (rightMotorBack.isBusy()) && (leftMotorFront.isBusy()) && (rightMotorFront.isBusy()))
-    { }
-    stopDriving();
-
-    leftMotorBack.setMode(DcMotor.RunMode.RUN_USING_ENCODERS);
-    rightMotorBack.setMode(DcMotor.RunMode.RUN_USING_ENCODERS);
-}
-
-public void leftTurn( double power, int degrees)
-{
-    degrees = degrees * 4;
-    power = power / 4;
-    leftMotorBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-    rightMotorBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-    leftMotorBack.setTargetPosition(-degrees);
-    rightMotorBack.setTargetPosition(degrees);
-
-    leftMotorBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-    rightMotorBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-    leftMotorBack.setPower(-power);
-    rightMotorBack.setPower(power);
-
-    moveFrontMotors(-power, power);
-    while ((leftMotorBack.isBusy()) && (rightMotorBack.isBusy()) && (leftMotorFront.isBusy()) && (rightMotorFront.isBusy()))
-    { }
-    stopDriving();
-}
-
-public void rightTurn( double power, int degrees)
-{
-    degrees = degrees * 4;
-    power = power / 4;
-    leftMotorBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-    rightMotorBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-    leftMotorBack.setTargetPosition(degrees);
-    rightMotorBack.setTargetPosition(-degrees);
-
-    leftMotorBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-    rightMotorBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-    leftMotorBack.setPower(power);
-    rightMotorBack.setPower(-power);
-
-    moveFrontMotors(power, -power);
-    while ((leftMotorBack.isBusy()) && (rightMotorBack.isBusy()) && (leftMotorFront.isBusy()) && (rightMotorFront.isBusy()))
-    { }
-    stopDriving();
-}
-
-
-public void leftShift (double power, int degrees) throws InterruptedException
-{
-    leftMotorBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-    rightMotorBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-    leftMotorBack.setTargetPosition(degrees);
-    rightMotorBack.setTargetPosition(-degrees);
-
-    leftMotorBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-    rightMotorBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-    leftMotorBack.setPower(-power);
-    rightMotorBack.setPower(power);
-
-    moveFrontMotors(-power, power);
-    while ((leftMotorBack.isBusy()) && (rightMotorBack.isBusy()) && (leftMotorFront.isBusy()) && (rightMotorFront.isBusy()))
-    { }
-    stopDriving();
-}
-
-
-public void rightShift (float shift, int degrees) throws InterruptedException
-{
-
-    leftMotorBack.setMode(DcMotor.RunMode.RESET_ENCODERS);
-    rightMotorBack.setMode(DcMotor.RunMode.RESET_ENCODERS);
-
-    leftMotorBack.setTargetPosition(-degrees);
-    rightMotorBack.setTargetPosition(degrees);
-
-    leftMotorBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-    rightMotorBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-    leftMotorBack.setPower(-shift);
-    rightMotorBack.setPower(shift);
-
-    moveFrontMotors(shift, -shift);
-    while ((leftMotorBack.isBusy()) || (rightMotorBack.isBusy()) || (leftMotorFront.isBusy()) || (rightMotorFront.isBusy()))
-    { }
-    stopDriving();
-
-}
-
-public void stopDriving()
-{
-    leftMotorFront.setPower(0.0);
-    leftMotorBack.setPower(0.0);
-    rightMotorFront.setPower(0.0);
-    rightMotorBack.setPower(0.0);
-}
 
 
 
@@ -240,7 +163,7 @@ public void stopDriving()
     //*************************************************************************************************************
 //AUTONOMOUS CODE BELOW
 
-        rightShift((float) 1.0, 8500);
+        functions.rightShiftAutonomous((float) 1.0, 8500, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
 
     } //Close main
 } //Close class and end program
