@@ -2,8 +2,6 @@ package org.swerverobotics.library;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.*;
-
-import org.swerverobotics.library.examples.SynchColorDemo;
 import org.swerverobotics.library.interfaces.*;
 import org.swerverobotics.library.internal.*;
 import java.util.*;

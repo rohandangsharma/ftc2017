@@ -56,15 +56,15 @@ public class functions
 
     public static void movesSpinnerTeleop(DcMotor spinner, int aPressCount )
     {
-            aPressCount = aPressCount + 1;
-            if (aPressCount % 2 == 0)
-            {
-                spinner.setPower(1.0);
-            }
-            if (aPressCount % 2 == 1)
-            {
-                spinner.setPower(-1.0);
-            }
+        aPressCount = aPressCount + 1;
+        if (aPressCount % 2 == 0)
+        {
+            spinner.setPower(1.0);
+        }
+        if (aPressCount % 2 == 1)
+        {
+            spinner.setPower(-1.0);
+        }
     }
 
     public static void moveFrontMotorsAutonomous(float powerLeft, float powerRight, DcMotor leftMotorFront, DcMotor rightMotorFront, DcMotor leftMotorBack, DcMotor rightMotorBack)
