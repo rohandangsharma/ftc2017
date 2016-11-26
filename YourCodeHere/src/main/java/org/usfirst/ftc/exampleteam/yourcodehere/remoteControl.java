@@ -72,13 +72,13 @@ public class remoteControl extends SynchronousOpMode //CLASS START
                 //Set float variables as the inputs from the joystick and the dpad
                 //The negative sign is necessary because pushing the joystick up normally sends the robot backward
                 //Additionally, set float variables as the input from the triggers
-                drive = -gamepad1.left_stick_y;
-                shift = gamepad1.left_stick_x;
+                drive = gamepad1.left_stick_y;
+                shift = -gamepad1.left_stick_x;
                 leftTurn = gamepad1.left_trigger;
                 rightTurn = gamepad1.right_trigger;
 
                 //Spinner always turning
-                spinner.setPower(-0.5);
+                spinner.setPower(-0.2);
 
                 //Drive vs Shift on left joystick:
                 //Do nothing if joystick is stationary

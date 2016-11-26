@@ -26,24 +26,23 @@ import org.swerverobotics.library.SynchronousOpMode;
 public class autonomousProgramEncoders extends SynchronousOpMode //CLASS START
 {
     //Define DC Motors
-    DcMotor leftMotorFront;
-    DcMotor rightMotorFront;
-    DcMotor leftMotorBack;
-    DcMotor rightMotorBack;
-    DcMotor flipper;
-    DcMotor spinner;
+    DcMotor leftMotorFront = null;
+    DcMotor rightMotorFront = null;
+    DcMotor leftMotorBack = null;
+    DcMotor rightMotorBack = null;
+    DcMotor flipper = null;
+    DcMotor spinner = null;
 
     //Define Sensors
     ColorSensor colorSensor;
     DeviceInterfaceModule CDI;
 
 
-//    //Define servo motor door positions
-//    final double CLOSED_DOOR_POSITION = 0.4;
-//    final double OPEN_DOOR_POSITION = 1.2;
+    public void driveForwardAutonomous(float power, int degrees)
+    {
 
-//**********************************************************************************************************
-//METHODS BELOW
+    }
+
 
     //***********************************************************************************************************
 //MAIN BELOW
@@ -66,20 +65,33 @@ public class autonomousProgramEncoders extends SynchronousOpMode //CLASS START
         rightMotorFront.setDirection(DcMotor.Direction.REVERSE);
         rightMotorBack.setDirection(DcMotor.Direction.REVERSE);
 
-        //*************************************************************************************************************
+        functions.driveForwardAutonomous((float) 1.0, 8500, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+    }
+
+
+
+
+
+    //*************************************************************************************************************
 //AUTONOMOUS CODE BELOW
 
-        functions.driveForwardAutonomous((float) 1.0, 5000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
-        functions.rightTurnAutonomous((float) 1.0, 2000,leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
-        functions.driveForwardAutonomous((float) 1.0, 5000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
-        functions.leftTurnAutonomous((float) 1.0, 2000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
-        functions.rightShiftAutonomous((float) 1.0, 1500, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
-        functions.leftShiftAutonomous((float) 1.0, 1500, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
-        functions.driveForwardAutonomous((float) 1.0, 3000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
-        functions.rightShiftAutonomous((float) 1.0, 1500, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
-        functions.leftShiftAutonomous((float) 1.0, 1500, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
-        functions.leftTurnAutonomous((float) 1.0, 3000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
-        functions.driveForwardAutonomous((float) 1.0, 6000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+
+//        functions.driveForwardAutonomous((float) 1.0, 5000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+//        functions.rightTurnAutonomous((float) 1.0, 2000,leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+//        functions.driveForwardAutonomous((float) 1.0, 5000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+//        functions.leftTurnAutonomous((float) 1.0, 2000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+//        functions.rightShiftAutonomous((float) 1.0, 1500, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+//        functions.leftShiftAutonomous((float) 1.0, 1500, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+//        functions.driveForwardAutonomous((float) 1.0, 3000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+//        functions.rightShiftAutonomous((float) 1.0, 1500, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+//        functions.leftShiftAutonomous((float) 1.0, 1500, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+//        functions.leftTurnAutonomous((float) 1.0, 3000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+//        functions.driveForwardAutonomous((float) 1.0, 6000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+
+
+    //Close Main
+
+ }//Close Class
 
 
 //Color Sensor (Not Working):
@@ -112,5 +124,3 @@ public class autonomousProgramEncoders extends SynchronousOpMode //CLASS START
 //
 //        waitOneFullHardwareCycle();
 //
-    }//Close Main
-}// Close Class
