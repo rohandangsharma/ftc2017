@@ -32,9 +32,6 @@ public class remoteControl extends SynchronousOpMode //CLASS START
     //Define Sensors
     //ColorSensor colorSensor;
 
-    //Define press counts
-    public int aPressCount = 0;
-    //public int yPressCount = 0;
 
     //Define floats to be used as joystick and trigger inputs
     float drive;
@@ -76,31 +73,38 @@ public class remoteControl extends SynchronousOpMode //CLASS START
                 //Spinner always turning
                 spinner.setPower(-0.5);
 
-            //Drive vs Shift on left joystick:
+                //Drive vs Shift on left joystick:
                 //Do nothing if joystick is stationary
-                if (Math.abs(drive) == Math.abs(shift)) {
+                if (Math.abs(drive) == Math.abs(shift))
+                {
                     functions.stopDriving(leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
                 }
                 //Shift if pushed more on X than Y
-                if (Math.abs(shift) > Math.abs(drive)) {
+                if (Math.abs(shift) > Math.abs(drive))
+                {
                     functions.shiftTeleop(shift, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
                 }
                 //Drive if joystick pushed more Y than X
-                if (Math.abs(drive) > Math.abs(shift)) {
+                if (Math.abs(drive) > Math.abs(shift))
+                {
                     functions.driveTeleop(drive, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
                 }
 
-            //Access turn functions from function class
-                if (leftTurn > 0) {
+                //Access turn functions from function class
+                if (leftTurn > 0)
+                {
                     functions.leftTurnTeleop(leftTurn, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
                 }
-                if (rightTurn > 0) {
+                if (rightTurn > 0)
+                {
                     functions.rightTurnTeleop(rightTurn, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
                 }
                 //Stop all motors when "b" is pressed
-                if (gamepad1.b) {
+                if (gamepad1.b)
+                {
                     functions.stopEverything(leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack, spinner);
                 }
+
             } //Close inside "if" loop
             telemetry.update();
             idle();

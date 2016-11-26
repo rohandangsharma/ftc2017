@@ -20,10 +20,7 @@ public class functions
 
     public static void stopEverything(DcMotor leftMotorFront, DcMotor rightMotorFront, DcMotor leftMotorBack, DcMotor rightMotorBack, DcMotor spinner)
     {
-        leftMotorFront.setPower(0.0);
-        leftMotorBack.setPower(0.0);
-        rightMotorFront.setPower(0.0);
-        rightMotorBack.setPower(0.0);
+        functions.stopDriving(leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
         spinner.setPower(0.0);
     }
 
@@ -78,13 +75,10 @@ public class functions
             leftMotorFront.setPower(powerLeft);
             rightMotorFront.setPower(powerRight);
         }
-
-        if ((!rightMotorBack.isBusy()) || (!leftMotorBack.isBusy()))
+        if ((!rightMotorBack.isBusy()) && (!leftMotorBack.isBusy()))
         {
-            leftMotorFront.setPower(0.0);
-            rightMotorFront.setPower(0.0);
+            functions.stopDriving(leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
         }
-
         functions.stopDriving(leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
     }
 
@@ -127,29 +121,6 @@ public class functions
         rightMotorBack.setPower(power);
 
         functions.moveFrontMotorsAutonomous(power, power, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
-        while ((leftMotorBack.isBusy()) || (rightMotorBack.isBusy()) || (leftMotorFront.isBusy()) || (rightMotorFront.isBusy()))
-        { }
-
-        functions.stopDriving(leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
-        leftMotorBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightMotorBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-    }
-
-    public static void leftTurnAutonomous(float power, int degrees, DcMotor leftMotorFront, DcMotor rightMotorFront, DcMotor leftMotorBack, DcMotor rightMotorBack)
-    {
-        leftMotorBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightMotorBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        leftMotorBack.setTargetPosition(-degrees);
-        rightMotorBack.setTargetPosition(degrees);
-
-        leftMotorBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightMotorBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        leftMotorBack.setPower(-power);
-        rightMotorBack.setPower(power);
-
-        functions.moveFrontMotorsAutonomous(-power, power, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
         while ((leftMotorBack.isBusy()) && (rightMotorBack.isBusy()) && (leftMotorFront.isBusy()) && (rightMotorFront.isBusy()))
         { }
 
@@ -158,7 +129,7 @@ public class functions
         rightMotorBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
-    public static void rightTurnAutonomous(float power, int degrees, DcMotor leftMotorFront, DcMotor rightMotorFront, DcMotor leftMotorBack, DcMotor rightMotorBack)
+    public static void leftTurnAutonomous(float power, int degrees, DcMotor leftMotorFront, DcMotor rightMotorFront, DcMotor leftMotorBack, DcMotor rightMotorBack)
     {
         leftMotorBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightMotorBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -173,6 +144,29 @@ public class functions
         rightMotorBack.setPower(-power);
 
         functions.moveFrontMotorsAutonomous(power, -power, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+        while ((leftMotorBack.isBusy()) && (rightMotorBack.isBusy()) && (leftMotorFront.isBusy()) && (rightMotorFront.isBusy()))
+        { }
+
+        functions.stopDriving(leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+        leftMotorBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightMotorBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
+
+    public static void rightTurnAutonomous(float power, int degrees, DcMotor leftMotorFront, DcMotor rightMotorFront, DcMotor leftMotorBack, DcMotor rightMotorBack)
+    {
+        leftMotorBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightMotorBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        leftMotorBack.setTargetPosition(-degrees);
+        rightMotorBack.setTargetPosition(degrees);
+
+        leftMotorBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightMotorBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        leftMotorBack.setPower(-power);
+        rightMotorBack.setPower(power);
+
+        functions.moveFrontMotorsAutonomous(-power, power, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
         while ((leftMotorBack.isBusy()) && (rightMotorBack.isBusy()) && (leftMotorFront.isBusy()) && (rightMotorFront.isBusy()))
         { }
 
@@ -198,7 +192,7 @@ public class functions
         rightMotorBack.setPower(-shift);
 
         functions.moveFrontMotorsAutonomous(-shift, shift, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
-        while ((leftMotorBack.isBusy()) || (rightMotorBack.isBusy()) || (leftMotorFront.isBusy()) || (rightMotorFront.isBusy()))
+        while ((leftMotorBack.isBusy()) && (rightMotorBack.isBusy()) && (leftMotorFront.isBusy()) && (rightMotorFront.isBusy()))
         { }
 
         functions.stopDriving(leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
@@ -221,7 +215,7 @@ public class functions
         rightMotorBack.setPower(shift);
 
         functions.moveFrontMotorsAutonomous(shift, -shift, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
-        while ((leftMotorBack.isBusy()) || (rightMotorBack.isBusy()) || (leftMotorFront.isBusy()) || (rightMotorFront.isBusy()))
+        while ((leftMotorBack.isBusy()) && (rightMotorBack.isBusy()) && (leftMotorFront.isBusy()) && (rightMotorFront.isBusy()))
         { }
 
         functions.stopDriving(leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
@@ -229,7 +223,10 @@ public class functions
         rightMotorBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
-    public static float colorCheck(float color, ColorSensor colorSensor) {
-        return colorSensor.argb();
+    public static float colorCheck(ColorSensor colorSensor)
+    {
+        float color;
+        color = colorSensor.argb();
+        return color;
     }
 } //Close class
