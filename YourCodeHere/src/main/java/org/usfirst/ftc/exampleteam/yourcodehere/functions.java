@@ -4,6 +4,7 @@ package org.usfirst.ftc.exampleteam.yourcodehere;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ColorSensor;
+import com.qualcomm.robotcore.hardware.DeviceInterfaceModule;
 import org.swerverobotics.library.SynchronousOpMode;
 
 public class functions
@@ -19,7 +20,10 @@ public class functions
 
     public static void stopEverything(DcMotor leftMotorFront, DcMotor rightMotorFront, DcMotor leftMotorBack, DcMotor rightMotorBack, DcMotor spinner)
     {
-        functions.stopDriving(leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+        leftMotorFront.setPower(0.0);
+        leftMotorBack.setPower(0.0);
+        rightMotorFront.setPower(0.0);
+        rightMotorBack.setPower(0.0);
         spinner.setPower(0.0);
     }
 
@@ -31,7 +35,7 @@ public class functions
         rightMotorBack.setPower(drive);
     }
 
-    public static void leftTurnTeleop(float turn,  DcMotor leftMotorFront, DcMotor rightMotorFront, DcMotor leftMotorBack, DcMotor rightMotorBack)
+    public static void rightTurnTeleop(float turn,  DcMotor leftMotorFront, DcMotor rightMotorFront, DcMotor leftMotorBack, DcMotor rightMotorBack)
     {
         rightMotorFront.setPower(turn);
         rightMotorBack.setPower(turn);
@@ -39,7 +43,7 @@ public class functions
         leftMotorBack.setPower(-turn);
     }
 
-    public static void rightTurnTeleop(float turn,  DcMotor leftMotorFront, DcMotor rightMotorFront, DcMotor leftMotorBack, DcMotor rightMotorBack)
+    public static void leftTurnTeleop(float turn,  DcMotor leftMotorFront, DcMotor rightMotorFront, DcMotor leftMotorBack, DcMotor rightMotorBack)
     {
         rightMotorFront.setPower(-turn);
         rightMotorBack.setPower(-turn);
@@ -54,17 +58,17 @@ public class functions
         rightMotorBack.setPower(-shift);
     }
 
-    public static void movesSpinnerTeleop(DcMotor spinner, int aPressCount )
+    public static void spinnerSwitch(DcMotor spinner, int aPressCount )
     {
-        aPressCount = aPressCount + 1;
-        if (aPressCount % 2 == 0)
-        {
-            spinner.setPower(1.0);
-        }
-        if (aPressCount % 2 == 1)
-        {
-            spinner.setPower(-1.0);
-        }
+            aPressCount = aPressCount + 1;
+            if (aPressCount % 2 == 0)
+            {
+                spinner.setPower(1.0);
+            }
+            if (aPressCount % 2 == 1)
+            {
+                spinner.setPower(-1.0);
+            }
     }
 
     public static void moveFrontMotorsAutonomous(float powerLeft, float powerRight, DcMotor leftMotorFront, DcMotor rightMotorFront, DcMotor leftMotorBack, DcMotor rightMotorBack)
@@ -177,6 +181,8 @@ public class functions
         rightMotorBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
+
+
     public static void leftShiftAutonomous (float shift, int degrees, DcMotor leftMotorFront, DcMotor rightMotorFront, DcMotor leftMotorBack, DcMotor rightMotorBack)
     {
         leftMotorBack.setMode(DcMotor.RunMode.RESET_ENCODERS);
@@ -223,8 +229,7 @@ public class functions
         rightMotorBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
-
-    {
-
+    public static float colorCheck(float color, ColorSensor colorSensor) {
+        return colorSensor.argb();
     }
-}
+} //Close class

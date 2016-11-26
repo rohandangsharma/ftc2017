@@ -8,7 +8,7 @@ package org.usfirst.ftc.exampleteam.yourcodehere;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.ColorSensor;
+import com.qualcomm.robotcore.hardware.I2cDevice;
 import org.swerverobotics.library.SynchronousOpMode;
 
 
@@ -24,7 +24,6 @@ public class remoteControl extends SynchronousOpMode //CLASS START
     //DcMotor elevator;
     //DcMotor shooterLeft;
     //DcMotor shooterRight;
-
 
     //Define Servo Motors
 //    Servo doorLeft;
@@ -53,13 +52,9 @@ public class remoteControl extends SynchronousOpMode //CLASS START
         rightMotorFront = hardwareMap.dcMotor.get("rightMotorFront");
         leftMotorBack = hardwareMap.dcMotor.get("leftMotorBack");
         rightMotorBack = hardwareMap.dcMotor.get("rightMotorBack");
-        //elevator = hardwareMap.dcMotor.get("elevator");
         spinner = hardwareMap.dcMotor.get("spinner");
-        //shooterLeft = hardwareMap.dcMotor.get("shooterLeft");
-        //shooterRight = hardwareMap.dcMotor.get("shooterRight");
-//        doorLeft = hardwareMap.servo.get("doorLeft");
-//        doorRight = hardwareMap.servo.get("doorRight");
-        //colorSensor = hardwareMap.colorSensor.get("colorSensor");
+
+        //colorSensor = hardwareMap.i2cDevice.get("colorSensor");
 
         //Reverse the right motors since it is facing the opposite direction as the left motor
         leftMotorFront.setDirection(DcMotor.Direction.REVERSE);
@@ -68,10 +63,8 @@ public class remoteControl extends SynchronousOpMode //CLASS START
 //LOOP BELOW
         waitForStart();
         //Open loops
-        while (opModeIsActive())
-        {
-            if (updateGamepads())
-            {
+        while (opModeIsActive()) {
+            if (updateGamepads()) {
                 //Set float variables as the inputs from the joystick and the dpad
                 //The negative sign is necessary because pushing the joystick up normally sends the robot backward
                 //Additionally, set float variables as the input from the triggers
@@ -80,44 +73,32 @@ public class remoteControl extends SynchronousOpMode //CLASS START
                 leftTurn = gamepad1.left_trigger;
                 rightTurn = gamepad1.right_trigger;
 
-//                functions.drive(drive, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+                //Spinner always turning
+                spinner.setPower(-0.5);
 
-                //Call drive function from function class
+            //Drive vs Shift on left joystick:
                 //Do nothing if joystick is stationary
-                if (Math.abs(drive) == Math.abs(shift))
-                {
+                if (Math.abs(drive) == Math.abs(shift)) {
                     functions.stopDriving(leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
                 }
                 //Shift if pushed more on X than Y
-                if (Math.abs(shift) > Math.abs(drive))
-                {
+                if (Math.abs(shift) > Math.abs(drive)) {
                     functions.shiftTeleop(shift, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
                 }
                 //Drive if joystick pushed more Y than X
-                if (Math.abs(drive) > Math.abs(shift))
-                {
+                if (Math.abs(drive) > Math.abs(shift)) {
                     functions.driveTeleop(drive, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
                 }
 
-
-                //Access turn functions from function class
-                if (leftTurn > 0)
-                {
+            //Access turn functions from function class
+                if (leftTurn > 0) {
                     functions.leftTurnTeleop(leftTurn, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
                 }
-                if (rightTurn > 0)
-                {
+                if (rightTurn > 0) {
                     functions.rightTurnTeleop(rightTurn, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
                 }
-
-                //Attachments code
-                //Set the power of the spinner so that it toggles between forward and backward
-                if (gamepad1.a)
-                {
-                    functions.movesSpinnerTeleop(spinner, aPressCount);
-                }
-                if (gamepad1.b)
-                {
+                //Stop all motors when "b" is pressed
+                if (gamepad1.b) {
                     functions.stopEverything(leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack, spinner);
                 }
             } //Close inside "if" loop
