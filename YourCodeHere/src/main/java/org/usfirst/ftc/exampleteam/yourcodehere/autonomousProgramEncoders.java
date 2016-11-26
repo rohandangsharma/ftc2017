@@ -66,6 +66,8 @@ public class autonomousProgramEncoders extends SynchronousOpMode //CLASS START
         rightMotorBack.setDirection(DcMotor.Direction.REVERSE);
 
         functions.driveForwardAutonomous((float) 1.0, 8500, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+        functions.rightTurnAutonomous((float) 1.0, 5000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+        functions.driveForwardAutonomous((float) 1.0, 5000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
     }
 
 

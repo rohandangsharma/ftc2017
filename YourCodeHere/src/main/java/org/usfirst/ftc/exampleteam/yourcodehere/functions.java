@@ -166,7 +166,7 @@ public class functions
         rightMotorBack.setPower(power);
 
         functions.moveFrontMotorsAutonomous(-power, power, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
-        while ((leftMotorBack.isBusy()) && (rightMotorBack.isBusy()) && (leftMotorFront.isBusy()) && (rightMotorFront.isBusy()))
+        while ((leftMotorBack.isBusy()) || (rightMotorBack.isBusy()))
         { }
 
         functions.stopDriving(leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
