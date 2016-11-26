@@ -7,9 +7,11 @@ package org.usfirst.ftc.exampleteam.yourcodehere;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DeviceInterfaceModule;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.I2cDevice;
 import org.swerverobotics.library.SynchronousOpMode;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 
 
 @TeleOp(name="teleOp Working") //Name the class
@@ -21,6 +23,7 @@ public class remoteControl extends SynchronousOpMode //CLASS START
     DcMotor leftMotorBack;
     DcMotor rightMotorBack;
     DcMotor spinner;
+    DcMotor flipper;
     //DcMotor elevator;
     //DcMotor shooterLeft;
     //DcMotor shooterRight;
@@ -30,7 +33,8 @@ public class remoteControl extends SynchronousOpMode //CLASS START
 //    Servo doorRight;
 
     //Define Sensors
-    //ColorSensor colorSensor;
+    ColorSensor colorSensor;
+    DeviceInterfaceModule CDI;
 
 
     //Define floats to be used as joystick and trigger inputs
@@ -50,12 +54,15 @@ public class remoteControl extends SynchronousOpMode //CLASS START
         leftMotorBack = hardwareMap.dcMotor.get("leftMotorBack");
         rightMotorBack = hardwareMap.dcMotor.get("rightMotorBack");
         spinner = hardwareMap.dcMotor.get("spinner");
+        flipper = hardwareMap.dcMotor.get("flipper");
 
-        //colorSensor = hardwareMap.i2cDevice.get("colorSensor");
+        //Get references to the sensors from the hardware map
+        colorSensor = hardwareMap.colorSensor.get("colorSensor");
+        CDI = hardwareMap.deviceInterfaceModule.get("CDI");
 
         //Reverse the right motors since it is facing the opposite direction as the left motor
-        leftMotorFront.setDirection(DcMotor.Direction.REVERSE);
-        leftMotorBack.setDirection(DcMotor.Direction.REVERSE);
+        rightMotorFront.setDirection(DcMotor.Direction.REVERSE);
+        rightMotorBack.setDirection(DcMotor.Direction.REVERSE);
 //***********************************************************************************************************
 //LOOP BELOW
         waitForStart();

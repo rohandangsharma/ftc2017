@@ -30,14 +30,8 @@ public class autonomousProgramEncoders extends SynchronousOpMode //CLASS START
     DcMotor rightMotorFront;
     DcMotor leftMotorBack;
     DcMotor rightMotorBack;
-    //DcMotor elevator;
+    DcMotor flipper;
     DcMotor spinner;
-    //DcMotor shooterLeft;
-    //DcMotor shooterRight;
-
-//    //Define Servo Motors
-//    Servo doorLeft ;
-//    Servo doorRight;
 
     //Define Sensors
     ColorSensor colorSensor;
@@ -61,12 +55,8 @@ public class autonomousProgramEncoders extends SynchronousOpMode //CLASS START
         rightMotorFront = hardwareMap.dcMotor.get("rightMotorFront");
         leftMotorBack = hardwareMap.dcMotor.get("leftMotorBack");
         rightMotorBack = hardwareMap.dcMotor.get("rightMotorBack");
-        //elevator = hardwareMap.dcMotor.get("elevator");
         spinner = hardwareMap.dcMotor.get("spinner");
-        //shooterLeft = hardwareMap.dcMotor.get("shooterLeft");
-        //shooterRight = hardwareMap.dcMotor.get("shooterRight");
-//        doorLeft = hardwareMap.servo.get("doorLeft");
-//        doorRight = hardwareMap.servo.get("doorRight");
+        flipper = hardwareMap.dcMotor.get("flipper");
 
         //Get references to the sensors from the hardware map
         colorSensor = hardwareMap.colorSensor.get("colorSensor");
