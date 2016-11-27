@@ -37,18 +37,10 @@ public class autonomousProgramEncoders extends SynchronousOpMode //CLASS START
     ColorSensor colorSensor;
     DeviceInterfaceModule CDI;
 
-
-    public void driveForwardAutonomous(float power, int degrees)
-    {
-
-    }
-
-
     //***********************************************************************************************************
 //MAIN BELOW
     @Override
-    public void main() throws InterruptedException
-    {
+    public void main() throws InterruptedException {
         //Get references to the motors from the hardware map
         leftMotorFront = hardwareMap.dcMotor.get("leftMotorFront");
         rightMotorFront = hardwareMap.dcMotor.get("rightMotorFront");
@@ -65,64 +57,16 @@ public class autonomousProgramEncoders extends SynchronousOpMode //CLASS START
         rightMotorFront.setDirection(DcMotor.Direction.REVERSE);
         rightMotorBack.setDirection(DcMotor.Direction.REVERSE);
 
-        functions.driveForwardAutonomous((float) 1.0, 8500, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
-        functions.rightTurnAutonomous((float) 1.0, 5000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
-        functions.driveForwardAutonomous((float) 1.0, 5000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+
+
+
+
+
+        functions.driveForwardAutonomous((float) 1.0, 11000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+//        functions.rightTurnAutonomous((float) 1.0, 4500, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+
+
     }
 
 
-
-
-
-    //*************************************************************************************************************
-//AUTONOMOUS CODE BELOW
-
-
-//        functions.driveForwardAutonomous((float) 1.0, 5000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
-//        functions.rightTurnAutonomous((float) 1.0, 2000,leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
-//        functions.driveForwardAutonomous((float) 1.0, 5000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
-//        functions.leftTurnAutonomous((float) 1.0, 2000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
-//        functions.rightShiftAutonomous((float) 1.0, 1500, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
-//        functions.leftShiftAutonomous((float) 1.0, 1500, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
-//        functions.driveForwardAutonomous((float) 1.0, 3000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
-//        functions.rightShiftAutonomous((float) 1.0, 1500, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
-//        functions.leftShiftAutonomous((float) 1.0, 1500, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
-//        functions.leftTurnAutonomous((float) 1.0, 3000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
-//        functions.driveForwardAutonomous((float) 1.0, 6000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
-
-
-    //Close Main
-
- }//Close Class
-
-
-//Color Sensor (Not Working):
-
-//        colorSensor.enableLed(true);
-//        float hsvValues[] = {0, 0, 0};
-//        //calculate hue
-//        Color.RGBToHSV(colorSensor.red() * 8, colorSensor.green() * 8, colorSensor.blue() * 8, hsvValues);
-//
-//        //display values
-//        telemetry.addData("2 Clear", colorSensor.alpha());
-//        telemetry.addData("3 Red  ", colorSensor.red());
-//        telemetry.addData("4 Green", colorSensor.green());
-//        telemetry.addData("5 Blue ", colorSensor.blue());
-//        telemetry.addData("6 Hue", hsvValues[0]);
-//
-//        //illuminate the RED/BLUE LED on the Core Device Interface if the RED/BLUE value is greatest
-//        if (colorSensor.red() > colorSensor.blue() && colorSensor.red() > colorSensor.green()) {
-//            CDI.setLED(1, true);
-//            CDI.setLED(0, false);
-//        }
-//        else if (colorSensor.blue() > colorSensor.red() && colorSensor.blue() > colorSensor.green()) {
-//            CDI.setLED(1, false);
-//            CDI.setLED(0, true);
-//        }
-//        else {
-//            CDI.setLED(1, false);
-//            CDI.setLED(0, false);
-//        }
-//
-//        waitOneFullHardwareCycle();
-//
+}

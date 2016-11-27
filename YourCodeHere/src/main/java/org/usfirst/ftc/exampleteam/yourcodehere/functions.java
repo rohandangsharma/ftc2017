@@ -7,8 +7,27 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DeviceInterfaceModule;
 import org.swerverobotics.library.SynchronousOpMode;
 
+import java.sql.Time;
+
 public class functions
 {
+
+    public static void sleep(long sleepTime)
+    {
+        long wakeupTime = System.currentTimeMillis() + sleepTime;
+
+        while (sleepTime > 0)
+        {
+            try
+            {
+                Thread.sleep(sleepTime);
+            }
+            catch (InterruptedException e)
+            {
+                sleepTime = wakeupTime - System.currentTimeMillis();
+            }
+        }
+    } //sleep
 
     public static void stopDriving(DcMotor leftMotorFront, DcMotor rightMotorFront, DcMotor leftMotorBack, DcMotor rightMotorBack)
     {
@@ -17,11 +36,16 @@ public class functions
         rightMotorFront.setPower(0.0);
         rightMotorBack.setPower(0.0);
     }
+    public static void stopAttachments(DcMotor spinner, DcMotor flipper)
+    {
+        spinner.setPower(0.0);
+        flipper.setPower(0.0);
+    }
 
-    public static void stopEverything(DcMotor leftMotorFront, DcMotor rightMotorFront, DcMotor leftMotorBack, DcMotor rightMotorBack, DcMotor spinner)
+    public static void stopEverything(DcMotor leftMotorFront, DcMotor rightMotorFront, DcMotor leftMotorBack, DcMotor rightMotorBack, DcMotor spinner, DcMotor flipper)
     {
         functions.stopDriving(leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
-        spinner.setPower(0.0);
+        functions.stopAttachments(spinner, flipper);
     }
 
     public static void driveTeleop(float drive,  DcMotor leftMotorFront, DcMotor rightMotorFront, DcMotor leftMotorBack, DcMotor rightMotorBack)
@@ -47,25 +71,33 @@ public class functions
         leftMotorFront.setPower(-turn);
         leftMotorBack.setPower(-turn);
     }
-    public static void shiftTeleop(float shift, DcMotor leftMotorFront, DcMotor rightMotorFront, DcMotor leftMotorBack, DcMotor rightMotorBack)
-    {
+    public static void shiftTeleop(float shift, DcMotor leftMotorFront, DcMotor rightMotorFront, DcMotor leftMotorBack, DcMotor rightMotorBack) {
         leftMotorFront.setPower(-shift);
         leftMotorBack.setPower(shift);
         rightMotorFront.setPower(shift);
         rightMotorBack.setPower(-shift);
     }
 
-    public static void spinnerSwitch(DcMotor spinner, int aPressCount )
+    public static void toggleSpinner(DcMotor spinner, int aPressCount )
     {
-            aPressCount = aPressCount + 1;
-            if (aPressCount % 2 == 0)
+            if (aPressCount % 3 == 0)
             {
-                spinner.setPower(1.0);
+                spinner.setPower(0.0);
             }
-            if (aPressCount % 2 == 1)
+            if (aPressCount % 3 == 1)
             {
-                spinner.setPower(-1.0);
+                spinner.setPower(-0.75);
             }
+            if (aPressCount % 3 == 2)
+            {
+                spinner.setPower(0.75);
+            }
+    }
+
+    public static void shootBall(DcMotor flipper)
+    {
+        flipper.setPower(0.2);
+
     }
 
     public static void moveFrontMotorsAutonomous(float powerLeft, float powerRight, DcMotor leftMotorFront, DcMotor rightMotorFront, DcMotor leftMotorBack, DcMotor rightMotorBack)
@@ -133,17 +165,17 @@ public class functions
         leftMotorBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightMotorBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        leftMotorBack.setTargetPosition(degrees);
-        rightMotorBack.setTargetPosition(-degrees);
+        leftMotorBack.setTargetPosition(-degrees);
+        rightMotorBack.setTargetPosition(degrees);
 
         leftMotorBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         rightMotorBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        leftMotorBack.setPower(power);
-        rightMotorBack.setPower(-power);
+        leftMotorBack.setPower(-power);
+        rightMotorBack.setPower(power);
 
-        functions.moveFrontMotorsAutonomous(power, -power, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
-        while ((leftMotorBack.isBusy()) && (rightMotorBack.isBusy()) && (leftMotorFront.isBusy()) && (rightMotorFront.isBusy()))
+        functions.moveFrontMotorsAutonomous(-power, power, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+        while ((leftMotorBack.isBusy()) || (rightMotorBack.isBusy()))
         { }
 
         functions.stopDriving(leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
@@ -156,16 +188,16 @@ public class functions
         leftMotorBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightMotorBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        leftMotorBack.setTargetPosition(-degrees);
-        rightMotorBack.setTargetPosition(degrees);
+        leftMotorBack.setTargetPosition(degrees);
+        rightMotorBack.setTargetPosition(-degrees);
 
         leftMotorBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         rightMotorBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        leftMotorBack.setPower(-power);
-        rightMotorBack.setPower(power);
+        leftMotorBack.setPower(power);
+        rightMotorBack.setPower(-power);
 
-        functions.moveFrontMotorsAutonomous(-power, power, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+        functions.moveFrontMotorsAutonomous(power, -power, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
         while ((leftMotorBack.isBusy()) || (rightMotorBack.isBusy()))
         { }
 

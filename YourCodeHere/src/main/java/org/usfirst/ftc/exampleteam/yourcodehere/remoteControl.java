@@ -18,19 +18,14 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 public class remoteControl extends SynchronousOpMode //CLASS START
 {
     //Define DC Motors
-    DcMotor leftMotorFront;
-    DcMotor rightMotorFront;
-    DcMotor leftMotorBack;
-    DcMotor rightMotorBack;
-    DcMotor spinner;
-    DcMotor flipper;
-    //DcMotor elevator;
-    //DcMotor shooterLeft;
-    //DcMotor shooterRight;
+    DcMotor leftMotorFront = null;
+    DcMotor rightMotorFront = null;
+    DcMotor leftMotorBack = null;
+    DcMotor rightMotorBack = null;
+    DcMotor spinner = null;
+    DcMotor flipper = null;
 
-    //Define Servo Motors
-//    Servo doorLeft;
-//    Servo doorRight;
+    int aPressCount = 0;
 
     //Define Sensors
     ColorSensor colorSensor;
@@ -77,10 +72,9 @@ public class remoteControl extends SynchronousOpMode //CLASS START
                 leftTurn = gamepad1.left_trigger;
                 rightTurn = gamepad1.right_trigger;
 
-                //Spinner always turning
-                spinner.setPower(-0.2);
 
                 //Drive vs Shift on left joystick:
+
                 //Do nothing if joystick is stationary
                 if (Math.abs(drive) == Math.abs(shift))
                 {
@@ -106,11 +100,24 @@ public class remoteControl extends SynchronousOpMode //CLASS START
                 {
                     functions.rightTurnTeleop(rightTurn, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
                 }
-                //Stop all motors when "b" is pressed
-                if (gamepad1.b)
+
+                if (gamepad2.a)
                 {
-                    functions.stopEverything(leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack, spinner);
+                    aPressCount++;
+                    functions.toggleSpinner(spinner, aPressCount);
                 }
+                if (gamepad2.y)
+                {
+                    functions.shootBall(flipper);
+                    functions.sleep(1000);
+                }
+                //Stop all motors when "b" is pressed
+                if ((gamepad1.b) || (gamepad2.b))
+                {
+                    functions.stopEverything(leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack, spinner, flipper);
+                }
+
+
 
             } //Close inside "if" loop
             telemetry.update();
