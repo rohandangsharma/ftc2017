@@ -112,9 +112,13 @@ public class remoteControl extends SynchronousOpMode //CLASS START
                     functions.sleep(1000);
                 }
                 //Stop all motors when "b" is pressed
-                if ((gamepad1.b) || (gamepad2.b))
+                if ((gamepad1.b))
                 {
                     functions.stopEverything(leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack, spinner, flipper);
+                }
+                if ((gamepad2.b))
+                {
+                    functions.stopAttachments(spinner, flipper);
                 }
 
 

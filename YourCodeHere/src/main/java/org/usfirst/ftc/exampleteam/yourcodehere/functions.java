@@ -96,7 +96,7 @@ public class functions
 
     public static void shootBall(DcMotor flipper)
     {
-        flipper.setPower(0.2);
+        flipper.setPower(1.0);
 
     }
 
