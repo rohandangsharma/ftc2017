@@ -78,7 +78,7 @@ public class functions
         rightMotorBack.setPower(-shift);
     }
 
-    public static void toggleSpinner(DcMotor spinner, int aPressCount )
+    public static void toggleSpinner(DcMotor spinner, int aPressCount, double speed )
     {
             if (aPressCount % 3 == 0)
             {
@@ -86,11 +86,11 @@ public class functions
             }
             if (aPressCount % 3 == 1)
             {
-                spinner.setPower(-0.75);
+                spinner.setPower(-1 * speed);
             }
             if (aPressCount % 3 == 2)
             {
-                spinner.setPower(0.75);
+                spinner.setPower(speed);
             }
     }
 

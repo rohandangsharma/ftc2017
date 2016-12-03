@@ -18,14 +18,14 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 public class remoteControl extends SynchronousOpMode //CLASS START
 {
     //Define DC Motors
-    DcMotor leftMotorFront = null;
-    DcMotor rightMotorFront = null;
-    DcMotor leftMotorBack = null;
-    DcMotor rightMotorBack = null;
-    DcMotor spinner = null;
-    DcMotor flipper = null;
+    DcMotor leftMotorFront;
+    DcMotor rightMotorFront;
+    DcMotor leftMotorBack;
+    DcMotor rightMotorBack;
+    DcMotor spinner;
+    DcMotor flipper;
 
-    int aPressCount = 0;
+    int aPressCount = 1;
 
     //Define Sensors
     ColorSensor colorSensor;
@@ -74,55 +74,43 @@ public class remoteControl extends SynchronousOpMode //CLASS START
 
 
                 //Drive vs Shift on left joystick:
-
                 //Do nothing if joystick is stationary
-                if (Math.abs(drive) == Math.abs(shift))
-                {
+                if (Math.abs(drive) == Math.abs(shift)) {
                     functions.stopDriving(leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
                 }
                 //Shift if pushed more on X than Y
-                if (Math.abs(shift) > Math.abs(drive))
-                {
+                if (Math.abs(shift) > Math.abs(drive)) {
                     functions.shiftTeleop(shift, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
                 }
                 //Drive if joystick pushed more Y than X
-                if (Math.abs(drive) > Math.abs(shift))
-                {
+                if (Math.abs(drive) > Math.abs(shift)) {
                     functions.driveTeleop(drive, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
                 }
 
                 //Access turn functions from function class
-                if (leftTurn > 0)
-                {
+                if (leftTurn > 0) {
                     functions.leftTurnTeleop(leftTurn, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
                 }
-                if (rightTurn > 0)
-                {
+                if (rightTurn > 0) {
                     functions.rightTurnTeleop(rightTurn, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
                 }
 
-                if (gamepad2.a)
-                {
+                // "a" button starts spinner
+                if (gamepad2.a) {
                     aPressCount++;
-                    functions.toggleSpinner(spinner, aPressCount);
+                    functions.toggleSpinner(spinner, aPressCount, 1.0);
                 }
-                if (gamepad2.y)
-                {
+                if (gamepad2.y) {
                     functions.shootBall(flipper);
                     functions.sleep(1000);
                 }
                 //Stop all motors when "b" is pressed
-                if ((gamepad1.b))
-                {
+                if ((gamepad1.b)) {
                     functions.stopEverything(leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack, spinner, flipper);
                 }
-                if ((gamepad2.b))
-                {
+                if ((gamepad2.b)) {
                     functions.stopAttachments(spinner, flipper);
                 }
-
-
-
             } //Close inside "if" loop
             telemetry.update();
             idle();

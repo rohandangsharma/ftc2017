@@ -26,19 +26,18 @@ import org.swerverobotics.library.SynchronousOpMode;
 public class autonomousProgramEncoders extends SynchronousOpMode //CLASS START
 {
     //Define DC Motors
-    DcMotor leftMotorFront = null;
-    DcMotor rightMotorFront = null;
-    DcMotor leftMotorBack = null;
-    DcMotor rightMotorBack = null;
-    DcMotor flipper = null;
-    DcMotor spinner = null;
+    DcMotor leftMotorFront;
+    DcMotor rightMotorFront;
+    DcMotor leftMotorBack;
+    DcMotor rightMotorBack;
+    DcMotor flipper;
+    DcMotor spinner;
 
     //Define Sensors
     ColorSensor colorSensor;
     DeviceInterfaceModule CDI;
 
-    //***********************************************************************************************************
-//MAIN BELOW
+    //MAIN BELOW
     @Override
     public void main() throws InterruptedException {
         //Get references to the motors from the hardware map

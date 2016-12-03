@@ -16,8 +16,7 @@ import org.swerverobotics.library.SynchronousOpMode;
 
 
 @Autonomous(name="Color Sensor ") //Name the class
-public class colorSensorTest extends SynchronousOpMode //CLASS START
-{
+public class colorSensorTest extends SynchronousOpMode {
     //Define DC Motors
     DcMotor leftMotorFront;
     DcMotor rightMotorFront;
