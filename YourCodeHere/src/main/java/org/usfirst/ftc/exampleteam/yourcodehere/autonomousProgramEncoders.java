@@ -56,14 +56,17 @@ public class autonomousProgramEncoders extends SynchronousOpMode //CLASS START
         rightMotorFront.setDirection(DcMotor.Direction.REVERSE);
         rightMotorBack.setDirection(DcMotor.Direction.REVERSE);
 
+    functions.blueGreater(colorSensor);
 
-
-
-
-
-        functions.driveForwardAutonomous((float) 1.0, 11000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
-//        functions.rightTurnAutonomous((float) 1.0, 4500, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
-
+//        functions.driveForwardAutonomous((float) 1.0, 11000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+//        functions.rightTurnAutonomous((float) 0.4, 4200, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+//        functions.driveForwardAutonomous((float) 1.0, 9000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+//        functions.leftTurnAutonomous((float) 0.4, 4000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+//        functions.driveForwardAutonomous((float) 1.0, 7000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+//        functions.leftTurnAutonomous((float) 0.4, 8000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+//        functions.driveForwardAutonomous((float) 1.0, 11000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+//        functions.leftTurnAutonomous((float) 0.4, 1000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+//        functions.driveForwardAutonomous((float) 1.0, 5000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
 
     }
 

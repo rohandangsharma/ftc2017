@@ -1,4 +1,4 @@
-//This is the main autonomous program with encoders for FTC Velocity Vortex 2016
+//This is the main color sensor program for FTC Velocity Vortex 2016
 //Authors: FTC team [11212??], The Lexington Legoheads
 //In case of questions email anupendra@gmail.com (coach)
 //**********************************************************************************************************
@@ -48,7 +48,7 @@ public class colorSensorAuto extends SynchronousOpMode {
 
         while (opModeIsActive()) {
             // Set the LED in the beginning
-            colorSensor.enableLed(true);
+            colorSensor.enableLed(false);
 
             // while the op mode is active, loop and read the RGB data.
             // convert the RGB values to HSV values.
@@ -59,7 +59,6 @@ public class colorSensorAuto extends SynchronousOpMode {
             telemetry.addData("Red  ", colorSensor.red());
             telemetry.addData("Green", colorSensor.green());
             telemetry.addData("Blue ", colorSensor.blue());
-            telemetry.addData("Rohan", colorSensor.argb());
             telemetry.addData("Hue", hsvValues[0]);
 
             // change the background color to match the color detected by the RGB sensor.

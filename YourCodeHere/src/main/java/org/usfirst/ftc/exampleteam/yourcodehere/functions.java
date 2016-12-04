@@ -1,34 +1,18 @@
 package org.usfirst.ftc.exampleteam.yourcodehere;
 
+import android.app.Activity;
+import android.graphics.Color;
+import android.view.View;
+
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DeviceInterfaceModule;
-import org.swerverobotics.library.SynchronousOpMode;
-
-import java.sql.Time;
 
 public class functions
 {
-
-    public static void sleep(long sleepTime)
-    {
-        long wakeupTime = System.currentTimeMillis() + sleepTime;
-
-        while (sleepTime > 0)
-        {
-            try
-            {
-                Thread.sleep(sleepTime);
-            }
-            catch (InterruptedException e)
-            {
-                sleepTime = wakeupTime - System.currentTimeMillis();
-            }
-        }
-    } //sleep
-
     public static void stopDriving(DcMotor leftMotorFront, DcMotor rightMotorFront, DcMotor leftMotorBack, DcMotor rightMotorBack)
     {
         leftMotorFront.setPower(0.0);
@@ -71,33 +55,34 @@ public class functions
         leftMotorFront.setPower(-turn);
         leftMotorBack.setPower(-turn);
     }
-    public static void shiftTeleop(float shift, DcMotor leftMotorFront, DcMotor rightMotorFront, DcMotor leftMotorBack, DcMotor rightMotorBack) {
+    public static void shiftTeleop(float shift, DcMotor leftMotorFront, DcMotor rightMotorFront, DcMotor leftMotorBack, DcMotor rightMotorBack)  {
         leftMotorFront.setPower(-shift);
         leftMotorBack.setPower(shift);
         rightMotorFront.setPower(shift);
         rightMotorBack.setPower(-shift);
     }
 
-    public static void toggleSpinner(DcMotor spinner, int aPressCount, double speed )
+    public static void toggleSpinner(DcMotor spinner, int aPressCount, float power )
     {
-            if (aPressCount % 3 == 0)
-            {
-                spinner.setPower(0.0);
-            }
-            if (aPressCount % 3 == 1)
-            {
-                spinner.setPower(-1 * speed);
-            }
-            if (aPressCount % 3 == 2)
-            {
-                spinner.setPower(speed);
-            }
+        if (aPressCount % 3 == 0)
+        {
+            spinner.setPower(0.0);
+        }
+        if (aPressCount % 3 == 1)
+        {
+            spinner.setPower(power);
+        }
+        if (aPressCount % 3 == 2)
+        {
+            spinner.setPower(-power);
+        }
     }
 
-    public static void shootBall(DcMotor flipper)
+    public static void shootBall(DcMotor flipper, long time) throws InterruptedException
     {
         flipper.setPower(1.0);
-
+        Thread.sleep(time);
+        flipper.setPower(0);
     }
 
     public static void moveFrontMotorsAutonomous(float powerLeft, float powerRight, DcMotor leftMotorFront, DcMotor rightMotorFront, DcMotor leftMotorBack, DcMotor rightMotorBack)
@@ -254,10 +239,12 @@ public class functions
         rightMotorBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
-    public static float colorCheck(ColorSensor colorSensor)
-    {
-        float color;
-        color = colorSensor.argb();
-        return color;
+    public static boolean blueGreater(ColorSensor colorSensor) {
+        if (colorSensor.blue() > colorSensor.red()) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 } //Close class
