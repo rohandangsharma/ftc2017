@@ -8,14 +8,8 @@ package org.usfirst.ftc.exampleteam.yourcodehere;
 
 //Import necessary items
 
-import android.graphics.Color;
-
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorController;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.HardwareDevice;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.DeviceInterfaceModule;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import org.swerverobotics.library.SynchronousOpMode;
@@ -56,7 +50,24 @@ public class autonomousProgramEncoders extends SynchronousOpMode //CLASS START
         rightMotorFront.setDirection(DcMotor.Direction.REVERSE);
         rightMotorBack.setDirection(DcMotor.Direction.REVERSE);
 
-    functions.blueGreater(colorSensor);
+        waitForStart();
+
+        while (opModeIsActive()) {
+//            while (functions.colorGreater(colorSensor, "blue") == true) {
+//                functions.driveTeleop((float) 1.0, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+//            }
+//            while (functions.colorGreater(colorSensor, "red") == true) {
+//                functions.driveTeleop((float) -1.0, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+//            }
+
+            if(functions.iSeeAColor(colorSensor) == true){
+                while(functions.whatColor(colorSensor).equals("blue")){
+
+                }
+            }
+
+
+
 
 //        functions.driveForwardAutonomous((float) 1.0, 11000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
 //        functions.rightTurnAutonomous((float) 0.4, 4200, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
@@ -68,7 +79,8 @@ public class autonomousProgramEncoders extends SynchronousOpMode //CLASS START
 //        functions.leftTurnAutonomous((float) 0.4, 1000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
 //        functions.driveForwardAutonomous((float) 1.0, 5000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
 
+        }
+
+
     }
-
-
 }
