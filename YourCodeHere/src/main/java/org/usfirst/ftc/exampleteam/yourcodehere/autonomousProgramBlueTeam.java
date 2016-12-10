@@ -14,6 +14,7 @@ import com.qualcomm.robotcore.hardware.DeviceInterfaceModule;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import org.swerverobotics.library.SynchronousOpMode;
 
+import static org.usfirst.ftc.exampleteam.yourcodehere.functions.*;
 
 
 @Autonomous(name="Blue Team Autonomous") //Name the class
@@ -49,25 +50,40 @@ public class autonomousProgramBlueTeam extends SynchronousOpMode //CLASS START
         //Reverse the right motors since it is facing the opposite direction as the left motor
         rightMotorFront.setDirection(DcMotor.Direction.REVERSE);
         rightMotorBack.setDirection(DcMotor.Direction.REVERSE);
+        //Put color in passive mode
         colorSensor.enableLed(false);
 
-            functions.driveAutonomous((float) 0.5, 5400, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
-            functions.rightTurnAutonomous((float) 0.4, 2500, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
-            functions.driveAutonomous((float) 0.5, 5400, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
-            functions.leftTurnAutonomous((float) 0.4, 2500, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
-            functions.colorSensorAutonomous(colorSensor, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
-            functions.leftShiftAutonomous((float) 0.4, 1000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
-            functions.driveAutonomous((float) 0.5, 5000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
-            functions.colorSensorAutonomous(colorSensor, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
-            functions.leftShiftAutonomous((float) 0.4, 2000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
-            functions.leftTurnAutonomous((float) 0.4, 4000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
-            functions.driveAutonomous((float) 0.5, 6000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
-            functions.leftTurnAutonomous((float) 0.4, 100, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
-            functions.driveAutonomous((float) 0.5, 6000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+        //Wait for start button to be clicked
+        waitForStart();
+        //Open loops
+        while (opModeIsActive()) {
+            //Drive forward to center Vortex
+            driveAutonomous((float) 0.5, 3000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+            //Shift towards beacon
+            rightShiftAutonomous((float) 0.4, 3000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+            //Become aligned with beacon
+            driveAutonomous((float) 0.5, 2000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+            //Shift next to beacon
+            rightShiftAutonomous((float) 0.2, 3000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+            //If "blue" seen, shift to right, hit button
+            colorSensorAutonomous("blue", colorSensor, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+            //Come off of wall
+            leftShiftAutonomous((float) 0.5, 300, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+            //Align with second beacon
+            driveAutonomous((float) 0.5, 5500, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+            //If "blue seen, shift to right, hit button
+            colorSensorAutonomous("blue", colorSensor, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+            //Come off wall
+            leftShiftAutonomous((float) 0.4, 2000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+            //Turn to Center Vortex
+            leftTurnAutonomous((float) 0.4, 4000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+            //Drive to Center Vortex
+            driveAutonomous((float) 0.5, 6000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+            //Turn to ramp
+            leftTurnAutonomous((float) 0.4, 1000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+            //Drive up ramp
+            driveAutonomous((float) 0.5, 6000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
 
-//            idle();
-//        }
-
-
+        }
     }
 }
