@@ -51,16 +51,19 @@ public class autonomousProgramBlueTeam extends SynchronousOpMode //CLASS START
         rightMotorBack.setDirection(DcMotor.Direction.REVERSE);
         colorSensor.enableLed(false);
 
-            functions.driveAutonomous((float) 0.5, 4500, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
-            functions.rightTurnAutonomous((float) 0.2, 2000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
-            functions.driveAutonomous((float) 0.5, 6000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
-            functions.leftTurnAutonomous((float) 0.2, 1800, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+            functions.driveAutonomous((float) 0.5, 5400, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+            functions.rightTurnAutonomous((float) 0.4, 2500, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+            functions.driveAutonomous((float) 0.5, 5400, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+            functions.leftTurnAutonomous((float) 0.4, 2500, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
             functions.colorSensorAutonomous(colorSensor, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
-//            functions.driveAutonomous((float) 1.0, 3000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
-//            functions.leftTurnAutonomous((float) 0.4, 3500, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
-//            functions.driveAutonomous((float) 1.0, 5000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
-//            functions.leftTurnAutonomous((float) 0.4, 400, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
-//            functions.driveAutonomous((float) 1.0, 2000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+            functions.leftShiftAutonomous((float) 0.4, 1000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+            functions.driveAutonomous((float) 0.5, 5000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+            functions.colorSensorAutonomous(colorSensor, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+            functions.leftShiftAutonomous((float) 0.4, 2000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+            functions.leftTurnAutonomous((float) 0.4, 4000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+            functions.driveAutonomous((float) 0.5, 6000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+            functions.leftTurnAutonomous((float) 0.4, 100, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+            functions.driveAutonomous((float) 0.5, 6000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
 
 //            idle();
 //        }

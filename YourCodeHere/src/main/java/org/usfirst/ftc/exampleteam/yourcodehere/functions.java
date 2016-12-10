@@ -333,15 +333,13 @@ public class functions
 
     public static void colorSensorAutonomous(ColorSensor colorSensor, DcMotor leftMotorFront, DcMotor rightMotorFront, DcMotor leftMotorBack, DcMotor rightMotorBack) throws InterruptedException
     {
-        boolean stateOfSensor = functions.iSeeAColor(colorSensor);
-        if(stateOfSensor)
+        if(functions.iSeeAColor(colorSensor))
         {
             while (functions.whatColor(colorSensor).equals("red"))
             {
-                functions.driveAutonomous((float) 0.2, 500, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+                functions.driveAutonomous((float) 0.2, 200, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
             }
                 functions.rightShiftAutonomous((float) 0.2, 1000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
-                stateOfSensor = false;
         }
     }
 }
