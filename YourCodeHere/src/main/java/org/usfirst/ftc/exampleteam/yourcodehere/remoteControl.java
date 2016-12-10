@@ -25,7 +25,8 @@ public class remoteControl extends SynchronousOpMode //CLASS START
     DcMotor spinner;
     DcMotor flipper;
 
-    int aPressCount = 0;
+    //Define presscount
+    int spinnerMode = 0;
 
     //Define Sensors
     ColorSensor colorSensor;
@@ -66,9 +67,7 @@ public class remoteControl extends SynchronousOpMode //CLASS START
         {
             if (updateGamepads())
             {
-                //Set float variables as the inputs from the joystick and the dpad
-                //The negative sign is necessary because pushing the joystick up normally sends the robot backward
-                //Additionally, set float variables as the input from the triggers
+                //Set float variables as the inputs from the joystick and the triggers
                 drive = gamepad1.left_stick_y;
                 shift = -gamepad1.left_stick_x;
                 leftTurn = gamepad1.left_trigger;
@@ -77,44 +76,53 @@ public class remoteControl extends SynchronousOpMode //CLASS START
 
                 //Drive vs Shift on left joystick:
                 //Do nothing if joystick is stationary
-                if (Math.abs(drive) == Math.abs(shift)) {
+                if (Math.abs(drive) == Math.abs(shift))
+                {
                     stopDriving(leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
                 }
                 //Shift if pushed more on X than Y
-                if (Math.abs(shift) > Math.abs(drive)) {
+                if (Math.abs(shift) > Math.abs(drive))
+                {
                     shiftTeleop(shift, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
                 }
                 //Drive if joystick pushed more Y than X
-                if (Math.abs(drive) > Math.abs(shift)) {
+                if (Math.abs(drive) > Math.abs(shift))
+                {
                     driveTeleop(drive, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
                 }
 
                 //Access turn functions from function class
-                if (leftTurn > 0) {
+                //Turn left if left trigger is pushed
+                if (leftTurn > 0)
+                {
                     leftTurnTeleop(leftTurn, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
                 }
-                if (rightTurn > 0) {
+                //Turn right if right trigger is pushed
+                if (rightTurn > 0)
+                {
                     rightTurnTeleop(rightTurn, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
                 }
 
-                // "a" button starts spinner
-                if (gamepad2.a) {
-                    aPressCount = 2;
-                    toggleSpinner(spinner, aPressCount, (float) 1.0);
+                // "a" button starts spinner forwards
+                if (gamepad2.a)
+                {
+                    spinnerMode = 2;
+                    toggleSpinner(spinner, spinnerMode, (float) 1.0);
                 }
-                if (gamepad2.x) {
-                    aPressCount = 1;
-                    toggleSpinner(spinner,aPressCount, (float) 1.0);
+                // "x" button starts spinner backwards
+                if (gamepad2.x)
+                {
+                    spinnerMode = 1;
+                    toggleSpinner(spinner, spinnerMode, (float) 1.0);
                 }
                 //Stop all motors when "b" is pressed
-                if ((gamepad1.b) || (gamepad2.b)) {
-                    aPressCount = 0;
-                    toggleSpinner(spinner,aPressCount, (float) 1.0);
+                if ((gamepad1.b) || (gamepad2.b))
+                {
                     stopEverything(leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack, spinner, flipper);
                 }
-                if (gamepad2.y) {
+                if (gamepad2.y)
+                {
                     shootBall(flipper, 300);
-                    functions.stopEverything(leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack, spinner, flipper);
                 }
 
             } //Close inside "if" loop
