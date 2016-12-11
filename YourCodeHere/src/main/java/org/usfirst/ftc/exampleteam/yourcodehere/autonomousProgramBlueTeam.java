@@ -1,4 +1,3 @@
-
 //This is the main autonomous program with encoders for FTC Velocity Vortex 2016
 //Authors: FTC team [11212??], The Lexington Legoheads
 //In case of questions email anupendra@gmail.com (coach)
@@ -7,7 +6,6 @@
 package org.usfirst.ftc.exampleteam.yourcodehere;
 
 //Import necessary items
-
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DeviceInterfaceModule;
@@ -15,7 +13,6 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 import org.swerverobotics.library.SynchronousOpMode;
 
 import static org.usfirst.ftc.exampleteam.yourcodehere.functions.*;
-
 
 @Autonomous(name="Blue Team Autonomous") //Name the class
 public class autonomousProgramBlueTeam extends SynchronousOpMode //CLASS START
@@ -35,13 +32,13 @@ public class autonomousProgramBlueTeam extends SynchronousOpMode //CLASS START
     //Define a string to use as the color, and set it to blue
     String color = "blue";
 
-
     //MAIN BELOW
     @Override
     public void main() throws InterruptedException
     {
         boolean fastMode = true;
 
+        //Set up drive powers to avoid magic numbers
         double drivePower  = fastMode ? 1.0 : 0.5;
         double shiftPower = fastMode ? 1.0 : 0.4;
         double turnPower = fastMode ? 1.0 : 0.4;
@@ -110,7 +107,5 @@ public class autonomousProgramBlueTeam extends SynchronousOpMode //CLASS START
             driveAutonomous((float) drivePower, fastMode ? 5600 : 6000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
 
             spinner.setPower(1.0);
-
-//        }
     }
 }

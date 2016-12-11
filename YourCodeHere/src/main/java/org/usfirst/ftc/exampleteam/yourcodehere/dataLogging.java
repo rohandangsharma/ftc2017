@@ -1,30 +1,13 @@
+//Run from the desired package
 package org.usfirst.ftc.exampleteam.yourcodehere;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+//Import necessary items
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DeviceInterfaceModule;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import org.swerverobotics.library.SynchronousOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DeviceInterfaceModule;
-import com.qualcomm.robotcore.hardware.ColorSensor;
-import org.swerverobotics.library.SynchronousOpMode;
 
-/*
- *
- * This is an example LinearOpMode that shows how to use
- * a Modern Robotics Color Sensor.
- *
- * The op mode assumes that the color sensor
- * is configured with a name of "color sensor".
- *
- * You can use the X button on game pad 1 to toggle the LED on and off.
- *
- * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
- * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
- */
 @TeleOp(name = "data log")
 public class dataLogging extends SynchronousOpMode {
 
@@ -64,16 +47,19 @@ public class dataLogging extends SynchronousOpMode {
         {
             if (gamepad1.b)
             {
+                //Reset the encoders
                 leftMotorFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 leftMotorBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 rightMotorFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 rightMotorBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
+                //Use the encoders
                 leftMotorFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 leftMotorBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 rightMotorFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 rightMotorBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             }
+            //Show all the encoder values on the driver station
             telemetry.addData("left front", leftMotorFront.getCurrentPosition());
             telemetry.addData("left back", leftMotorBack.getCurrentPosition());
             telemetry.addData("right front", rightMotorFront.getCurrentPosition());
