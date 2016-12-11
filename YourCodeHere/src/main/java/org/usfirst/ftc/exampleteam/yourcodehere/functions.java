@@ -104,7 +104,7 @@ public class functions
         rightMotorFront.setPower(-power);
         rightMotorBack.setPower(-power);
 
-        while ((leftMotorFront.isBusy()) || (rightMotorFront.isBusy()) || (leftMotorBack.isBusy()) || (rightMotorBack.isBusy()))
+        while ((leftMotorFront.isBusy()) && (rightMotorFront.isBusy()) && (leftMotorBack.isBusy()) && (rightMotorBack.isBusy()))
         { }
 
         stopDriving(leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
@@ -168,7 +168,7 @@ public class functions
         rightMotorFront.setPower(-power);
         rightMotorBack.setPower(-power);
 
-        while ((leftMotorFront.isBusy()) || (rightMotorFront.isBusy()) || (leftMotorBack.isBusy()) || (rightMotorBack.isBusy()))
+        while ((leftMotorFront.isBusy()) && (rightMotorFront.isBusy()) && (leftMotorBack.isBusy()) && (rightMotorBack.isBusy()))
         { }
 
         stopDriving(leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
@@ -201,7 +201,7 @@ public class functions
         rightMotorFront.setPower(power);
         rightMotorBack.setPower(-power);
 
-        while ((leftMotorFront.isBusy()) || (rightMotorFront.isBusy()) || (leftMotorBack.isBusy()) || (rightMotorBack.isBusy()))
+        while ((leftMotorFront.isBusy()) && (rightMotorFront.isBusy()) && (leftMotorBack.isBusy()) && (rightMotorBack.isBusy()))
         { }
 
         stopDriving(leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
@@ -233,7 +233,7 @@ public class functions
         rightMotorFront.setPower(-power);
         rightMotorBack.setPower(power);
 
-        while ((leftMotorFront.isBusy()) || (rightMotorFront.isBusy()) || (leftMotorBack.isBusy()) || (rightMotorBack.isBusy()))
+        while ((leftMotorFront.isBusy()) && (rightMotorFront.isBusy()) && (leftMotorBack.isBusy()) && (rightMotorBack.isBusy()))
         { }
 
         stopDriving(leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
@@ -281,18 +281,33 @@ public class functions
         return "red";
     }
 
+    /**
+     * Drives forward slowly until the target color is seen, then shifts into the beacon to press
+     * the button
+     * @param color take in our team color
+     * @param colorSensor color sensor used to detct the colors
+     * @throws InterruptedException
+     */
     public static void colorSensorAutonomous(String color, ColorSensor colorSensor, DcMotor leftMotorFront, DcMotor rightMotorFront, DcMotor leftMotorBack, DcMotor rightMotorBack) throws InterruptedException
     {
-
-        if (iSeeAColor(colorSensor))
+        //while we dont see the beacon, drive forward
+        while (!iSeeAColor(colorSensor))
         {
-            while (!whatColor(colorSensor).equals(color))
-            {
-                driveAutonomous((float) 0.2, 200, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
-            }
-            driveAutonomous((float) 0.2, 300, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
-            rightShiftAutonomous((float) 0.2, 3000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+            driveAutonomous((float) 0.2, 200, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
         }
+
+        //now we see a color, but possibly not the target color
+        // while we don't see the target color -> drive forward
+        while (!whatColor(colorSensor).equals(color))
+        {
+            driveAutonomous((float) 0.2, 200, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+        }
+
+        //now we see the target color, drive forward a tiny bit so cardboard is aligned
+        driveAutonomous((float) 0.2, 300, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+
+        //robot is aligned to the button for the target color, drive into button to press it
+        rightShiftAutonomous((float) 0.1, 800, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
 
     }
 }

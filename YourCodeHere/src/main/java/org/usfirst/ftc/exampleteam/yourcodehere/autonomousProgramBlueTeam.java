@@ -32,10 +32,20 @@ public class autonomousProgramBlueTeam extends SynchronousOpMode //CLASS START
     ColorSensor colorSensor;
     DeviceInterfaceModule CDI;
 
+    //Define a string to use as the color, and set it to blue
+    String color = "blue";
+
+
     //MAIN BELOW
     @Override
     public void main() throws InterruptedException
     {
+        boolean fastMode = true;
+
+        double drivePower  = fastMode ? 1.0 : 0.5;
+        double shiftPower = fastMode ? 1.0 : 0.4;
+        double turnPower = fastMode ? 1.0 : 0.4;
+
         //Get references to the motors from the hardware map
         leftMotorFront = hardwareMap.dcMotor.get("leftMotorFront");
         rightMotorFront = hardwareMap.dcMotor.get("rightMotorFront");
@@ -58,47 +68,49 @@ public class autonomousProgramBlueTeam extends SynchronousOpMode //CLASS START
         //Wait for start button to be clicked
         waitForStart();
         //Open loops
-        while (opModeIsActive())
-        {
+//        while (opModeIsActive())
+//        {
             //Drive forward to center Vortex
-            driveAutonomous((float) 0.5, 3000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+            driveAutonomous((float) drivePower, (fastMode ? 2300: 2700), leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
 
             //Shift towards beacon
-            rightShiftAutonomous((float) 0.4, 3000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+            rightShiftAutonomous((float) shiftPower, 3000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
 
             //Become aligned with beacon
-            driveAutonomous((float) 0.5, 2000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+            driveAutonomous((float) drivePower, fastMode ? 1600: 2000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
 
             //Shift next to beacon
-            rightShiftAutonomous((float) 0.2, 3000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+            rightShiftAutonomous((float) shiftPower, 3000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
 
             //If "blue" seen, shift to right, hit button
-            colorSensorAutonomous("blue", colorSensor, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+            colorSensorAutonomous(color, colorSensor, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
 
             //Come off of wall
-            leftShiftAutonomous((float) 0.5, 300, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+            leftShiftAutonomous((float) shiftPower, 300, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
 
             //Align with second beacon
-            driveAutonomous((float) 0.5, 5500, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+            driveAutonomous((float) drivePower, fastMode ? 4000 : 4400, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
 
             //If "blue seen, shift to right, hit button
-            colorSensorAutonomous("blue", colorSensor, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+            colorSensorAutonomous(color, colorSensor, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
 
             //Come off wall
-            leftShiftAutonomous((float) 0.4, 2000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+            leftShiftAutonomous((float) shiftPower, 2000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
 
             //Turn to Center Vortex
-            leftTurnAutonomous((float) 0.4, 4000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+            leftTurnAutonomous((float) turnPower, 3800, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
 
             //Drive to Center Vortex
-            driveAutonomous((float) 0.5, 6000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+            driveAutonomous((float) drivePower, fastMode ? 5000 : 5400, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
 
             //Turn to ramp
-            leftTurnAutonomous((float) 0.4, 1000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+            leftTurnAutonomous((float) turnPower, 2000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
 
             //Drive up ramp
-            driveAutonomous((float) 0.5, 6000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+            driveAutonomous((float) drivePower, fastMode ? 5600 : 6000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
 
-        }
+            spinner.setPower(1.0);
+
+//        }
     }
 }
