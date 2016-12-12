@@ -341,21 +341,18 @@ public class functions
      */
     public static boolean iSeeAColor(ColorSensor colorSensor)
     {
-        float valueBlue, valueRed; //Define floats
         float[] hsvValues = {0, 0, 0}; //This is an array that stores the hue[0], saturation[1], and value[2], values
 
-        Color.RGBToHSV(colorSensor.red() * 8, colorSensor.green() * 8, colorSensor.blue() * 8, hsvValues); //Convert from RGB to HSV (red-green-blue to hue-saturation-value)
+        //Convert from RGB to HSV (red-green-blue to hue-saturation-value)
+        Color.RGBToHSV(colorSensor.red() * 8, colorSensor.green() * 8, colorSensor.blue() * 8, hsvValues);
 
-        valueBlue = hsvValues[2]; //Store the third value from the array into the float for blue
-        valueRed = hsvValues[1]; //Store the second value from the array into the float for red
-
-        if ((valueBlue == 0) && (valueRed == 0)) //If it sees neither color, return false
-        {
-            return false;
-        }
-
-        //Otherwise return true
-        return true;
+        //If it sees neither color, return false
+        if (hsvValues[2] == 0)
+            {
+                return false;
+            }
+            //Otherwise return true
+            return true;
     }
 
     /**
@@ -375,7 +372,6 @@ public class functions
         {
             return "blue";
         }
-
         //Otherwise return red
         return "red";
     }
@@ -387,25 +383,46 @@ public class functions
      */
     public static void colorSensorAutonomous(String color, ColorSensor colorSensor, DcMotor leftMotorFront, DcMotor rightMotorFront, DcMotor leftMotorBack, DcMotor rightMotorBack) throws InterruptedException
     {
-        //while we dont see the beacon, drive forward
+        boolean blueTeam = color.equals("blue");
+
+        double power  = blueTeam ? 0.2 : -0.2;
+        int findBeaconDistance = blueTeam ? 100 : -100;
+        int alignBeaconDistance = blueTeam ? 400 : -200;
+
+        //while we do not see the beacon, drive forward
         while (!iSeeAColor(colorSensor))
         {
-            driveAutonomous((float) 0.2, 200, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+            driveAutonomous((float) power, findBeaconDistance, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
         }
 
         //now we see a color, but possibly not the target color
         // while we don't see the target color -> drive forward
         while (!whatColor(colorSensor).equals(color))
         {
-            driveAutonomous((float) 0.2, 200, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+            driveAutonomous((float) power, findBeaconDistance, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
         }
 
         //now we see the target color, drive forward a tiny bit so cardboard is aligned
-        driveAutonomous((float) 0.2, 300, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+        driveAutonomous((float) power, alignBeaconDistance, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
 
         //robot is aligned to the button for the target color, drive into button to press it
-        rightShiftAutonomous((float) 0.1, 800, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
-
+        //No matter what, the robot will always have to right shift
+        rightShiftAutonomous((float) 0.2, 800, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
     }
 
+//    public static void iSeeAColorStop(float power, ColorSensor colorSensor, String color, DcMotor leftMotorFront, DcMotor rightMotorFront, DcMotor leftMotorBack, DcMotor rightMotorBack)
+//    {
+//        while (!iSeeAColor(colorSensor))
+//        {
+//            driveTeleop(power, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+//        }
+//    }
+//
+//    public static void whatColorStop(float power, ColorSensor colorSensor, String color, DcMotor leftMotorFront, DcMotor rightMotorFront, DcMotor leftMotorBack, DcMotor rightMotorBack)
+//    {
+//        while (!whatColor(colorSensor).equals(color))
+//        {
+//            driveTeleop(power, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+//        }
+//    }
 } //CLOSE CLASS

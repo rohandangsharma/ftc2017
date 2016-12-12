@@ -6,16 +6,24 @@
 package org.usfirst.ftc.exampleteam.yourcodehere;
 
 //Import necessary items
+
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DeviceInterfaceModule;
-import com.qualcomm.robotcore.hardware.ColorSensor;
+
 import org.swerverobotics.library.SynchronousOpMode;
 
-import static org.usfirst.ftc.exampleteam.yourcodehere.functions.*;
+import static org.usfirst.ftc.exampleteam.yourcodehere.functions.colorSensorAutonomous;
+import static org.usfirst.ftc.exampleteam.yourcodehere.functions.driveAutonomous;
+import static org.usfirst.ftc.exampleteam.yourcodehere.functions.leftShiftAutonomous;
+import static org.usfirst.ftc.exampleteam.yourcodehere.functions.leftTurnAutonomous;
+import static org.usfirst.ftc.exampleteam.yourcodehere.functions.rightShiftAutonomous;
+import static org.usfirst.ftc.exampleteam.yourcodehere.functions.rightTurnAutonomous;
 
-@Autonomous(name="Blue Team Autonomous") //Name the class
-public class autonomousProgramBlueTeam extends SynchronousOpMode //CLASS START
+@Autonomous(name="Red Team Autonomous") //Name the class
+public class autonomousProgramRedTeam extends SynchronousOpMode //CLASS START
 {
     //Define DC Motors
     DcMotor leftMotorFront;
@@ -30,18 +38,18 @@ public class autonomousProgramBlueTeam extends SynchronousOpMode //CLASS START
     DeviceInterfaceModule CDI;
 
     //Define a string to use as the color, and set it to blue
-    String color = "blue";
+    String color = "red";
+
+    boolean fastMode = false;
+
+    //Set up drive powers to avoid magic numbers
+    double drivePower = fastMode ? 1.0 : 0.5;
+    double shiftPower = fastMode ? 1.0 : 0.4;
+    double turnPower = fastMode ? 1.0 : 0.4;
 
     //MAIN BELOW
     @Override
-    public void main() throws InterruptedException
-    {
-        boolean fastMode = false;
-
-        //Set up drive powers to avoid magic numbers
-        double drivePower  = fastMode ? 1.0 : 0.5;
-        double shiftPower = fastMode ? 1.0 : 0.4;
-        double turnPower = fastMode ? 1.0 : 0.4;
+    public void main() throws InterruptedException {
 
         //Get references to the motors from the hardware map
         leftMotorFront = hardwareMap.dcMotor.get("leftMotorFront");
@@ -65,16 +73,16 @@ public class autonomousProgramBlueTeam extends SynchronousOpMode //CLASS START
         //Wait for start button to be clicked
         waitForStart();
         //Open loops
-//        while (opModeIsActive())
-//        {
+        while (opModeIsActive()) {
+
             //Drive forward to center Vortex
-            driveAutonomous((float) drivePower, (fastMode ? 2300: 2700), leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+            driveAutonomous((float) -drivePower, (fastMode ? 2300 : -2700), leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
 
             //Shift towards beacon
             rightShiftAutonomous((float) shiftPower, 3000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
 
             //Become aligned with beacon
-            driveAutonomous((float) drivePower, fastMode ? 1600: 2000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+            driveAutonomous((float) -drivePower, fastMode ? 1600 : -2000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
 
             //Shift next to beacon
             rightShiftAutonomous((float) shiftPower, 3000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
@@ -86,7 +94,7 @@ public class autonomousProgramBlueTeam extends SynchronousOpMode //CLASS START
             leftShiftAutonomous((float) shiftPower, 300, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
 
             //Align with second beacon
-            driveAutonomous((float) drivePower, fastMode ? 4000 : 4400, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+            driveAutonomous((float) -drivePower, fastMode ? 4000 : -4400, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
 
             //If "blue seen, shift to right, hit button
             colorSensorAutonomous(color, colorSensor, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
@@ -95,17 +103,18 @@ public class autonomousProgramBlueTeam extends SynchronousOpMode //CLASS START
             leftShiftAutonomous((float) shiftPower, 2000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
 
             //Turn to Center Vortex
-            leftTurnAutonomous((float) turnPower, 3800, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+            leftTurnAutonomous((float) turnPower, 1267, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
 
             //Drive to Center Vortex
             driveAutonomous((float) drivePower, fastMode ? 5000 : 5400, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
 
             //Turn to ramp
-            leftTurnAutonomous((float) turnPower, 2000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+            rightTurnAutonomous((float) turnPower, 2000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
 
             //Drive up ramp
             driveAutonomous((float) drivePower, fastMode ? 5600 : 6000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
 
             spinner.setPower(1.0);
+        }
     }
 }
