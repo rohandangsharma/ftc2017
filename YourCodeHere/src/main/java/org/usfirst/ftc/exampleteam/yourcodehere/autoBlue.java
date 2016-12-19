@@ -7,6 +7,7 @@ package org.usfirst.ftc.exampleteam.yourcodehere;
 
 //Import necessary items
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DeviceInterfaceModule;
 import com.qualcomm.robotcore.hardware.ColorSensor;
@@ -14,8 +15,8 @@ import org.swerverobotics.library.SynchronousOpMode;
 
 import static org.usfirst.ftc.exampleteam.yourcodehere.functions.*;
 
-@Autonomous(name="Blue Team Autonomous") //Name the class
-public class autonomousProgramBlueTeam extends SynchronousOpMode //CLASS START
+@Autonomous(name="Blue Autonomous") //Name the class
+public class autoBlue extends LinearOpMode //CLASS START
 {
     //Define DC Motors
     DcMotor leftMotorFront;
@@ -34,12 +35,11 @@ public class autonomousProgramBlueTeam extends SynchronousOpMode //CLASS START
 
     //MAIN BELOW
     @Override
-    public void main() throws InterruptedException
-    {
+    public void runOpMode() throws InterruptedException {
         boolean fastMode = false;
 
         //Set up drive powers to avoid magic numbers
-        double drivePower  = fastMode ? 1.0 : 0.5;
+        double drivePower = fastMode ? 1.0 : 0.5;
         double shiftPower = fastMode ? 1.0 : 0.4;
         double turnPower = fastMode ? 1.0 : 0.4;
 
@@ -65,16 +65,17 @@ public class autonomousProgramBlueTeam extends SynchronousOpMode //CLASS START
         //Wait for start button to be clicked
         waitForStart();
         //Open loops
-//        while (opModeIsActive())
-//        {
+        while (opModeIsActive()) {
             //Drive forward to center Vortex
-            driveAutonomous((float) drivePower, (fastMode ? 2300: 2700), leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+
+//            functions.iSeeAColorStop((float) -0.1, colorSensor, "Blue", leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+            driveAutonomous((float) drivePower, (fastMode ? 2300 : 2700), leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
 
             //Shift towards beacon
             rightShiftAutonomous((float) shiftPower, 3000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
 
             //Become aligned with beacon
-            driveAutonomous((float) drivePower, fastMode ? 1600: 2000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+            driveAutonomous((float) drivePower, fastMode ? 1600 : 2000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
 
             //Shift next to beacon
             rightShiftAutonomous((float) shiftPower, 3000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
@@ -92,7 +93,7 @@ public class autonomousProgramBlueTeam extends SynchronousOpMode //CLASS START
             colorSensorAutonomous(color, colorSensor, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
 
             //Come off wall
-            leftShiftAutonomous((float) shiftPower, 2000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+            leftShiftAutonomous((float) shiftPower, 300, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
 
             //Turn to Center Vortex
             leftTurnAutonomous((float) turnPower, 3800, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
@@ -107,5 +108,8 @@ public class autonomousProgramBlueTeam extends SynchronousOpMode //CLASS START
             driveAutonomous((float) drivePower, fastMode ? 5600 : 6000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
 
             spinner.setPower(1.0);
+
+            idle(); // Always call idle() at the bottom of your while(opModeIsActive()) loop
+        }
     }
 }

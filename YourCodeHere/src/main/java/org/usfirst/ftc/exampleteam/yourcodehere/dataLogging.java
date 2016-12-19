@@ -3,6 +3,7 @@ package org.usfirst.ftc.exampleteam.yourcodehere;
 
 //Import necessary items
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DeviceInterfaceModule;
@@ -11,7 +12,7 @@ import org.swerverobotics.library.SynchronousOpMode;
 
 @TeleOp(name = "Data Log")
 @Disabled
-public class dataLogging extends SynchronousOpMode {
+public class dataLogging extends LinearOpMode {
 
     //Define DC Motors
     DcMotor leftMotorFront;
@@ -25,7 +26,7 @@ public class dataLogging extends SynchronousOpMode {
     ColorSensor colorSensor;
     DeviceInterfaceModule CDI;
     @Override
-    public void main() throws InterruptedException {
+    public void runOpMode() throws InterruptedException {
         //Get references to the motors from the hardware map
         leftMotorFront = hardwareMap.dcMotor.get("leftMotorFront");
         rightMotorFront = hardwareMap.dcMotor.get("rightMotorFront");

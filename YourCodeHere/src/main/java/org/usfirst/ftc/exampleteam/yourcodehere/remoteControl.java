@@ -62,10 +62,8 @@ public class remoteControl extends SynchronousOpMode //CLASS START
 //LOOP BELOW
         waitForStart();
         //Open loops
-        while (opModeIsActive())
-        {
-            if (updateGamepads())
-            {
+        while (opModeIsActive()) {
+            if (updateGamepads()) {
                 //Set float variables as the inputs from the joystick and the dpad
                 //The negative sign is necessary because pushing the joystick up normally sends the robot backward
                 //Additionally, set float variables as the input from the triggers
@@ -119,7 +117,7 @@ public class remoteControl extends SynchronousOpMode //CLASS START
 
             } //Close inside "if" loop
             telemetry.update();
-            idle();
+            idle(); // Always call idle() at the bottom of your while(opModeIsActive()) loop
         } //Close outside loop
     } //Close main
 } //Close class and end program

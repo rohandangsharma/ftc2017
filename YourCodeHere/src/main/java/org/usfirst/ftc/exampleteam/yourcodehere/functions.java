@@ -410,19 +410,20 @@ public class functions
         rightShiftAutonomous((float) 0.2, 800, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
     }
 
-//    public static void iSeeAColorStop(float power, ColorSensor colorSensor, String color, DcMotor leftMotorFront, DcMotor rightMotorFront, DcMotor leftMotorBack, DcMotor rightMotorBack)
-//    {
-//        while (!iSeeAColor(colorSensor))
-//        {
-//            driveTeleop(power, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
-//        }
-//    }
-//
-//    public static void whatColorStop(float power, ColorSensor colorSensor, String color, DcMotor leftMotorFront, DcMotor rightMotorFront, DcMotor leftMotorBack, DcMotor rightMotorBack)
-//    {
-//        while (!whatColor(colorSensor).equals(color))
-//        {
-//            driveTeleop(power, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
-//        }
-//    }
+    public static void iSeeAColorStop(float power, ColorSensor colorSensor, String color, DcMotor leftMotorFront, DcMotor rightMotorFront, DcMotor leftMotorBack, DcMotor rightMotorBack)
+    {
+        while (!iSeeAColor(colorSensor))
+        {
+            driveTeleop(power, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+        }
+        stopDriving(leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+    }
+
+    public static void whatColorStop(float power, ColorSensor colorSensor, String color, DcMotor leftMotorFront, DcMotor rightMotorFront, DcMotor leftMotorBack, DcMotor rightMotorBack)
+    {
+        while (!whatColor(colorSensor).equals(color))
+        {
+            driveTeleop(power, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+        }
+    }
 } //CLOSE CLASS
