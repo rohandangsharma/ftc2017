@@ -8,12 +8,31 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 
 @Disabled
-public class functions
+public class DriveFunctions
 { //START CLASS
+    DcMotor leftMotorFront;
+    DcMotor rightMotorFront;
+    DcMotor leftMotorBack;
+    DcMotor rightMotorBack;
+    DcMotor spinner;
+    DcMotor flipper;
+    ColorSensor colorSensor;
+
+    public DriveFunctions(DcMotor leftMotorFront, DcMotor rightMotorFront, DcMotor leftMotorBack, DcMotor rightMotorBack, ColorSensor colorSensor, DcMotor spinner, DcMotor flipper){
+        this.leftMotorFront = leftMotorFront;
+        this.leftMotorBack = leftMotorBack;
+        this.rightMotorFront = rightMotorFront;
+        this.rightMotorBack = rightMotorBack;
+        this.colorSensor = colorSensor;
+        this.spinner = spinner;
+        this.flipper = flipper;
+
+    }
+
     /**
      * If this function is called, stop the drive motors
      */
-    public static void stopDriving(DcMotor leftMotorFront, DcMotor rightMotorFront, DcMotor leftMotorBack, DcMotor rightMotorBack)
+    public void stopDriving()
     {
         leftMotorFront.setPower(0.0);
         leftMotorBack.setPower(0.0);
@@ -24,7 +43,7 @@ public class functions
     /**
      * If this function is called, stop the attachments
      */
-    public static void stopAttachments(DcMotor spinner, DcMotor flipper)
+    public void stopAttachments()
     {
         spinner.setPower(0.0);
         flipper.setPower(0.0);
@@ -33,16 +52,16 @@ public class functions
     /**
      * If this function is called, stop everything
      */
-    public static void stopEverything(DcMotor leftMotorFront, DcMotor rightMotorFront, DcMotor leftMotorBack, DcMotor rightMotorBack, DcMotor spinner, DcMotor flipper)
+    public void stopEverything()
     {
-        stopDriving(leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
-        stopAttachments(spinner, flipper);
+        stopDriving();
+        stopAttachments();
     }
 
     /**
      * If this function is called, turn on the drive motors at the given powers to make it drive forward
      */
-    public static void driveTeleop(float drive, DcMotor leftMotorFront, DcMotor rightMotorFront, DcMotor leftMotorBack, DcMotor rightMotorBack)
+    public void driveTeleop(float drive)
     {
         leftMotorFront.setPower(drive);
         leftMotorBack.setPower(drive);
@@ -53,7 +72,7 @@ public class functions
     /**
      * If this function is called, turn on the drive motors at the given powers, to make it turn right
      */
-    public static void rightTurnTeleop(float turn, DcMotor leftMotorFront, DcMotor rightMotorFront, DcMotor leftMotorBack, DcMotor rightMotorBack)
+    public void rightTurnTeleop(float turn)
     {
         //Turn the right motors backwards and the left motors forward
         rightMotorFront.setPower(-turn);
@@ -65,7 +84,7 @@ public class functions
     /**
      * If this function is called, turn on the drive motors at the given powers, to make it turn left
      */
-    public static void leftTurnTeleop(float turn, DcMotor leftMotorFront, DcMotor rightMotorFront, DcMotor leftMotorBack, DcMotor rightMotorBack)
+    public void leftTurnTeleop(float turn)
     {
         //Turn the left motors backwards and the right motors forward
         rightMotorFront.setPower(turn);
@@ -77,7 +96,7 @@ public class functions
     /**
      * If this function is called, turn on the drive motors at the given powers, to make it shift in the desired direction
      */
-    public static void shiftTeleop(float shift, DcMotor leftMotorFront, DcMotor rightMotorFront, DcMotor leftMotorBack, DcMotor rightMotorBack)
+    public void shiftTeleop(float shift)
     {
         //This sequence of backwards, forwards, forwards, backwards makes the robot shift
         leftMotorFront.setPower(-shift);
@@ -90,7 +109,7 @@ public class functions
      * Toggle the spinner to make it stop, go forwards, and go backwards whenever we want
      * @param spinnerMode tells the mode of the spinner, that is set in the teleop program
      */
-    public static void toggleSpinner(DcMotor spinner, int spinnerMode, double power)
+    public void toggleSpinner(int spinnerMode, double power)
     {
         if (spinnerMode % 3 == 0)
         {
@@ -110,7 +129,7 @@ public class functions
      * Shoot the ball for the given time
      * @param time we want the flipper on for
      */
-    public static void shootBall(DcMotor flipper, long time) throws InterruptedException
+    public void shootBall(long time) throws InterruptedException
     {
         flipper.setPower(1.0); //turn on flipper
         Thread.sleep(time); //stop at the given time
@@ -118,16 +137,42 @@ public class functions
     }
 
     /**
-     * Drive for the given distance at the given power
-     * @param degrees distance
+     * Reset encoder readings
+     * Sets to mode of turning for degrees specified
      */
-    public static void driveAutonomous(float power, int degrees, DcMotor leftMotorFront, DcMotor rightMotorFront, DcMotor leftMotorBack, DcMotor rightMotorBack)
-    {
+    void prepMotorsForAutonomous(){
         //Reset encoders
         leftMotorFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftMotorBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightMotorFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightMotorBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        //Set up the motors run to the given position
+        leftMotorFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        leftMotorBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightMotorFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightMotorBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+    }
+
+    /**
+     * Sets motors to mode of moving with given velocity
+     */
+    void prepMotorsForTeleop(){
+        leftMotorFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftMotorBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightMotorFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightMotorBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
+
+    /**
+     * Drive for the given distance at the given power
+     * @param degrees distance
+     */
+    public void driveAutonomous(float power, int degrees)
+    {
+
+        prepMotorsForAutonomous();
 
         //Set the target position of the encoders as the input
         leftMotorFront.setTargetPosition(-degrees);
@@ -135,11 +180,6 @@ public class functions
         rightMotorFront.setTargetPosition(-degrees);
         rightMotorBack.setTargetPosition(-degrees);
 
-        //Set up the motors run to the given position
-        leftMotorFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        leftMotorBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightMotorFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightMotorBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         //Turn on the motors at the given powers
         leftMotorFront.setPower(-power);
@@ -152,24 +192,18 @@ public class functions
         { }
 
         //Stop motors and use encoders
-        stopDriving(leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
-        leftMotorFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        leftMotorBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightMotorFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightMotorBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        stopDriving();
+
+        prepMotorsForTeleop();
+
     }
 
     /**
      * Turn left for the given distance at the given power
      * @param degrees distance
      */
-    public static void leftTurnAutonomous(float power, int degrees, DcMotor leftMotorFront, DcMotor rightMotorFront, DcMotor leftMotorBack, DcMotor rightMotorBack)
-    {
-        //Reset encoders
-        leftMotorFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        leftMotorBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightMotorFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightMotorBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    public void leftTurnAutonomous(float power, int degrees) {
+        prepMotorsForAutonomous();
 
         //Set motor target positions
         //Left motors backwards and right motors forwards gives us a left turn
@@ -178,11 +212,6 @@ public class functions
         rightMotorFront.setTargetPosition(degrees);
         rightMotorBack.setTargetPosition(degrees);
 
-        //Set up the motors run to the given position
-        leftMotorFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        leftMotorBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightMotorFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightMotorBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         //Turn on the motors at the given powers
         //Left motors backwards and right motors forwards gives us a left turn
@@ -192,28 +221,21 @@ public class functions
         rightMotorBack.setPower(power);
 
         //Empty while loop while motors are moving
-        while ((leftMotorFront.isBusy()) && (rightMotorFront.isBusy()) && (leftMotorBack.isBusy()) && (rightMotorBack.isBusy()))
-        { }
+        while ((leftMotorFront.isBusy()) && (rightMotorFront.isBusy()) && (leftMotorBack.isBusy()) && (rightMotorBack.isBusy())) {
+        }
 
         //Stop motors and use encoders
-        stopDriving(leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
-        leftMotorFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        leftMotorBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightMotorFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightMotorBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        stopDriving();
+        prepMotorsForTeleop();
     }
 
     /**
      * Turn right for the given distance at the given power
      * @param degrees distance
      */
-    public static void rightTurnAutonomous(float power, int degrees, DcMotor leftMotorFront, DcMotor rightMotorFront, DcMotor leftMotorBack, DcMotor rightMotorBack)
+    public void rightTurnAutonomous(float power, int degrees)
     {
-        //Reset encoders
-        leftMotorFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        leftMotorBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightMotorFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightMotorBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        prepMotorsForAutonomous();
 
         //Set motor target positions
         //Right motors backwards and left motors forwards gives us a right turn
@@ -222,11 +244,7 @@ public class functions
         rightMotorFront.setTargetPosition(-degrees);
         rightMotorBack.setTargetPosition(-degrees);
 
-        //Set up the motors run to the given position
-        leftMotorFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        leftMotorBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightMotorFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightMotorBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
 
         //Turn on the motors at the given powers
         //Right motors backwards and left motors forwards gives us a right turn
@@ -240,24 +258,17 @@ public class functions
         { }
 
         //Stop motors and use encoders
-        stopDriving(leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
-        leftMotorFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        leftMotorBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightMotorFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightMotorBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        stopDriving();
+        prepMotorsForTeleop();
     }
 
     /**
      * Shift left for the given distance at the given power
      * @param degrees distance
      */
-    public static void leftShiftAutonomous(float power, int degrees, DcMotor leftMotorFront, DcMotor rightMotorFront, DcMotor leftMotorBack, DcMotor rightMotorBack)
+    public void leftShiftAutonomous(float power, int degrees)
     {
-        //Reset encoders
-        leftMotorFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        leftMotorBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightMotorFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightMotorBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        prepMotorsForAutonomous();
 
         //Set motor target positions
         //This sequence of backwards, forwards, forwards, backwards makes the robot shift left
@@ -265,12 +276,6 @@ public class functions
         leftMotorBack.setTargetPosition(degrees);
         rightMotorFront.setTargetPosition(degrees);
         rightMotorBack.setTargetPosition(-degrees);
-
-        //Set up the motors run to the given position
-        leftMotorFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        leftMotorBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightMotorFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightMotorBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         //Turn on the motors at the given powers
         //This sequence of backwards, forwards, forwards, backwards makes the robot shift left
@@ -284,24 +289,17 @@ public class functions
         { }
 
         //Stop motors and use encoders
-        stopDriving(leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
-        leftMotorFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        leftMotorBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightMotorFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightMotorBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        stopDriving();
+        prepMotorsForTeleop();
     }
 
     /**
      * Shift right for the given distance at the given power
      * @param degrees distance
      */
-    public static void rightShiftAutonomous(float power, int degrees, DcMotor leftMotorFront, DcMotor rightMotorFront, DcMotor leftMotorBack, DcMotor rightMotorBack)
+    public void rightShiftAutonomous(float power, int degrees)
     {
-        //Reset encoders
-        leftMotorFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        leftMotorBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightMotorFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightMotorBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        prepMotorsForAutonomous();
 
         //Set motor target positions
         //This sequence of forwards, backwards, backwards, forwards makes the robot shift right
@@ -328,18 +326,14 @@ public class functions
         { }
 
         //Stop motors and use encoders
-        stopDriving(leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
-        leftMotorFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        leftMotorBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightMotorFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightMotorBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        stopDriving();
+        prepMotorsForTeleop();
     }
 
     /**
-     * @param colorSensor The ColorSensor object to read values from
      * @return returns true if the supplied ColorSensor either red or blue.  False otherwise
      */
-    public static boolean iSeeAColor(ColorSensor colorSensor)
+    public boolean iSeeAColor()
     {
         float[] hsvValues = {0, 0, 0}; //This is an array that stores the hue[0], saturation[1], and value[2], values
 
@@ -357,10 +351,9 @@ public class functions
 
     /**
      * Determines what color the color sensor is seeing
-     * @param colorSensor The ColorSensor object to read values from
      * @return The string "blue" if we see the color blue, "red" if we see the color red
      */
-    public static String whatColor(ColorSensor colorSensor)
+    public String whatColor()
     {
         float hue; //Define float
         float[] hsvValues = {0, 0, 0}; //This is an array that stores the hue[0], saturation[1], and value[2], values
@@ -381,7 +374,7 @@ public class functions
      * the button
      * @param color take in our team color
      */
-    public static void colorSensorAutonomous(String color, ColorSensor colorSensor, DcMotor leftMotorFront, DcMotor rightMotorFront, DcMotor leftMotorBack, DcMotor rightMotorBack) throws InterruptedException
+    public void colorSensorAutonomous(String color) throws InterruptedException
     {
         boolean blueTeam = color.equals("blue");
 
@@ -390,40 +383,40 @@ public class functions
         int alignBeaconDistance = blueTeam ? 400 : -200;
 
         //while we do not see the beacon, drive forward
-        while (!iSeeAColor(colorSensor))
+        while (!iSeeAColor())
         {
-            driveAutonomous((float) power, findBeaconDistance, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+            driveAutonomous((float) power, findBeaconDistance);
         }
 
         //now we see a color, but possibly not the target color
         // while we don't see the target color -> drive forward
-        while (!whatColor(colorSensor).equals(color))
+        while (!whatColor().equals(color))
         {
-            driveAutonomous((float) power, findBeaconDistance, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+            driveAutonomous((float) power, findBeaconDistance);
         }
 
         //now we see the target color, drive forward a tiny bit so cardboard is aligned
-        driveAutonomous((float) power, alignBeaconDistance, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+        driveAutonomous((float) power, alignBeaconDistance);
 
         //robot is aligned to the button for the target color, drive into button to press it
         //No matter what, the robot will always have to right shift
-        rightShiftAutonomous((float) 0.2, 800, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+        rightShiftAutonomous((float) 0.2, 800);
     }
 
-    public static void iSeeAColorStop(float power, ColorSensor colorSensor, String color, DcMotor leftMotorFront, DcMotor rightMotorFront, DcMotor leftMotorBack, DcMotor rightMotorBack)
+    public void iSeeAColorStop(float power, String color)
     {
-        while (!iSeeAColor(colorSensor))
+        while (!iSeeAColor())
         {
-            driveTeleop(power, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+            driveTeleop(power);
         }
-        stopDriving(leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+        stopDriving();
     }
 
-    public static void whatColorStop(float power, ColorSensor colorSensor, String color, DcMotor leftMotorFront, DcMotor rightMotorFront, DcMotor leftMotorBack, DcMotor rightMotorBack)
+    public void whatColorStop(float power, String color)
     {
-        while (!whatColor(colorSensor).equals(color))
+        while (!whatColor().equals(color))
         {
-            driveTeleop(power, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+            driveTeleop(power);
         }
     }
 } //CLOSE CLASS

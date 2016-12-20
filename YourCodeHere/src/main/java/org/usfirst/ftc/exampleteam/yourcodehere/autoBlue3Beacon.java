@@ -13,12 +13,6 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DeviceInterfaceModule;
 
-import static org.usfirst.ftc.exampleteam.yourcodehere.functions.colorSensorAutonomous;
-import static org.usfirst.ftc.exampleteam.yourcodehere.functions.driveAutonomous;
-import static org.usfirst.ftc.exampleteam.yourcodehere.functions.leftShiftAutonomous;
-import static org.usfirst.ftc.exampleteam.yourcodehere.functions.leftTurnAutonomous;
-import static org.usfirst.ftc.exampleteam.yourcodehere.functions.rightShiftAutonomous;
-
 @Autonomous(name="3 Beacon") //Name the class
 public class autoBlue3Beacon extends LinearOpMode //CLASS START
 {
@@ -59,6 +53,8 @@ public class autoBlue3Beacon extends LinearOpMode //CLASS START
         colorSensor = hardwareMap.colorSensor.get("colorSensor");
         CDI = hardwareMap.deviceInterfaceModule.get("CDI");
 
+        DriveFunctions functions = new DriveFunctions(leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack, colorSensor, spinner, flipper);
+
         //Reverse the right motors since it is facing the opposite direction as the left motor
         rightMotorFront.setDirection(DcMotor.Direction.REVERSE);
         rightMotorBack.setDirection(DcMotor.Direction.REVERSE);
@@ -72,41 +68,40 @@ public class autoBlue3Beacon extends LinearOpMode //CLASS START
         while (opModeIsActive()) {
             //Drive forward to center Vortex
 
-//            functions.iSeeAColorStop( -0.1, colorSensor, "Blue", leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
-            driveAutonomous(drivePower, 2700, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+//            DriveFunctions.iSeeAColorStop( -0.1, colorSensor, "Blue", leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+            functions.driveAutonomous(drivePower, 2700);
 
             //Shift towards beacon
-            rightShiftAutonomous(shiftPower, 3000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+            functions.rightShiftAutonomous(shiftPower, 3000);
 
             //Become aligned with beacon
-            driveAutonomous(drivePower, 2000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+            functions.driveAutonomous(drivePower, 2000);
 
             //Shift next to beacon
-            rightShiftAutonomous(shiftPower, 3000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+            functions.rightShiftAutonomous(shiftPower, 3000);
 
             //If "blue" seen, shift to right, hit button
-            colorSensorAutonomous(color, colorSensor, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+            functions.colorSensorAutonomous(color);
 
             //Come off of wall
-            leftShiftAutonomous(shiftPower, 300, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+            functions.leftShiftAutonomous(shiftPower, 300);
 
             //Align with second beacon
-            driveAutonomous(drivePower, 4400, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+            functions.driveAutonomous(drivePower, 4400);
 
             //If "blue seen, shift to right, hit button
-            colorSensorAutonomous(color, colorSensor, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+            functions.colorSensorAutonomous(color);
 
             //Come off wall
-            leftShiftAutonomous(shiftPower, 300, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+            functions.leftShiftAutonomous(shiftPower, 300);
 
-            leftTurnAutonomous(turnPower, 2400, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+            functions.leftTurnAutonomous(turnPower, 2400);
 
+            functions.rightShiftAutonomous(drivePower, 4000);
 
-            rightShiftAutonomous(drivePower, 4000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+            functions.driveAutonomous(drivePower, 7000);
 
-            driveAutonomous(drivePower, 7000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
-
-            colorSensorAutonomous(color, colorSensor, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+            functions.colorSensorAutonomous(color);
 
 //            //Turn to Center Vortex
 //            leftTurnAutonomous( turnPower, 3800, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);

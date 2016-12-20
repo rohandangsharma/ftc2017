@@ -8,20 +8,11 @@ package org.usfirst.ftc.exampleteam.yourcodehere;
 //Import necessary items
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DeviceInterfaceModule;
 
-import org.swerverobotics.library.SynchronousOpMode;
-
-import static org.usfirst.ftc.exampleteam.yourcodehere.functions.colorSensorAutonomous;
-import static org.usfirst.ftc.exampleteam.yourcodehere.functions.driveAutonomous;
-import static org.usfirst.ftc.exampleteam.yourcodehere.functions.leftShiftAutonomous;
-import static org.usfirst.ftc.exampleteam.yourcodehere.functions.leftTurnAutonomous;
-import static org.usfirst.ftc.exampleteam.yourcodehere.functions.rightShiftAutonomous;
-import static org.usfirst.ftc.exampleteam.yourcodehere.functions.rightTurnAutonomous;
 
 @Autonomous(name="Red Autonomous") //Name the class
 public class autoRed extends LinearOpMode //CLASS START
@@ -64,6 +55,9 @@ public class autoRed extends LinearOpMode //CLASS START
         colorSensor = hardwareMap.colorSensor.get("colorSensor");
         CDI = hardwareMap.deviceInterfaceModule.get("CDI");
 
+        //Constructor
+        DriveFunctions functions = new DriveFunctions(leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack, colorSensor, spinner, flipper);
+
         //Reverse the right motors since it is facing the opposite direction as the left motor
         rightMotorFront.setDirection(DcMotor.Direction.REVERSE);
         rightMotorBack.setDirection(DcMotor.Direction.REVERSE);
@@ -77,43 +71,43 @@ public class autoRed extends LinearOpMode //CLASS START
         while (opModeIsActive()) {
 
             //Drive forward to center Vortex
-            driveAutonomous((float) -drivePower, (fastMode ? 2300 : -2700), leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+            functions.driveAutonomous((float) -drivePower, (fastMode ? 2300 : -2700));
 
             //Shift towards beacon
-            rightShiftAutonomous((float) shiftPower, 3000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+            functions.rightShiftAutonomous((float) shiftPower, 3000);
 
             //Become aligned with beacon
-            driveAutonomous((float) -drivePower, fastMode ? 1600 : -2000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+            functions.driveAutonomous((float) -drivePower, fastMode ? 1600 : -2000);
 
             //Shift next to beacon
-            rightShiftAutonomous((float) shiftPower, 3000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+            functions.rightShiftAutonomous((float) shiftPower, 3000);
 
             //If "red" seen, shift to right, hit button
-            colorSensorAutonomous(color, colorSensor, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+            functions.colorSensorAutonomous(color);
 
             //Come off of wall
-            leftShiftAutonomous((float) shiftPower, 300, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+            functions.leftShiftAutonomous((float) shiftPower, 300);
 
             //Align with second beacon
-            driveAutonomous((float) -drivePower, fastMode ? 4000 : -4400, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+            functions.driveAutonomous((float) -drivePower, fastMode ? 4000 : -4400);
 
             //If "red seen, shift to right, hit button
-            colorSensorAutonomous(color, colorSensor, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+            functions.colorSensorAutonomous(color);
 
             //Come off wall
-            leftShiftAutonomous((float) shiftPower, 300, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+            functions.leftShiftAutonomous((float) shiftPower, 300);
 
             //Turn to Center Vortex
-            leftTurnAutonomous((float) turnPower, 1267, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+            functions.leftTurnAutonomous((float) turnPower, 1267);
 
             //Drive to Center Vortex
-            driveAutonomous((float) drivePower, fastMode ? 5000 : 5400, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+            functions.driveAutonomous((float) drivePower, fastMode ? 5000 : 5400);
 
             //Turn to ramp
-            rightTurnAutonomous((float) turnPower, 2000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+            functions.rightTurnAutonomous((float) turnPower, 2000);
 
             //Drive up ramp
-            driveAutonomous((float) drivePower, fastMode ? 5600 : 6000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+            functions.driveAutonomous((float) drivePower, fastMode ? 5600 : 6000);
 
             spinner.setPower(1.0);
 
