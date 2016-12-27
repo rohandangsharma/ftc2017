@@ -40,7 +40,7 @@ public class dataLogging extends LinearOpMode {
         CDI = hardwareMap.deviceInterfaceModule.get("CDI");
 
         //Reverse the right motors since it is facing the opposite direction as the left motor
-        rightMotorFront.setDirection(DcMotor.Direction.REVERSE);
+        leftMotorFront.setDirection(DcMotor.Direction.REVERSE);
         rightMotorBack.setDirection(DcMotor.Direction.REVERSE);
         waitForStart();
 

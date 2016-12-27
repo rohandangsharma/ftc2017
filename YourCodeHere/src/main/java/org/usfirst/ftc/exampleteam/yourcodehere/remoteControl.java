@@ -23,7 +23,8 @@ public class remoteControl extends SynchronousOpMode //CLASS START
     DcMotor leftMotorBack;
     DcMotor rightMotorBack;
     DcMotor spinner;
-    DcMotor flipper;
+    DcMotor shooterLeft;
+    DcMotor shooterRight;
 
     int aPressCount = 0;
 
@@ -49,16 +50,17 @@ public class remoteControl extends SynchronousOpMode //CLASS START
         leftMotorBack = hardwareMap.dcMotor.get("leftMotorBack");
         rightMotorBack = hardwareMap.dcMotor.get("rightMotorBack");
         spinner = hardwareMap.dcMotor.get("spinner");
-        flipper = hardwareMap.dcMotor.get("flipper");
+        shooterLeft = hardwareMap.dcMotor.get("shooterLeft");
+        shooterRight = hardwareMap.dcMotor.get("shooterRight");
 
 
         //Get references to the sensors from the hardware map
         colorSensor = hardwareMap.colorSensor.get("colorSensor");
         CDI = hardwareMap.deviceInterfaceModule.get("CDI");
-        DriveFunctions functions = new DriveFunctions(leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack, colorSensor, spinner, flipper);
+        DriveFunctions functions = new DriveFunctions(leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack, colorSensor, spinner, shooterLeft, shooterRight);
 
         //Reverse the right motors since it is facing the opposite direction as the left motor
-        rightMotorFront.setDirection(DcMotor.Direction.REVERSE);
+        leftMotorFront.setDirection(DcMotor.Direction.REVERSE);
         rightMotorBack.setDirection(DcMotor.Direction.REVERSE);
 //***********************************************************************************************************
 //LOOP BELOW
@@ -113,8 +115,8 @@ public class remoteControl extends SynchronousOpMode //CLASS START
                     functions.stopEverything();
                 }
                 if (gamepad2.y) {
-                    functions.shootBall( 300);
-                    functions.stopEverything();
+                    shooterRight.setPower(-0.5);
+                    shooterLeft.setPower(0.5);
                 }
 
             } //Close inside "if" loop

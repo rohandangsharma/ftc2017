@@ -15,25 +15,28 @@ public class DriveFunctions
     DcMotor leftMotorBack;
     DcMotor rightMotorBack;
     DcMotor spinner;
-    DcMotor flipper;
+    DcMotor shooterLeft;
+    DcMotor shooterRight;
     ColorSensor colorSensor;
 
-    public DriveFunctions(DcMotor leftMotorFront, DcMotor rightMotorFront, DcMotor leftMotorBack, DcMotor rightMotorBack, ColorSensor colorSensor, DcMotor spinner, DcMotor flipper){
+    public DriveFunctions(DcMotor leftMotorFront, DcMotor rightMotorFront, DcMotor leftMotorBack, DcMotor rightMotorBack, ColorSensor colorSensor, DcMotor spinner, DcMotor shooterLeft, DcMotor shooterRight) {
         this.leftMotorFront = leftMotorFront;
         this.leftMotorBack = leftMotorBack;
         this.rightMotorFront = rightMotorFront;
         this.rightMotorBack = rightMotorBack;
         this.colorSensor = colorSensor;
         this.spinner = spinner;
-        this.flipper = flipper;
+        this.shooterLeft = shooterLeft;
+        this.shooterRight = shooterRight;
 
     }
+
+
 
     /**
      * If this function is called, stop the drive motors
      */
-    public void stopDriving()
-    {
+    public void stopDriving() {
         leftMotorFront.setPower(0.0);
         leftMotorBack.setPower(0.0);
         rightMotorFront.setPower(0.0);
@@ -43,10 +46,10 @@ public class DriveFunctions
     /**
      * If this function is called, stop the attachments
      */
-    public void stopAttachments()
-    {
+    public void stopAttachments() {
         spinner.setPower(0.0);
-        flipper.setPower(0.0);
+        shooterRight.setPower(0.0);
+        shooterLeft.setPower(0.0);
     }
 
     /**
@@ -61,8 +64,7 @@ public class DriveFunctions
     /**
      * If this function is called, turn on the drive motors at the given powers to make it drive forward
      */
-    public void driveTeleop(float drive)
-    {
+    public void driveTeleop(float drive) {
         leftMotorFront.setPower(drive);
         leftMotorBack.setPower(drive);
         rightMotorFront.setPower(drive);
@@ -72,8 +74,7 @@ public class DriveFunctions
     /**
      * If this function is called, turn on the drive motors at the given powers, to make it turn right
      */
-    public void rightTurnTeleop(float turn)
-    {
+    public void rightTurnTeleop(float turn) {
         //Turn the right motors backwards and the left motors forward
         rightMotorFront.setPower(-turn);
         rightMotorBack.setPower(-turn);
@@ -84,8 +85,7 @@ public class DriveFunctions
     /**
      * If this function is called, turn on the drive motors at the given powers, to make it turn left
      */
-    public void leftTurnTeleop(float turn)
-    {
+    public void leftTurnTeleop(float turn) {
         //Turn the left motors backwards and the right motors forward
         rightMotorFront.setPower(turn);
         rightMotorBack.setPower(turn);
@@ -96,8 +96,7 @@ public class DriveFunctions
     /**
      * If this function is called, turn on the drive motors at the given powers, to make it shift in the desired direction
      */
-    public void shiftTeleop(float shift)
-    {
+    public void shiftTeleop(float shift) {
         //This sequence of backwards, forwards, forwards, backwards makes the robot shift
         leftMotorFront.setPower(-shift);
         leftMotorBack.setPower(shift);
@@ -109,31 +108,31 @@ public class DriveFunctions
      * Toggle the spinner to make it stop, go forwards, and go backwards whenever we want
      * @param spinnerMode tells the mode of the spinner, that is set in the teleop program
      */
-    public void toggleSpinner(int spinnerMode, double power)
-    {
-        if (spinnerMode % 3 == 0)
-        {
+    public void toggleSpinner(int spinnerMode, double power) {
+        if (spinnerMode % 3 == 0) {
             spinner.setPower(0.0);
         }
-        if (spinnerMode % 3 == 1)
-        {
+        if (spinnerMode % 3 == 1) {
             spinner.setPower(power);
         }
-        if (spinnerMode % 3 == 2)
-        {
+        if (spinnerMode % 3 == 2) {
             spinner.setPower(-power);
         }
     }
 
     /**
-     * Shoot the ball for the given time
-     * @param time we want the flipper on for
+     *
+     * @param power power for shooter to move at
+     * @param time time to shoot for
+     * @throws InterruptedException
      */
-    public void shootBall(long time) throws InterruptedException
-    {
-        flipper.setPower(1.0); //turn on flipper
+    public void shootBall(double power, long time) throws InterruptedException {
+        //Turn on
+        shooterLeft.setPower(power);
+        shooterRight.setPower(-power);
         Thread.sleep(time); //stop at the given time
-        flipper.setPower(0.0);
+        shooterLeft.setPower(0.0);
+        shooterRight.setPower(0.0);
     }
 
     /**
@@ -169,8 +168,7 @@ public class DriveFunctions
      * Drive for the given distance at the given power
      * @param degrees distance
      */
-    public void driveAutonomous(float power, int degrees)
-    {
+    public void driveAutonomous(float power, int degrees) {
 
         prepMotorsForAutonomous();
 
@@ -374,24 +372,22 @@ public class DriveFunctions
      * the button
      * @param color take in our team color
      */
-    public void colorSensorAutonomous(String color) throws InterruptedException
+    public void beaconColorCheck(String color) throws InterruptedException
     {
-        boolean blueTeam = color.equals("blue");
+        boolean blueTeam = color.equals("blue") || color.equals("Blue");
 
         double power  = blueTeam ? 0.2 : -0.2;
         int findBeaconDistance = blueTeam ? 100 : -100;
         int alignBeaconDistance = blueTeam ? 400 : -200;
 
         //while we do not see the beacon, drive forward
-        while (!iSeeAColor())
-        {
+        while (!iSeeAColor()) {
             driveAutonomous((float) power, findBeaconDistance);
         }
 
         //now we see a color, but possibly not the target color
         // while we don't see the target color -> drive forward
-        while (!whatColor().equals(color))
-        {
+        while (!whatColor().equals(color)) {
             driveAutonomous((float) power, findBeaconDistance);
         }
 
@@ -403,20 +399,22 @@ public class DriveFunctions
         rightShiftAutonomous((float) 0.2, 800);
     }
 
-    public void iSeeAColorStop(float power, String color)
-    {
-        while (!iSeeAColor())
-        {
+    public void iSeeAColorStop(float power, String color) {
+        while (!iSeeAColor()) {
             driveTeleop(power);
         }
         stopDriving();
     }
 
-    public void whatColorStop(float power, String color)
-    {
-        while (!whatColor().equals(color))
-        {
+    public void whatColorStop(float power, String color) {
+        while (!whatColor().equals(color)) {
             driveTeleop(power);
         }
+    }
+
+    public void floorColor(float power) {
+        colorSensor.enableLed(true);
+
+
     }
 } //CLOSE CLASS

@@ -12,8 +12,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DeviceInterfaceModule;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 
-import static org.usfirst.ftc.exampleteam.yourcodehere.DriveFunctions.*;
-
 @Autonomous(name="Blue Autonomous") //Name the class
 public class autoBlue extends LinearOpMode //CLASS START
 {
@@ -22,7 +20,8 @@ public class autoBlue extends LinearOpMode //CLASS START
     DcMotor rightMotorFront;
     DcMotor leftMotorBack;
     DcMotor rightMotorBack;
-    DcMotor flipper;
+    DcMotor shooterLeft;
+    DcMotor shooterRight;
     DcMotor spinner;
 
     //Define Sensors
@@ -49,17 +48,18 @@ public class autoBlue extends LinearOpMode //CLASS START
         rightMotorBack = hardwareMap.dcMotor.get("rightMotorBack");
 
         spinner = hardwareMap.dcMotor.get("spinner");
-        flipper = hardwareMap.dcMotor.get("flipper");
+        shooterLeft = hardwareMap.dcMotor.get("shooterLeft");
+        shooterRight = hardwareMap.dcMotor.get("shooterRight");
 
         //Get references to the sensors from the hardware map
         colorSensor = hardwareMap.colorSensor.get("colorSensor");
         CDI = hardwareMap.deviceInterfaceModule.get("CDI");
 
         //Constructor
-        DriveFunctions functions = new DriveFunctions(leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack, colorSensor, spinner, flipper);
+        DriveFunctions functions = new DriveFunctions(leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack, colorSensor, spinner, shooterLeft, shooterRight);
 
         //Reverse the right motors since it is facing the opposite direction as the left motor
-        rightMotorFront.setDirection(DcMotor.Direction.REVERSE);
+        leftMotorFront.setDirection(DcMotor.Direction.REVERSE);
         rightMotorBack.setDirection(DcMotor.Direction.REVERSE);
 
         //Put color sensor in passive mode
@@ -84,7 +84,7 @@ public class autoBlue extends LinearOpMode //CLASS START
             functions.rightShiftAutonomous((float) shiftPower, 3000);
 
             //If "blue" seen, shift to right, hit button
-            functions.colorSensorAutonomous(color);
+            functions.beaconColorCheck(color);
 
             //Come off of wall
             functions.leftShiftAutonomous((float) shiftPower, 300);
@@ -93,7 +93,7 @@ public class autoBlue extends LinearOpMode //CLASS START
             functions.driveAutonomous((float) drivePower, fastMode ? 4000 : 4400);
 
             //If "blue seen, shift to right, hit button
-            functions.colorSensorAutonomous(color);
+            functions.beaconColorCheck(color);
 
             //Come off wall
             functions.leftShiftAutonomous((float) shiftPower, 300);
