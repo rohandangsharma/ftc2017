@@ -13,7 +13,7 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DeviceInterfaceModule;
 
-@Autonomous(name="3 Beacon") //Name the class
+@Autonomous(name="3 Beacon Blue Team") //Name the class
 public class autoBlue3Beacon extends LinearOpMode //CLASS START
 {
     //Define DC Motors
@@ -117,7 +117,7 @@ public class autoBlue3Beacon extends LinearOpMode //CLASS START
 //            //Drive up ramp
 //            driveAutonomous(drivePower, 6000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
 
-            spinner.setPower(1.0);
+//            spinner.setPower(1.0);
 
             idle(); // Always call idle() at the bottom of your while(opModeIsActive()) loop
         }

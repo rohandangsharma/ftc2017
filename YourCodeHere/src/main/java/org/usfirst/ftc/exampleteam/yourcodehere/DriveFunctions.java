@@ -121,18 +121,16 @@ public class DriveFunctions
     }
 
     /**
-     *
      * @param power power for shooter to move at
-     * @param time time to shoot for
-     * @throws InterruptedException
      */
-    public void shootBall(double power, long time) throws InterruptedException {
+    public void shootBall(float power)
+    {
         //Turn on
         shooterLeft.setPower(power);
         shooterRight.setPower(-power);
-        Thread.sleep(time); //stop at the given time
-        shooterLeft.setPower(0.0);
-        shooterRight.setPower(0.0);
+//        Thread.sleep(time); //stop at the given time
+//        shooterLeft.setPower(0.0);
+//        shooterRight.setPower(0.0);
     }
 
     /**
@@ -306,11 +304,11 @@ public class DriveFunctions
         rightMotorFront.setTargetPosition(-degrees);
         rightMotorBack.setTargetPosition(degrees);
 
-        //Set up the motors run to the given position
-        leftMotorFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        leftMotorBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightMotorFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightMotorBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        //Set up the motors run to the given position
+//        leftMotorFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        leftMotorBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        rightMotorFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        rightMotorBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         //Turn on the motors at the given powers
         //This sequence of forwards, backwards, backwards, forwards makes the robot shift right
@@ -372,22 +370,22 @@ public class DriveFunctions
      * the button
      * @param color take in our team color
      */
-    public void beaconColorCheck(String color) throws InterruptedException
+    public void beaconColorCheck(String color)
     {
-        boolean blueTeam = color.equals("blue") || color.equals("Blue");
-
-        double power  = blueTeam ? 0.2 : -0.2;
-        int findBeaconDistance = blueTeam ? 100 : -100;
-        int alignBeaconDistance = blueTeam ? 400 : -200;
+        double power = 0.2;
+        int findBeaconDistance = 100;
+        int alignBeaconDistance = 400;
 
         //while we do not see the beacon, drive forward
-        while (!iSeeAColor()) {
+        while (!iSeeAColor())
+        {
             driveAutonomous((float) power, findBeaconDistance);
         }
 
         //now we see a color, but possibly not the target color
         // while we don't see the target color -> drive forward
-        while (!whatColor().equals(color)) {
+        while (!whatColor().equals(color))
+        {
             driveAutonomous((float) power, findBeaconDistance);
         }
 
@@ -395,26 +393,45 @@ public class DriveFunctions
         driveAutonomous((float) power, alignBeaconDistance);
 
         //robot is aligned to the button for the target color, drive into button to press it
-        //No matter what, the robot will always have to right shift
-        rightShiftAutonomous((float) 0.2, 800);
-    }
-
-    public void iSeeAColorStop(float power, String color) {
-        while (!iSeeAColor()) {
-            driveTeleop(power);
+        if (color.equals("Blue"))
+        {
+            rightShiftAutonomous((float) 0.2, 800);
         }
-        stopDriving();
-    }
 
-    public void whatColorStop(float power, String color) {
-        while (!whatColor().equals(color)) {
-            driveTeleop(power);
+        if (color.equals("Red"))
+        {
+            leftShiftAutonomous((float) 0.2, 800);
         }
     }
 
-    public void floorColor(float power) {
-        colorSensor.enableLed(true);
-
-
-    }
+//    public void teleOpAutonomousCombo()
+//    {
+//        //Come off of wall
+//        leftShiftAutonomous((float) 0.5, 300);
+//
+//        //Align with second beacon
+//        driveAutonomous((float) 0.4, 4400);
+//
+//        //If "blue seen, shift to right, hit button
+//        beaconColorCheck("Blue");
+//    }
+//
+//    public void iSeeAColorStop(float power, String color) {
+//        while (!iSeeAColor()) {
+//            driveTeleop(power);
+//        }
+//        stopDriving();
+//    }
+//
+//    public void whatColorStop(float power, String color) {
+//        while (!whatColor().equals(color)) {
+//            driveTeleop(power);
+//        }
+//    }
+//
+//    public void floorColor(float power) {
+//        colorSensor.enableLed(true);
+//
+//
+//    }
 } //CLOSE CLASS

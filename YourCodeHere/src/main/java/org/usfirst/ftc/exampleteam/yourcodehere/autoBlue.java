@@ -29,7 +29,7 @@ public class autoBlue extends LinearOpMode //CLASS START
     DeviceInterfaceModule CDI;
 
     //Define a string to use as the color, and set it to blue
-    String color = "blue";
+    String color = "Blue";
 
     //MAIN BELOW
     @Override

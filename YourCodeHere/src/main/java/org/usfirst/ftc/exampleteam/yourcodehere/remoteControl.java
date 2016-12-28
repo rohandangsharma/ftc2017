@@ -39,6 +39,8 @@ public class remoteControl extends SynchronousOpMode //CLASS START
     float rightTurn;
     float leftTurn;
 
+    String color = "Blue";
+
     //***********************************************************************************************************
 //MAIN BELOW
     @Override
@@ -115,9 +117,12 @@ public class remoteControl extends SynchronousOpMode //CLASS START
                     functions.stopEverything();
                 }
                 if (gamepad2.y) {
-                    shooterRight.setPower(-0.5);
-                    shooterLeft.setPower(0.5);
+                    functions.shootBall((float) 0.5);
                 }
+//                if (gamepad1.right_bumper)
+//                {
+//                    functions.teleOpAutonomousCombo();
+//                }
 
             } //Close inside "if" loop
             telemetry.update();
