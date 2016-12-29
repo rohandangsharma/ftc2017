@@ -26,7 +26,10 @@ public class autoBlue3Beacon extends LinearOpMode //CLASS START
     DcMotor spinner;
 
     //Define Sensors
-    ColorSensor colorSensor;
+    ColorSensor colorSensorLeft;
+    ColorSensor colorSensorRight;
+    ColorSensor colorSensorBottom;
+
     DeviceInterfaceModule CDI;
 
     //Define a string to use as the color, and set it to blue
@@ -52,17 +55,22 @@ public class autoBlue3Beacon extends LinearOpMode //CLASS START
         shooterRight = hardwareMap.dcMotor.get("shooterRight");
 
         //Get references to the sensors from the hardware map
-        colorSensor = hardwareMap.colorSensor.get("colorSensor");
+        colorSensorLeft = hardwareMap.colorSensor.get("colorSensorLeft");
+        colorSensorRight = hardwareMap.colorSensor.get("colorSensorRight");
+        colorSensorBottom = hardwareMap.colorSensor.get("colorSensorBottom");
+
         CDI = hardwareMap.deviceInterfaceModule.get("CDI");
 
-        DriveFunctions functions = new DriveFunctions(leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack, colorSensor, spinner, shooterLeft, shooterRight);
+        DriveFunctions functions = new DriveFunctions(leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack, colorSensorLeft, colorSensorRight, colorSensorBottom, spinner, shooterLeft, shooterRight);
 
         //Reverse the right motors since it is facing the opposite direction as the left motor
         leftMotorFront.setDirection(DcMotor.Direction.REVERSE);
         rightMotorBack.setDirection(DcMotor.Direction.REVERSE);
 
         //Put color sensor in passive mode
-        colorSensor.enableLed(false);
+        colorSensorLeft.enableLed(false);
+        colorSensorRight.enableLed(false);
+        colorSensorBottom.enableLed(true);
 
         //Wait for start button to be clicked
         waitForStart();
@@ -83,7 +91,7 @@ public class autoBlue3Beacon extends LinearOpMode //CLASS START
             functions.rightShiftAutonomous(shiftPower, 3000);
 
             //If "blue" seen, shift to right, hit button
-            functions.beaconColorCheck(color);
+            functions.beaconColorCheck(color, colorSensorRight);
 
             //Come off of wall
             functions.leftShiftAutonomous(shiftPower, 300);
@@ -92,7 +100,7 @@ public class autoBlue3Beacon extends LinearOpMode //CLASS START
             functions.driveAutonomous(drivePower, 4400);
 
             //If "blue seen, shift to right, hit button
-            functions.beaconColorCheck(color);
+            functions.beaconColorCheck(color, colorSensorRight);
 
             //Come off wall
             functions.leftShiftAutonomous(shiftPower, 300);
@@ -103,7 +111,7 @@ public class autoBlue3Beacon extends LinearOpMode //CLASS START
 
             functions.driveAutonomous(drivePower, 7000);
 
-            functions.beaconColorCheck(color);
+            functions.beaconColorCheck(color, colorSensorRight);
 
 //            //Turn to Center Vortex
 //            leftTurnAutonomous( turnPower, 3800, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);

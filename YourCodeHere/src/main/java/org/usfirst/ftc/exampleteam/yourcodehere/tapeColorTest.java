@@ -27,11 +27,13 @@ public class tapeColorTest extends LinearOpMode //CLASS START
     DcMotor spinner;
 
     //Define Sensors
-    ColorSensor colorSensor;
+    ColorSensor colorSensorLeft;
+    ColorSensor colorSensorRight;
+    ColorSensor colorSensorBottom;
     DeviceInterfaceModule CDI;
 
     //Define a string to use as the color, and set it to blue
-    String color = "blue";
+    String color = "Blue";
 
     //MAIN BELOW
     @Override
@@ -54,24 +56,31 @@ public class tapeColorTest extends LinearOpMode //CLASS START
         shooterRight = hardwareMap.dcMotor.get("shooterRight");
 
         //Get references to the sensors from the hardware map
-        colorSensor = hardwareMap.colorSensor.get("colorSensor");
+        colorSensorLeft = hardwareMap.colorSensor.get("colorSensorLeft");
+        colorSensorRight = hardwareMap.colorSensor.get("colorSensorRight");
+        colorSensorBottom = hardwareMap.colorSensor.get("colorSensorBottom");
+
         CDI = hardwareMap.deviceInterfaceModule.get("CDI");
 
         //Constructor
-        DriveFunctions functions = new DriveFunctions(leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack, colorSensor, spinner, shooterLeft, shooterRight);
+        DriveFunctions functions = new DriveFunctions(leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack, colorSensorLeft, colorSensorRight, colorSensorBottom, spinner, shooterLeft, shooterRight);
 
         //Reverse the right motors since it is facing the opposite direction as the left motor
-        rightMotorFront.setDirection(DcMotor.Direction.REVERSE);
+        leftMotorFront.setDirection(DcMotor.Direction.REVERSE);
         rightMotorBack.setDirection(DcMotor.Direction.REVERSE);
 
-        //Put color sensor in passive mode
-        colorSensor.enableLed(true);
+        //Put side color sensors in passive mode
+        colorSensorLeft.enableLed(false);
+        colorSensorRight.enableLed(false);
+
+        //Bottom color sensor in active mode
+        colorSensorBottom.enableLed(true);
 
         //Wait for start button to be clicked
         waitForStart();
         //Open loops
         while (opModeIsActive()) {
-            //Drive forward to center Vortex
+
 
 
 

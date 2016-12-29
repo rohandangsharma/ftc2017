@@ -40,6 +40,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.ColorSensor;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DeviceInterfaceModule;
 
 /*
  *
@@ -58,7 +60,19 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 
 public class SensorMRColor extends LinearOpMode {
 
-  ColorSensor colorSensor;    // Hardware Device Object
+  DcMotor leftMotorFront;
+  DcMotor rightMotorFront;
+  DcMotor leftMotorBack;
+  DcMotor rightMotorBack;
+  DcMotor shooterLeft;
+  DcMotor shooterRight;
+  DcMotor spinner;
+
+  //Define Sensors
+  ColorSensor colorSensorLeft;
+  ColorSensor colorSensorRight;
+  ColorSensor colorSensorBottom;
+  DeviceInterfaceModule CDI;
 
 
   @Override
@@ -74,26 +88,51 @@ public class SensorMRColor extends LinearOpMode {
     // color of the Robot Controller app to match the hue detected by the RGB sensor.
     final View relativeLayout = ((Activity) hardwareMap.appContext).findViewById(R.id.RelativeLayout);
 
+
+    leftMotorFront = hardwareMap.dcMotor.get("leftMotorFront");
+    rightMotorFront = hardwareMap.dcMotor.get("rightMotorFront");
+    leftMotorBack = hardwareMap.dcMotor.get("leftMotorBack");
+    rightMotorBack = hardwareMap.dcMotor.get("rightMotorBack");
+
+    spinner = hardwareMap.dcMotor.get("spinner");
+    shooterLeft = hardwareMap.dcMotor.get("shooterLeft");
+    shooterRight = hardwareMap.dcMotor.get("shooterRight");
+
+    //Get references to the sensors from the hardware map
+    colorSensorLeft = hardwareMap.colorSensor.get("colorSensorLeft");
+    colorSensorRight = hardwareMap.colorSensor.get("colorSensorRight");
+    colorSensorBottom = hardwareMap.colorSensor.get("colorSensorBottom");
+
+    CDI = hardwareMap.deviceInterfaceModule.get("CDI");
+    DriveFunctions functions = new DriveFunctions(leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack, colorSensorLeft, colorSensorRight, colorSensorBottom, spinner, shooterLeft, shooterRight);
+
     // get a reference to our ColorSensor object.
-    colorSensor = hardwareMap.colorSensor.get("colorSensor");
+    colorSensorBottom = hardwareMap.colorSensor.get("colorSensorBottom");
 
     // Set the LED in the beginning
-    colorSensor.enableLed(false);
+
 
     // wait for the start button to be pressed.
     waitForStart();
+
+
+
 
     // while the op mode is active, loop and read the RGB data.
     // Note we use opModeIsActive() as our loop condition because it is an interruptible method.
     while (opModeIsActive()) {
       // convert the RGB values to HSV values.
-      Color.RGBToHSV(colorSensor.red() * 8, colorSensor.green() * 8, colorSensor.blue() * 8, hsvValues);
+        colorSensorLeft.enableLed(false);
+        colorSensorRight.enableLed(false);
+        colorSensorBottom.enableLed(true);
+
+        Color.RGBToHSV(colorSensorLeft.red() * 8, colorSensorLeft.green() * 8, colorSensorLeft.blue() * 8, hsvValues);
 
       // send the info back to driver station using telemetry function.
-      telemetry.addData("Clear", colorSensor.alpha());
-      telemetry.addData("Red  ", colorSensor.red());
-      telemetry.addData("Green", colorSensor.green());
-      telemetry.addData("Blue ", colorSensor.blue());
+      telemetry.addData("Clear", colorSensorLeft.alpha());
+      telemetry.addData("Red  ", colorSensorLeft.red());
+      telemetry.addData("Green", colorSensorLeft.green());
+      telemetry.addData("Blue ", colorSensorLeft.blue());
       telemetry.addData("Hue", hsvValues[0]);
       telemetry.addData("Saturation", hsvValues[1]);
       telemetry.addData("Value", hsvValues[2]);

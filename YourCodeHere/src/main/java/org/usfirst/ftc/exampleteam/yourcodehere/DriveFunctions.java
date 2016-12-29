@@ -17,17 +17,22 @@ public class DriveFunctions
     DcMotor spinner;
     DcMotor shooterLeft;
     DcMotor shooterRight;
-    ColorSensor colorSensor;
+    ColorSensor colorSensorLeft;
+    ColorSensor colorSensorRight;
+    ColorSensor colorSensorBottom;
 
-    public DriveFunctions(DcMotor leftMotorFront, DcMotor rightMotorFront, DcMotor leftMotorBack, DcMotor rightMotorBack, ColorSensor colorSensor, DcMotor spinner, DcMotor shooterLeft, DcMotor shooterRight) {
+    public DriveFunctions(DcMotor leftMotorFront, DcMotor rightMotorFront, DcMotor leftMotorBack, DcMotor rightMotorBack, ColorSensor colorSensorLeft, ColorSensor colorSensorRight, ColorSensor colorSensorBottom, DcMotor spinner, DcMotor shooterLeft, DcMotor shooterRight) {
         this.leftMotorFront = leftMotorFront;
         this.leftMotorBack = leftMotorBack;
         this.rightMotorFront = rightMotorFront;
         this.rightMotorBack = rightMotorBack;
-        this.colorSensor = colorSensor;
+        this.colorSensorLeft = colorSensorLeft;
+        this.colorSensorRight = colorSensorRight;
+        this.colorSensorBottom = colorSensorBottom;
         this.spinner = spinner;
         this.shooterLeft = shooterLeft;
         this.shooterRight = shooterRight;
+
 
     }
 
@@ -329,8 +334,7 @@ public class DriveFunctions
     /**
      * @return returns true if the supplied ColorSensor either red or blue.  False otherwise
      */
-    public boolean iSeeAColor()
-    {
+    public boolean iSeeAColor(ColorSensor colorSensor) {
         float[] hsvValues = {0, 0, 0}; //This is an array that stores the hue[0], saturation[1], and value[2], values
 
         //Convert from RGB to HSV (red-green-blue to hue-saturation-value)
@@ -349,7 +353,7 @@ public class DriveFunctions
      * Determines what color the color sensor is seeing
      * @return The string "blue" if we see the color blue, "red" if we see the color red
      */
-    public String whatColor()
+    public String whatColor(ColorSensor colorSensor)
     {
         float hue; //Define float
         float[] hsvValues = {0, 0, 0}; //This is an array that stores the hue[0], saturation[1], and value[2], values
@@ -370,21 +374,21 @@ public class DriveFunctions
      * the button
      * @param color take in our team color
      */
-    public void beaconColorCheck(String color)
+    public void beaconColorCheck(String color, ColorSensor colorSensor)
     {
         double power = 0.2;
         int findBeaconDistance = 100;
         int alignBeaconDistance = 400;
 
         //while we do not see the beacon, drive forward
-        while (!iSeeAColor())
+        while (!iSeeAColor(colorSensor))
         {
             driveAutonomous((float) power, findBeaconDistance);
         }
 
         //now we see a color, but possibly not the target color
         // while we don't see the target color -> drive forward
-        while (!whatColor().equals(color))
+        while (!whatColor(colorSensor).equals(color))
         {
             driveAutonomous((float) power, findBeaconDistance);
         }

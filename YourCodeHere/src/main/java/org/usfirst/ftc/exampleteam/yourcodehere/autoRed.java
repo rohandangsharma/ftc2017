@@ -27,7 +27,9 @@ public class autoRed extends LinearOpMode //CLASS START
     DcMotor spinner;
 
     //Define Sensors
-    ColorSensor colorSensor;
+    ColorSensor colorSensorLeft;
+    ColorSensor colorSensorRight;
+    ColorSensor colorSensorBottom;
     DeviceInterfaceModule CDI;
 
     //Define a string to use as the color, and set it to blue
@@ -49,23 +51,29 @@ public class autoRed extends LinearOpMode //CLASS START
         rightMotorFront = hardwareMap.dcMotor.get("rightMotorFront");
         leftMotorBack = hardwareMap.dcMotor.get("leftMotorBack");
         rightMotorBack = hardwareMap.dcMotor.get("rightMotorBack");
+
         spinner = hardwareMap.dcMotor.get("spinner");
         shooterLeft = hardwareMap.dcMotor.get("shooterLeft");
         shooterRight = hardwareMap.dcMotor.get("shooterRight");
 
         //Get references to the sensors from the hardware map
-        colorSensor = hardwareMap.colorSensor.get("colorSensor");
+        colorSensorLeft = hardwareMap.colorSensor.get("colorSensorLeft");
+        colorSensorRight = hardwareMap.colorSensor.get("colorSensorRight");
+        colorSensorBottom = hardwareMap.colorSensor.get("colorSensorBottom");
+
         CDI = hardwareMap.deviceInterfaceModule.get("CDI");
 
         //Constructor
-        DriveFunctions functions = new DriveFunctions(leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack, colorSensor, spinner, shooterLeft, shooterRight);
+        DriveFunctions functions = new DriveFunctions(leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack, colorSensorLeft, colorSensorRight, colorSensorBottom, spinner, shooterLeft, shooterRight);
 
         //Reverse the right motors since it is facing the opposite direction as the left motor
         leftMotorFront.setDirection(DcMotor.Direction.REVERSE);
         rightMotorBack.setDirection(DcMotor.Direction.REVERSE);
 
         //Put color sensor in passive mode
-        colorSensor.enableLed(false);
+        colorSensorLeft.enableLed(false);
+        colorSensorRight.enableLed(false);
+        colorSensorBottom.enableLed(true);
 
         //Wait for start button to be clicked
         waitForStart();
@@ -85,7 +93,7 @@ public class autoRed extends LinearOpMode //CLASS START
             functions.rightShiftAutonomous((float) shiftPower, 3000);
 
             //If "red" seen, shift to right, hit button
-            functions.beaconColorCheck(color);
+            functions.beaconColorCheck(color, colorSensorLeft);
 
             //Come off of wall
             functions.leftShiftAutonomous((float) shiftPower, 300);
@@ -94,7 +102,7 @@ public class autoRed extends LinearOpMode //CLASS START
             functions.driveAutonomous((float) -drivePower, fastMode ? 4000 : -4400);
 
             //If "red seen, shift to right, hit button
-            functions.beaconColorCheck(color);
+            functions.beaconColorCheck(color, colorSensorLeft);
 
             //Come off wall
             functions.leftShiftAutonomous((float) shiftPower, 300);

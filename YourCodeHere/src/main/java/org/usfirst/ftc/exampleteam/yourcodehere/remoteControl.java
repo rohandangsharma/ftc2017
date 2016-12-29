@@ -29,7 +29,9 @@ public class remoteControl extends SynchronousOpMode //CLASS START
     int aPressCount = 0;
 
     //Define Sensors
-    ColorSensor colorSensor;
+    ColorSensor colorSensorLeft;
+    ColorSensor colorSensorRight;
+    ColorSensor colorSensorBottom;
     DeviceInterfaceModule CDI;
 
 
@@ -44,26 +46,35 @@ public class remoteControl extends SynchronousOpMode //CLASS START
     //***********************************************************************************************************
 //MAIN BELOW
     @Override
-    public void main() throws InterruptedException
-    {
+    public void main() throws InterruptedException {
         //Get references to the motors from the hardware map
         leftMotorFront = hardwareMap.dcMotor.get("leftMotorFront");
         rightMotorFront = hardwareMap.dcMotor.get("rightMotorFront");
         leftMotorBack = hardwareMap.dcMotor.get("leftMotorBack");
         rightMotorBack = hardwareMap.dcMotor.get("rightMotorBack");
+
         spinner = hardwareMap.dcMotor.get("spinner");
         shooterLeft = hardwareMap.dcMotor.get("shooterLeft");
         shooterRight = hardwareMap.dcMotor.get("shooterRight");
 
-
         //Get references to the sensors from the hardware map
-        colorSensor = hardwareMap.colorSensor.get("colorSensor");
+        colorSensorLeft = hardwareMap.colorSensor.get("colorSensorLeft");
+        colorSensorRight = hardwareMap.colorSensor.get("colorSensorRight");
+        colorSensorBottom = hardwareMap.colorSensor.get("colorSensorBottom");
+
         CDI = hardwareMap.deviceInterfaceModule.get("CDI");
-        DriveFunctions functions = new DriveFunctions(leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack, colorSensor, spinner, shooterLeft, shooterRight);
+
+        //Constructor
+        DriveFunctions functions = new DriveFunctions(leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack, colorSensorLeft, colorSensorRight, colorSensorBottom, spinner, shooterLeft, shooterRight);
 
         //Reverse the right motors since it is facing the opposite direction as the left motor
         leftMotorFront.setDirection(DcMotor.Direction.REVERSE);
         rightMotorBack.setDirection(DcMotor.Direction.REVERSE);
+
+        //Put color sensor in passive mode
+        colorSensorLeft.enableLed(false);
+        colorSensorRight.enableLed(false);
+        colorSensorBottom.enableLed(true);
 //***********************************************************************************************************
 //LOOP BELOW
         waitForStart();
