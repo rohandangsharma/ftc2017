@@ -2,20 +2,20 @@
 package org.usfirst.ftc.exampleteam.yourcodehere;
 
 //Import necessary items
+import android.graphics.Color;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DeviceInterfaceModule;
-import com.qualcomm.robotcore.hardware.ColorSensor;
-import com.qualcomm.robotcore.hardware.I2cAddr;
 
 //***************************************************************************************************************************
 @Disabled //We don't want this class to show up in the list, it is just here for reference
-@TeleOp(name = "Data Logging Program") //Name the program
-public class dataLogging extends LinearOpMode //CLASS START
+@TeleOp(name = "Test All Color Sensors") //Name the program
+public class colorSensorsTest extends LinearOpMode //CLASS START
 {
-    //Define DC Motors
+    //Define DC motors
     DcMotor leftMotorFront;
     DcMotor rightMotorFront;
     DcMotor leftMotorBack;
@@ -35,6 +35,11 @@ public class dataLogging extends LinearOpMode //CLASS START
     @Override
     public void runOpMode() throws InterruptedException
     {
+        //These are arrays that will hold the hue, saturation, and value information for all three sensors.
+        float hsvValuesBottom[] = {0F,0F,0F};
+        float hsvValuesLeft[] = {0F,0F,0F};
+        float hsvValuesRight[] = {0F,0F,0F};
+
         //Get references to the DC motors from the hardware map
         leftMotorFront = hardwareMap.dcMotor.get("leftMotorFront");
         rightMotorFront = hardwareMap.dcMotor.get("rightMotorFront");
@@ -58,36 +63,50 @@ public class dataLogging extends LinearOpMode //CLASS START
 
         //Wait for start button to be clicked
         waitForStart();
+
 //***************************************************************************************************************************
 
-        //While the op mode is active, loop and read the RGB data.
+        //While the op mode is active, loop and read the RGB data from all three sensors.
         //Note we use opModeIsActive() as our loop condition because it is an interruptible method.
         while (opModeIsActive())
         {
-            if (gamepad1.b)
-            {
-                //If "b" is pressed, reset the encoders
-                leftMotorFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                leftMotorBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                rightMotorFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                rightMotorBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            //Convert RGB (red-blue-green) to HSV (hue-saturation-value) and store them into hsvValues
+            //This makes hsvValues[0] = hue, hsvValues[1] = saturation and hsvValues[2] = value
+            Color.RGBToHSV(colorSensorBottom.red() * 8, colorSensorBottom.green() * 8, colorSensorBottom.blue() * 8, hsvValuesBottom);
+            Color.RGBToHSV(colorSensorLeft.red() * 8, colorSensorLeft.green() * 8, colorSensorLeft.blue() * 8, hsvValuesLeft);
+            Color.RGBToHSV(colorSensorRight.red() * 8, colorSensorRight.green() * 8, colorSensorRight.blue() * 8, hsvValuesRight);
 
-                //Use the encoders
-                leftMotorFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                leftMotorBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                rightMotorFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                rightMotorBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            }
+            //Tell us the data from the bottom sensor
+            telemetry.addData("Clear Bottom", colorSensorBottom.alpha());
+            telemetry.addData("Red Bottom", colorSensorBottom.red());
+            telemetry.addData("Green Bottom", colorSensorBottom.green());
+            telemetry.addData("Blue Bottom", colorSensorBottom.blue());
+            telemetry.addData("Hue Bottom", hsvValuesBottom[0]);
+            telemetry.addData("Saturation Bottom", hsvValuesBottom[1]);
+            telemetry.addData("Value Bottom", hsvValuesBottom[2]);
 
-            //Show all the encoder values on the driver station
-            telemetry.addData("left front", leftMotorFront.getCurrentPosition());
-            telemetry.addData("left back", leftMotorBack.getCurrentPosition());
-            telemetry.addData("right front", rightMotorFront.getCurrentPosition());
-            telemetry.addData("right back", rightMotorBack.getCurrentPosition());
+            //Tell us the data from the left sensor
+            telemetry.addData("Clear Left", colorSensorLeft.alpha());
+            telemetry.addData("Red Left", colorSensorLeft.red());
+            telemetry.addData("Green Left", colorSensorLeft.green());
+            telemetry.addData("Blue Left", colorSensorLeft.blue());
+            telemetry.addData("Hue Left", hsvValuesLeft[0]);
+            telemetry.addData("Saturation Left", hsvValuesLeft[1]);
+            telemetry.addData("Value Left", hsvValuesLeft[2]);
+
+            //Tell us the data from the right sensor
+            telemetry.addData("Clear Right", colorSensorRight.alpha());
+            telemetry.addData("Red Right", colorSensorRight.red());
+            telemetry.addData("Green Right", colorSensorRight.green());
+            telemetry.addData("Blue Right", colorSensorRight.blue());
+            telemetry.addData("Hue Right", hsvValuesRight[0]);
+            telemetry.addData("Saturation Right", hsvValuesRight[1]);
+            telemetry.addData("Value Right", hsvValuesRight[2]);
+
+            //Update the data if/when it changes
             telemetry.update();
 
-
-            // Always call idle() at the bottom of your while(opModeIsActive()) loop
+            //Always call idle() at the bottom of your while(opModeIsActive()) loop
             idle();
         } //Close "while(opModeIsActive())" loop
     } //Close "run Opmode" loop

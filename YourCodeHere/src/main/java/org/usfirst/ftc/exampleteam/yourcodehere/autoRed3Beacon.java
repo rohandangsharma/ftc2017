@@ -9,8 +9,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DeviceInterfaceModule;
 
 //***************************************************************************************************************************
-@Autonomous(name="3 Beacon Blue Team") //Name the program
-public class autoBlue3Beacon extends LinearOpMode //CLASS START
+@Autonomous(name="3 Beacon Red Team") //Name the program
+public class autoRed3Beacon extends LinearOpMode //CLASS START
 {
     //Define DC Motors
     DcMotor leftMotorFront;
@@ -32,8 +32,8 @@ public class autoBlue3Beacon extends LinearOpMode //CLASS START
     float shiftPower = (float) 0.4;
     float turnPower = (float) 0.4;
 
-    //Define a string to use as the color, and set it to blue since we are blue team
-    String color = "Blue";
+    //Define a string to use as the color, and set it to red since we are red team
+    String color = "Red";
 
 //***************************************************************************************************************************
     //MAIN BELOW
@@ -70,55 +70,57 @@ public class autoBlue3Beacon extends LinearOpMode //CLASS START
         functions.driveAutonomous(drivePower, 2700);
 
         //Shift towards beacon
-        functions.rightShiftAutonomous(shiftPower, 3000);
+        functions.leftShiftAutonomous(shiftPower, 3000);
 
         //Become aligned with beacon
         functions.driveAutonomous(drivePower, 2000);
 
         //Shift next to beacon
-        functions.rightShiftAutonomous(shiftPower, 3300);
+        functions.leftShiftAutonomous(shiftPower, 3300);
 
-        //If we see the color (in this case, "blue") shift and hit the beacon
-        functions.beaconColorCheck(color, colorSensorRight);
+        //If we see the color (in this case, "red") shift and hit the beacon
+        functions.beaconColorCheck(color, colorSensorLeft);
 
         //Come off of wall
-        functions.leftShiftAutonomous(shiftPower, 300);
+        functions.rightShiftAutonomous(shiftPower, 300);
 
         //Align with second beacon
         functions.driveAutonomous(drivePower, 4400);
 
-        //If we see the color (in this case, "blue") shift and hit the beacon
-        functions.beaconColorCheck(color, colorSensorRight);
+        //If we see the color (in this case, "red") shift and hit the beacon
+        functions.beaconColorCheck(color, colorSensorLeft);
 
         //Come off wall
-        functions.leftShiftAutonomous(shiftPower, 3000);
+        functions.rightShiftAutonomous(shiftPower, 3000);
 
         //Turn to third beacon
-        functions.leftTurnAutonomous(turnPower, 2400);
+        functions.rightTurnAutonomous(turnPower, 2400);
 
         //Align on wall
-        functions.rightShiftAutonomous(drivePower, 5000);
+        functions.leftShiftAutonomous(drivePower, 5000);
 
         //Come off wall
-        functions.leftShiftAutonomous(shiftPower, 300);
+        functions.rightShiftAutonomous(shiftPower, 300);
 
         //Go to third beacon
         functions.driveAutonomous(drivePower, 1800);
 
-        //If we see the color (in this case, "blue") shift and hit the beacon
-        functions.beaconColorCheck(color, colorSensorRight);
+        //If we see the color (in this case, "red") shift and hit the beacon
+        functions.beaconColorCheck(color, colorSensorLeft);
 
 //            //Turn to Center Vortex
-//            leftTurnAutonomous(turnPower, 3800, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+//            rightTurnAutonomous(turnPower, 3800, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
 //
 //            //Drive to Center Vortex
 //            driveAutonomous(drivePower, 5400, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
 //
 //            //Turn to ramp
-//            leftTurnAutonomous(turnPower, 2000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+//            rightTurnAutonomous(turnPower, 2000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
 //
 //            //Drive up ramp
 //            driveAutonomous(drivePower, 6000, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
+//
+//            //Shoot balls that are in the robot
 //            spinner.setPower(1.0);
 
     } //Close "run Opmode" loop

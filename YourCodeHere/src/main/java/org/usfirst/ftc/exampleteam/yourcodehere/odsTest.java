@@ -17,11 +17,13 @@ Support is available by emailing support@modernroboticsinc.com.
 
 package org.usfirst.ftc.exampleteam.yourcodehere;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DeviceInterfaceModule;
 import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
 
+@Disabled
 @TeleOp(name = "ODS Enc 1", group = "MRI")
 public class odsTest extends OpMode {
 
