@@ -14,6 +14,7 @@ import org.swerverobotics.library.SynchronousOpMode;
 @Disabled
 public class DriveFunctions extends SynchronousOpMode
 { //START CLASS
+    //Define DC motors
     DcMotor leftMotorFront;
     DcMotor rightMotorFront;
     DcMotor leftMotorBack;
@@ -21,14 +22,22 @@ public class DriveFunctions extends SynchronousOpMode
     DcMotor spinner;
     DcMotor shooterLeft;
     DcMotor shooterRight;
+
+    //Define sensors and CDI
     ColorSensor colorSensorLeft;
     ColorSensor colorSensorRight;
     ColorSensor colorSensorBottom;
     DeviceInterfaceModule CDI;
 
+    /**
+     * Initialize all the harware all the hardware
+     * It creates a data type DriveFunctions to store all the hardware devices
+     */
     public DriveFunctions(DcMotor leftMotorFront, DcMotor rightMotorFront, DcMotor leftMotorBack, DcMotor rightMotorBack, DcMotor spinner, DcMotor shooterLeft, DcMotor shooterRight, ColorSensor colorSensorLeft, ColorSensor colorSensorRight, ColorSensor colorSensorBottom, DeviceInterfaceModule CDI)
     {
         //These lines enable us to store the motors, sensors and CDI without having to write them over and over again
+
+        //Initialize DC motors
         this.leftMotorFront = leftMotorFront;
         this.leftMotorBack = leftMotorBack;
         this.rightMotorFront = rightMotorFront;
@@ -36,12 +45,17 @@ public class DriveFunctions extends SynchronousOpMode
         this.spinner = spinner;
         this.shooterLeft = shooterLeft;
         this.shooterRight = shooterRight;
+
+        //Initialize sensors and CDI
         this.colorSensorLeft = colorSensorLeft;
         this.colorSensorRight = colorSensorRight;
         this.colorSensorBottom = colorSensorBottom;
         this.CDI = CDI;
     }
 
+    /**
+     * Set sensor addresses, modes and DC motor directions
+     */
     public void initializeMotorsAndSensors()
     {
         //Set the sensors to the modes that we want, and set their addresses
@@ -60,14 +74,22 @@ public class DriveFunctions extends SynchronousOpMode
     }
 
     /**
+     * Takes in motor powers for 4 drive motors
+     */
+    public void setDriveMotorPowers(float leftFrontPower, float leftBackPower, float rightFrontPower, float rightBackPower)
+    {
+        //Use the entered powers and feed them to the motors
+        leftMotorFront.setPower(leftFrontPower);
+        leftMotorBack.setPower(leftBackPower);
+        rightMotorFront.setPower(rightFrontPower);
+        rightMotorBack.setPower(rightBackPower);
+    }
+    /**
      * If this function is called, stop the drive motors
      */
     public void stopDriving()
     {
-        leftMotorFront.setPower(0.0);
-        leftMotorBack.setPower(0.0);
-        rightMotorFront.setPower(0.0);
-        rightMotorBack.setPower(0.0);
+        setDriveMotorPowers((float) 0.0, (float) 0.0, (float) 0.0, (float) 0.0);
     }
 
     /**
@@ -94,10 +116,8 @@ public class DriveFunctions extends SynchronousOpMode
      */
     public void driveTeleop(float drive)
     {
-        leftMotorFront.setPower(drive);
-        leftMotorBack.setPower(drive);
-        rightMotorFront.setPower(drive);
-        rightMotorBack.setPower(drive);
+        //Send all the motors in the same direction
+        setDriveMotorPowers(drive, drive, drive, drive);
     }
 
     /**
@@ -106,10 +126,7 @@ public class DriveFunctions extends SynchronousOpMode
     public void rightTurnTeleop(float turn)
     {
         //Turn the right motors backwards and the left motors forward so that it turns right
-        leftMotorFront.setPower(turn);
-        leftMotorBack.setPower(turn);
-        rightMotorFront.setPower(-turn);
-        rightMotorBack.setPower(-turn);
+        setDriveMotorPowers(turn, turn, -turn, -turn);
     }
 
     /**
@@ -118,10 +135,7 @@ public class DriveFunctions extends SynchronousOpMode
     public void leftTurnTeleop(float turn)
     {
         //Turn the left motors backwards and the right motors forward so that it turns left
-        leftMotorFront.setPower(-turn);
-        leftMotorBack.setPower(-turn);
-        rightMotorFront.setPower(turn);
-        rightMotorBack.setPower(turn);
+        setDriveMotorPowers(-turn, -turn, turn, turn);
     }
 
     /**
@@ -130,10 +144,7 @@ public class DriveFunctions extends SynchronousOpMode
     public void shiftTeleop(float shift)
     {
         //This sequence of backwards, forwards, forwards, backwards makes the robot shift
-        leftMotorFront.setPower(-shift);
-        leftMotorBack.setPower(shift);
-        rightMotorFront.setPower(shift);
-        rightMotorBack.setPower(-shift);
+        setDriveMotorPowers(-shift, shift, shift, -shift);
     }
 
     /**
@@ -167,25 +178,10 @@ public class DriveFunctions extends SynchronousOpMode
     }
 
     /**
-     * Reset encoder readings
-     * Sets to mode of turning for degrees specified
+     * Takes in powers for 4 drive motors, as well as 4 encoder distances
+     * //Allows us to run at the entered power, for the entered distance
      */
-//    public void prepMotorsForAutonomous()
-//    {
-//        //Reset encoders
-//        leftMotorFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        leftMotorBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        rightMotorFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        rightMotorBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//
-//        //Set up the motors run to the given position
-//        leftMotorFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//        leftMotorBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//        rightMotorFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//        rightMotorBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//    }
-
-    public void moveMotorsWithEncoders(int leftFrontDegrees, int leftBackDegrees, int rightFrontDegrees, int rightBackDegrees, float leftFrontPower, float leftBackPower, float rightFrontPower, float rightBackPower)
+    public void moveDriveMotorsWithEncoders(int leftFrontDegrees, int leftBackDegrees, int rightFrontDegrees, int rightBackDegrees, float leftFrontPower, float leftBackPower, float rightFrontPower, float rightBackPower)
     {
         //Resets encoders
         leftMotorFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -206,10 +202,7 @@ public class DriveFunctions extends SynchronousOpMode
         rightMotorBack.setTargetPosition(rightBackDegrees);
 
         //Turn on the motors at the given powers
-        leftMotorFront.setPower(leftFrontPower);
-        leftMotorBack.setPower(leftBackPower);
-        rightMotorFront.setPower(rightFrontPower);
-        rightMotorBack.setPower(rightBackPower);
+        setDriveMotorPowers(leftFrontPower, leftBackPower, rightFrontPower, rightBackPower);
 
         //Empty while loop while the motors are moving
         while ((leftMotorFront.isBusy()) && (rightMotorFront.isBusy()) && (leftMotorBack.isBusy()) && (rightMotorBack.isBusy()))
@@ -234,29 +227,9 @@ public class DriveFunctions extends SynchronousOpMode
         //INVERT MOTORS
         power = -power;
         degrees = -degrees;
-        moveMotorsWithEncoders(degrees, degrees, degrees, degrees, power, power, power, power);
-//        //Prepare encoders
-//        prepMotorsForAutonomous();
-//
-//        //Set the target position of the encoders as the input
-//        leftMotorFront.setTargetPosition(-degrees);
-//        leftMotorBack.setTargetPosition(-degrees);
-//        rightMotorFront.setTargetPosition(-degrees);
-//        rightMotorBack.setTargetPosition(-degrees);
-//
-//        //Turn on the motors at the given powers
-//        leftMotorFront.setPower(-power);
-//        leftMotorBack.setPower(-power);
-//        rightMotorFront.setPower(-power);
-//        rightMotorBack.setPower(-power);
-//
-//        //Empty while loop while motors are moving
-//        while ((leftMotorFront.isBusy()) && (rightMotorFront.isBusy()) && (leftMotorBack.isBusy()) && (rightMotorBack.isBusy()))
-//        { }
-//
-//        //Stop motors and use encoders
-//        stopDriving();
-//        prepMotorsForTeleop();
+
+        //Everything in the same direction creates linear driving
+        moveDriveMotorsWithEncoders(degrees, degrees, degrees, degrees, power, power, power, power);
     }
 
     /**
@@ -266,33 +239,7 @@ public class DriveFunctions extends SynchronousOpMode
     public void leftTurnAutonomous(float power, int degrees)
     {
         //Left motors backwards and right motors forwards gives us a left turn
-        moveMotorsWithEncoders(-degrees, -degrees, degrees, degrees, -power, -power, power, power);
-
-//        //Prepare encoders
-//        prepMotorsForAutonomous();
-//
-//        //Set motor target positions
-//        //Left motors backwards and right motors forwards gives us a left turn
-//        leftMotorFront.setTargetPosition(-degrees);
-//        leftMotorBack.setTargetPosition(-degrees);
-//        rightMotorFront.setTargetPosition(degrees);
-//        rightMotorBack.setTargetPosition(degrees);
-//
-//
-//        //Turn on the motors at the given powers
-//        //Left motors backwards and right motors forwards gives us a left turn
-//        leftMotorFront.setPower(-power);
-//        leftMotorBack.setPower(-power);
-//        rightMotorFront.setPower(power);
-//        rightMotorBack.setPower(power);
-//
-//        //Empty while loop while motors are moving
-//        while ((leftMotorFront.isBusy()) && (rightMotorFront.isBusy()) && (leftMotorBack.isBusy()) && (rightMotorBack.isBusy()))
-//        { }
-//
-//        //Stop motors and use encoders
-//        stopDriving();
-//        prepMotorsForTeleop();
+        moveDriveMotorsWithEncoders(-degrees, -degrees, degrees, degrees, -power, -power, power, power);
     }
 
     /**
@@ -302,31 +249,7 @@ public class DriveFunctions extends SynchronousOpMode
     public void rightTurnAutonomous(float power, int degrees)
     {
         //Right motors backwards and left motors forwards gives us a right turn
-        moveMotorsWithEncoders(degrees, degrees, -degrees, -degrees, power, power, -power, -power);
-//        //Prepare encoders
-//        prepMotorsForAutonomous();
-//
-//        //Set motor target positions
-//        //Right motors backwards and left motors forwards gives us a right turn
-//        leftMotorFront.setTargetPosition(degrees);
-//        leftMotorBack.setTargetPosition(degrees);
-//        rightMotorFront.setTargetPosition(-degrees);
-//        rightMotorBack.setTargetPosition(-degrees);
-//
-//        //Turn on the motors at the given powers
-//        //Right motors backwards and left motors forwards gives us a right turn
-//        leftMotorFront.setPower(power);
-//        leftMotorBack.setPower(power);
-//        rightMotorFront.setPower(-power);
-//        rightMotorBack.setPower(-power);
-//
-//        //Empty while loop while motors are moving
-//        while ((leftMotorFront.isBusy()) && (rightMotorFront.isBusy()) && (leftMotorBack.isBusy()) && (rightMotorBack.isBusy()))
-//        { }
-//
-//        //Stop motors and use encoders
-//        stopDriving();
-//        prepMotorsForTeleop();
+        moveDriveMotorsWithEncoders(degrees, degrees, -degrees, -degrees, power, power, -power, -power);
     }
 
     /**
@@ -336,31 +259,7 @@ public class DriveFunctions extends SynchronousOpMode
     public void leftShiftAutonomous(float power, int degrees)
     {
         //This sequence of backwards, forwards, forwards, backwards makes the robot shift left
-        moveMotorsWithEncoders(-degrees, degrees, degrees, -degrees, -power, power, power, -power);
-//        //Prepare encoders
-//        prepMotorsForAutonomous();
-//
-//        //Set motor target positions
-//        //This sequence of backwards, forwards, forwards, backwards makes the robot shift left
-//        leftMotorFront.setTargetPosition(-degrees);
-//        leftMotorBack.setTargetPosition(degrees);
-//        rightMotorFront.setTargetPosition(degrees);
-//        rightMotorBack.setTargetPosition(-degrees);
-//
-//        //Turn on the motors at the given powers
-//        //This sequence of backwards, forwards, forwards, backwards makes the robot shift left
-//        leftMotorFront.setPower(-power);
-//        leftMotorBack.setPower(power);
-//        rightMotorFront.setPower(power);
-//        rightMotorBack.setPower(-power);
-//
-//        //Empty while loop while motors are moving
-//        while ((leftMotorFront.isBusy()) && (rightMotorFront.isBusy()) && (leftMotorBack.isBusy()) && (rightMotorBack.isBusy()))
-//        { }
-//
-//        //Stop motors and use encoders
-//        stopDriving();
-//        prepMotorsForTeleop();
+        moveDriveMotorsWithEncoders(-degrees, degrees, degrees, -degrees, -power, power, power, -power);
     }
 
     /**
@@ -370,31 +269,7 @@ public class DriveFunctions extends SynchronousOpMode
     public void rightShiftAutonomous(float power, int degrees)
     {
         //This sequence of forwards, backwards, backwards, forwards makes the robot shift right
-        moveMotorsWithEncoders(degrees, -degrees, -degrees, degrees, power, -power, -power, power);
-//        //Prepare encoders
-//        prepMotorsForAutonomous();
-//
-//        //Set motor target positions
-//        //This sequence of forwards, backwards, backwards, forwards makes the robot shift right
-//        leftMotorFront.setTargetPosition(degrees);
-//        leftMotorBack.setTargetPosition(-degrees);
-//        rightMotorFront.setTargetPosition(-degrees);
-//        rightMotorBack.setTargetPosition(degrees);
-//
-//        //Turn on the motors at the given powers
-//        //This sequence of forwards, backwards, backwards, forwards makes the robot shift right
-//        leftMotorFront.setPower(power);
-//        leftMotorBack.setPower(-power);
-//        rightMotorFront.setPower(-power);
-//        rightMotorBack.setPower(power);
-//
-//        //Empty while loop while motors are moving
-//        while ((leftMotorFront.isBusy()) && (rightMotorFront.isBusy()) && (leftMotorBack.isBusy()) && (rightMotorBack.isBusy()))
-//        { }
-//
-//        //Stop motors and use encoders
-//        stopDriving();
-//        prepMotorsForTeleop();
+        moveDriveMotorsWithEncoders(degrees, -degrees, -degrees, degrees, power, -power, -power, power);
     }
 
     /**
@@ -425,13 +300,20 @@ public class DriveFunctions extends SynchronousOpMode
      */
     public String whatColor(ColorSensor colorSensor)
     {
-        float hue; //Define float for hue
-        float[] hsvValues = {0, 0, 0}; //This is an array that stores the hue[0], saturation[1], and value[2], values
-        Color.RGBToHSV(colorSensor.red() * 8, colorSensor.green() * 8, colorSensor.blue() * 8, hsvValues); //Convert from RGB to HSV (red-green-blue to hue-saturation-value)
+        //Define float for hue
+        float hue;
 
-        hue = hsvValues[0]; //store the first value from the array into hue
+        //This is an array that stores the hue[0], saturation[1], and value[2], values
+        float[] hsvValues = {0, 0, 0};
 
-        if (hue > 120) //If hue is greater than 120, we are looking at blue, so return blue
+        //Convert from RGB to HSV (red-green-blue to hue-saturation-value)
+        Color.RGBToHSV(colorSensor.red() * 8, colorSensor.green() * 8, colorSensor.blue() * 8, hsvValues);
+
+        //store the first value from the array into hue
+        hue = hsvValues[0];
+
+        //If hue is greater than 120, we are looking at blue, so return blue
+        if (hue > 120)
         {
             return "Blue";
         }
@@ -448,35 +330,38 @@ public class DriveFunctions extends SynchronousOpMode
      */
     public void beaconColorCheck(String color, ColorSensor colorSensor)
     {
-        double power = 0.2;
+        //Define some constants to use and avoid magic numbers
+        float drivePower = (float) 0.2;
+        float shiftPower = (float) 0.4;
         int findBeaconDistance = 100;
         int alignBeaconDistance = 400;
+        int shiftDistance = 800;
 
         //While we do not see the beacon, drive forward
         while (!iSeeAColor(colorSensor))
         {
-            driveAutonomous((float) power, findBeaconDistance);
+            driveAutonomous(drivePower, findBeaconDistance);
         }
 
         //Now we see a color, but possibly not the target color
         //While we don't see the target color, drive forward
         while (!whatColor(colorSensor).equals(color))
         {
-            driveAutonomous((float) power, findBeaconDistance);
+            driveAutonomous(drivePower, findBeaconDistance);
         }
 
         //Now we see the target color, drive forward a tiny bit so cardboard is aligned
-        driveAutonomous((float) power, alignBeaconDistance);
+        driveAutonomous(drivePower, alignBeaconDistance);
 
         //The robot is aligned to the button of the target color, shift into the button to press it
         if (color.equals("Blue"))
         {
-            rightShiftAutonomous((float) 0.4, 800);
+            rightShiftAutonomous(shiftPower, shiftDistance);
         }
 
         if (color.equals("Red"))
         {
-            leftShiftAutonomous((float) 0.4, 800);
+            leftShiftAutonomous(shiftPower, shiftDistance);
         }
     }
 
@@ -588,6 +473,7 @@ public class DriveFunctions extends SynchronousOpMode
                     //Empty
                 }
             } //Close "if" statement of when we are on beacon 4
+
         } //Close "if" statement of when we are blue team
     } //Close method
 

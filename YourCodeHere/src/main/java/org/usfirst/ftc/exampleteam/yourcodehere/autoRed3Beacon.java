@@ -97,13 +97,13 @@ public class autoRed3Beacon extends LinearOpMode //CLASS START
         functions.rightTurnAutonomous(turnPower, 2400);
 
         //Align on wall
-        functions.leftShiftAutonomous(drivePower, 5000);
+        functions.leftShiftAutonomous(drivePower, 4500);
 
         //Come off wall
         functions.rightShiftAutonomous(shiftPower, 300);
 
         //Go to third beacon
-        functions.driveAutonomous(drivePower, 1800);
+        functions.driveAutonomous(drivePower, 1000);
 
         //If we see the color (in this case, "red") shift and hit the beacon
         functions.beaconColorCheck(color, colorSensorLeft);
