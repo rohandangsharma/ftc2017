@@ -79,7 +79,7 @@ public class autoRed3Beacon extends LinearOpMode //CLASS START
         functions.leftShiftAutonomous(shiftPower, 3300);
 
         //If we see the color (in this case, "red") shift and hit the beacon
-        functions.beaconColorCheck(color, colorSensorLeft);
+        functions.beaconColorCheckAutonomous(color, colorSensorLeft);
 
         //Come off of wall
         functions.rightShiftAutonomous(shiftPower, 300);
@@ -88,7 +88,7 @@ public class autoRed3Beacon extends LinearOpMode //CLASS START
         functions.driveAutonomous(drivePower, 4400);
 
         //If we see the color (in this case, "red") shift and hit the beacon
-        functions.beaconColorCheck(color, colorSensorLeft);
+        functions.beaconColorCheckAutonomous(color, colorSensorLeft);
 
         //Come off wall
         functions.rightShiftAutonomous(shiftPower, 3000);
@@ -97,7 +97,7 @@ public class autoRed3Beacon extends LinearOpMode //CLASS START
         functions.rightTurnAutonomous(turnPower, 2400);
 
         //Align on wall
-        functions.leftShiftAutonomous(drivePower, 4500);
+        functions.leftShiftAutonomous(drivePower, 4000);
 
         //Come off wall
         functions.rightShiftAutonomous(shiftPower, 300);
@@ -106,7 +106,7 @@ public class autoRed3Beacon extends LinearOpMode //CLASS START
         functions.driveAutonomous(drivePower, 1000);
 
         //If we see the color (in this case, "red") shift and hit the beacon
-        functions.beaconColorCheck(color, colorSensorLeft);
+        functions.beaconColorCheckAutonomous(color, colorSensorLeft);
 
 //            //Turn to Center Vortex
 //            rightTurnAutonomous(turnPower, 3800, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);

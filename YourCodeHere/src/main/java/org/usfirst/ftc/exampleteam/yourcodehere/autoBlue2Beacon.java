@@ -80,7 +80,7 @@ public class autoBlue2Beacon extends LinearOpMode //CLASS START
         functions.rightShiftAutonomous(shiftPower, 3000);
 
         //If we see the color (in this case, "blue") shift and hit the beacon
-        functions.beaconColorCheck(color, colorSensorRight);
+        functions.beaconColorCheckAutonomous(color, colorSensorRight);
 
         //Come off of wall
         functions.leftShiftAutonomous(shiftPower, 300);
@@ -89,7 +89,7 @@ public class autoBlue2Beacon extends LinearOpMode //CLASS START
         functions.driveAutonomous(drivePower, 4400);
 
         //If we see the color (in this case, "blue") shift and hit the beacon
-        functions.beaconColorCheck(color, colorSensorRight);
+        functions.beaconColorCheckAutonomous(color, colorSensorRight);
 
         //Come off wall
         functions.leftShiftAutonomous(shiftPower, 300);
@@ -109,5 +109,6 @@ public class autoBlue2Beacon extends LinearOpMode //CLASS START
         //Shoot balls that are in the robot
         spinner.setPower(1.0);
 
+        idle();
     } //Close "run Opmode" loop
 } //Close class and end program

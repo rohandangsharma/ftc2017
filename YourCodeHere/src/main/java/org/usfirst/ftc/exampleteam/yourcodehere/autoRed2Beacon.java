@@ -86,7 +86,7 @@ public class autoRed2Beacon extends LinearOpMode //CLASS START
         functions.leftShiftAutonomous(shiftPower, 3000);
 
         //If we see the color (in this case, "red") shift and hit the beacon
-        functions.beaconColorCheck(color, colorSensorLeft);
+        functions.beaconColorCheckAutonomous(color, colorSensorLeft);
 
         //Come off of wall
         functions.rightShiftAutonomous(shiftPower, 300);
@@ -95,7 +95,7 @@ public class autoRed2Beacon extends LinearOpMode //CLASS START
         functions.driveAutonomous(drivePower, 4400);
 
         //If we see the color (in this case, "red") shift and hit the beacon
-        functions.beaconColorCheck(color, colorSensorLeft);
+        functions.beaconColorCheckAutonomous(color, colorSensorLeft);
 
         //Come off wall
         functions.rightShiftAutonomous(shiftPower, 300);

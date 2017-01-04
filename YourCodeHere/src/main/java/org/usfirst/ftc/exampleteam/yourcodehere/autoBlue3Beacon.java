@@ -27,19 +27,21 @@ public class autoBlue3Beacon extends LinearOpMode //CLASS START
     ColorSensor colorSensorBottom;
     DeviceInterfaceModule CDI;
 
+    boolean fastMode = false;
+
     //Set up drive powers to avoid magic numbers
-    float drivePower = (float) 0.5;
-    float shiftPower = (float) 0.4;
-    float turnPower = (float) 0.4;
+    float drivePower = fastMode ? (float) 1.0 : (float)  0.5;
+    float shiftPower =  fastMode ? (float) 1.0 : (float) 0.4;
+    float turnPower = fastMode ? (float) 1.0 : (float) 0.4;
 
     //Define a string to use as the color, and set it to blue since we are blue team
     String color = "Blue";
 
+
 //***************************************************************************************************************************
     //MAIN BELOW
     @Override
-    public void runOpMode() throws InterruptedException
-    {
+    public void runOpMode() throws InterruptedException {
         //Get references to the DC motors from the hardware map
         leftMotorFront = hardwareMap.dcMotor.get("leftMotorFront");
         rightMotorFront = hardwareMap.dcMotor.get("rightMotorFront");
@@ -67,46 +69,54 @@ public class autoBlue3Beacon extends LinearOpMode //CLASS START
 //***************************************************************************************************************************
 
         //Drive toward the center vortex
-        functions.driveAutonomous(drivePower, 2700);
+        functions.driveAutonomous(drivePower, (fastMode ? 2100 : 2500));
 
         //Shift towards beacon
-        functions.rightShiftAutonomous(shiftPower, 3000);
+        functions.rightShiftAutonomous(shiftPower, (fastMode ? 2600 : 3000));
 
         //Become aligned with beacon
-        functions.driveAutonomous(drivePower, 2000);
+        functions.driveAutonomous(drivePower, (fastMode ? 1600 : 2000));
 
         //Shift next to beacon
-        functions.rightShiftAutonomous(shiftPower, 3300);
+        functions.rightShiftAutonomous(shiftPower, (fastMode ? 3100 : 3300));
+
+        functions.whiteLineStop((float) 0.1);
+
 
         //If we see the color (in this case, "blue") shift and hit the beacon
-        functions.beaconColorCheck(color, colorSensorRight);
+        functions.beaconColorCheckAutonomous(color, colorSensorRight);
 
         //Come off of wall
-        functions.leftShiftAutonomous(shiftPower, 300);
+        functions.leftShiftAutonomous(shiftPower, (fastMode ? 100 : 300));
 
         //Align with second beacon
-        functions.driveAutonomous(drivePower, 4400);
+        functions.driveAutonomous(drivePower, (fastMode ? 4000 : 4400));
+
+        functions.whiteLineStop((float) 0.1);
 
         //If we see the color (in this case, "blue") shift and hit the beacon
-        functions.beaconColorCheck(color, colorSensorRight);
+        functions.beaconColorCheckAutonomous(color, colorSensorRight);
 
         //Come off wall
-        functions.leftShiftAutonomous(shiftPower, 3000);
+        functions.leftShiftAutonomous(shiftPower, (fastMode ? 2100 : 2500));
 
         //Turn to third beacon
-        functions.leftTurnAutonomous(turnPower, 2400);
+        functions.leftTurnAutonomous(turnPower, (fastMode ? 2000 : 2400));
 
         //Align on wall
-        functions.rightShiftAutonomous(drivePower, 5000);
+        functions.rightShiftAutonomous(drivePower, (fastMode ? 3100 : 3500));
 
-        //Come off wall
-        functions.leftShiftAutonomous(shiftPower, 300);
+//        //Come off wall
+//        functions.leftShiftAutonomous(shiftPower, 300);
 
         //Go to third beacon
-        functions.driveAutonomous(drivePower, 1800);
+        functions.driveAutonomous(drivePower, 700);
+
+        functions.whiteLineStop((float) 0.1);
+
 
         //If we see the color (in this case, "blue") shift and hit the beacon
-        functions.beaconColorCheck(color, colorSensorRight);
+        functions.beaconColorCheckAutonomous(color, colorSensorRight);
 
 //            //Turn to Center Vortex
 //            leftTurnAutonomous(turnPower, 3800, leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack);
