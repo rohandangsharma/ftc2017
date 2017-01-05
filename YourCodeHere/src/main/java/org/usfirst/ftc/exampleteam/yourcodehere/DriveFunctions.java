@@ -11,7 +11,6 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.I2cAddr;
 import com.qualcomm.robotcore.hardware.DeviceInterfaceModule;
 
-
 @Disabled
 public class DriveFunctions extends LinearOpMode
 { //START CLASS
@@ -37,7 +36,6 @@ public class DriveFunctions extends LinearOpMode
     public DriveFunctions(DcMotor leftMotorFront, DcMotor rightMotorFront, DcMotor leftMotorBack, DcMotor rightMotorBack, DcMotor spinner, DcMotor shooterLeft, DcMotor shooterRight, ColorSensor colorSensorLeft, ColorSensor colorSensorRight, ColorSensor colorSensorBottom, DeviceInterfaceModule CDI)
     {
         //These lines enable us to store the motors, sensors and CDI without having to write them over and over again
-
         //Initialize DC motors
         this.leftMotorFront = leftMotorFront;
         this.leftMotorBack = leftMotorBack;
@@ -225,12 +223,8 @@ public class DriveFunctions extends LinearOpMode
      */
     public void driveAutonomous(float power, int degrees)
     {
-        //INVERT MOTORS
-        power = -power;
-        degrees = -degrees;
-
         //Everything in the same direction creates linear driving
-        moveDriveMotorsWithEncoders(degrees, degrees, degrees, degrees, power, power, power, power);
+        moveDriveMotorsWithEncoders(-degrees, -degrees, -degrees, -degrees, -power, -power, -power, -power);
     }
 
     /**
@@ -305,7 +299,7 @@ public class DriveFunctions extends LinearOpMode
         float hue;
 
         //This is an array that stores the hue[0], saturation[1], and value[2], values
-        float[] hsvValues = {0, 0, 0};
+        float[] hsvValues = {0F, 0F, 0F};
 
         //Convert from RGB to HSV (red-green-blue to hue-saturation-value)
         Color.RGBToHSV(colorSensor.red() * 8, colorSensor.green() * 8, colorSensor.blue() * 8, hsvValues);
@@ -323,32 +317,32 @@ public class DriveFunctions extends LinearOpMode
         return "Red";
     }
 
+
     /**
      * Drives forward slowly until the target color is seen, then shifts into the beacon to press
-     * the button in autonomous
-     * @param color take in our team color
+     * the button of the correct color
+     * @param color take in our teams color, as that is the color that needs to be pressed
      * @param colorSensor take in the correct color sensor
      */
-    public void beaconColorCheckAutonomous(String color, ColorSensor colorSensor)
+    public void beaconColorCheck(String color, ColorSensor colorSensor)
     {
         //Define some constants to use and avoid magic numbers
         float drivePower = (float) 0.2;
         float shiftPower = (float) 0.4;
-        int findBeaconDistance = 100;
         int alignBeaconDistance = 400;
         int shiftDistance = 800;
 
         //While we do not see the beacon, drive forward
         while (!iSeeAColor(colorSensor))
         {
-            driveAutonomous(drivePower, findBeaconDistance);
+            driveTeleop(drivePower);
         }
 
         //Now we see a color, but possibly not the target color
         //While we don't see the target color, drive forward
         while (!whatColor(colorSensor).equals(color))
         {
-            driveAutonomous(drivePower, findBeaconDistance);
+            driveTeleop(drivePower);
         }
 
         //Now we see the target color, drive forward a tiny bit so cardboard is aligned
@@ -363,53 +357,11 @@ public class DriveFunctions extends LinearOpMode
         if (color.equals("Red"))
         {
             leftShiftAutonomous(shiftPower, shiftDistance);
-        }
-    }
-
-    /**
-     * Drives forward slowly until the target color is seen, then shifts into the beacon to press
-     * the button of the o
-     * @param color take in our the other teams color, as that is the color that needs to be pressed
-     * @param colorSensor take in the correct color sensor
-     */
-    public void beaconColorCheckTeleOp(String color, ColorSensor colorSensor)
-    {
-        //Define some constants to use and avoid magic numbers
-        float drivePower = (float) 0.2;
-        float shiftPower = (float) 0.4;
-        int findBeaconDistance = 100;
-        int alignBeaconDistance = 400;
-        int shiftDistance = 800;
-
-        //While we do not see the beacon, drive forward
-        while (!iSeeAColor(colorSensor))
-        {
-            driveAutonomous(drivePower, findBeaconDistance);
-        }
-
-        //Now we see a color, but possibly not the target color
-        //While we don't see the target color, drive forward
-        while (!whatColor(colorSensor).equals(color))
-        {
-            driveAutonomous(drivePower, findBeaconDistance);
-        }
-
-        //Now we see the target color, drive forward a tiny bit so cardboard is aligned
-        driveAutonomous(drivePower, alignBeaconDistance);
-
-        //The robot is aligned to the button of the target color, shift into the button to press it
-        if (color.equals("Blue"))
-        {
-            leftShiftAutonomous(shiftPower, shiftDistance);
-        }
-
-        if (color.equals("Red"))
-        {
-            rightShiftAutonomous(shiftPower, shiftDistance);
         }
     }
     /**
      * Stops on the white line
+     * Take in a drive power
      */
     public void whiteLineStop(float drivePower)
     {
@@ -418,9 +370,9 @@ public class DriveFunctions extends LinearOpMode
         //If the alpha value is less than 20, drive forward
         //The alpha value of the mat is close to zero, and the alpha value of the line is above 50
         //This means that if the below condition is true, we are not on the line
-        while (colorSensorLeft.alpha() < 20) {
+        while (colorSensorLeft.alpha() < 20)
+        {
             driveTeleop(-drivePower);
-
         }
 
         driveAutonomous(-drivePower * 2, -400);
@@ -429,325 +381,9 @@ public class DriveFunctions extends LinearOpMode
         stopDriving();
     }
 
-    /**
-     * FOUR CASES
-     * @param direction
-     * @param color
-     */
-    public void sameSideBeacons(String direction, String color)
-    {
-
-        float power = (float) 0.5;
-
-        if (color.equals("Red"))
-        {
-            if (direction.equals("Forward"))
-            {
-                //Beacon 1 to beacon 2 blue team, or beacon 3 to beacon 4 blue team
-                //Come off beacon
-                leftShiftAutonomous(power, 300);
-
-                //Align with second beacon
-                driveAutonomous(power, 4400);
-
-                //If we see the color, shift and hit the beacon
-                beaconColorCheckTeleOp(color, colorSensorRight);
-            }
-
-            if (direction.equals("Backward"))
-            {
-                //Beacon 2 to beacon 1 blue team, or beacon 4 to beacon 3 blue team
-                //Come off beacon
-                leftShiftAutonomous(power, 300);
-
-                //Align with second beacon
-                driveAutonomous(-power, -5000);
-
-                //If we see the color, shift and hit the beacon
-                beaconColorCheckTeleOp(color, colorSensorRight);
-            }
-        }
-
-        if (color.equals("Blue"))
-        {
-            if (direction.equals("Forward"))
-            {
-                //Beacon 1 to beacon 2 red team, or beacon 3 to beacon 4 red team
-                //Come off beacon
-                rightShiftAutonomous(power, 300);
-
-                //Align with second beacon
-                driveAutonomous(power, 4400);
-
-                //If we see the color, shift and hit the beacon
-                beaconColorCheckTeleOp(color, colorSensorLeft);
-            }
-
-            if (direction.equals("Backward"))
-            {
-                //Beacon 2 to beacon 1 red team, or beacon 4 to beacon 3 red team
-                //Come off beacon
-                leftShiftAutonomous(power, 300);
-
-                //Align with second beacon
-                driveAutonomous(-power, -5000);
-
-                //If we see the color, shift and hit the beacon
-                beaconColorCheckTeleOp(color, colorSensorLeft);
-            }
-        }
-    }
-
-    /**
-     * TWO CASES
-     * @param direction
-     * @param color
-     */
-    public void oddBeacons(String direction, String color)
-    {
-        float power = (float) 0.5;
-
-        if (color.equals("Red"))
-        {
-            if (direction.equals("Forward"))
-            {
-                //Beacon 1 to beacon 3 blue team
-                leftShiftAutonomous(power, 500);
-
-                leftTurnAutonomous(power, 2400);
-
-                rightShiftAutonomous(power, 5000);
-
-                beaconColorCheckTeleOp(color, colorSensorRight);
-            }
-
-            if (direction.equals("Backward"))
-            {
-                //Beacon 3 to beacon 1 blue team
-                leftShiftAutonomous(power, 500);
-
-                rightTurnAutonomous(power, 2400);
-
-                driveAutonomous(-power, -5000);
-
-                beaconColorCheckTeleOp(color, colorSensorRight);
-            }
-        }
-
-        if (color.equals("Blue"))
-        {
-            if (direction.equals("Forward"))
-            {
-                //Beacon 1 to beacon 3 red team
-                rightShiftAutonomous(power, 1000);
-
-                rightTurnAutonomous(power, 2400);
-
-                rightShiftAutonomous(power, 5000);
-
-                beaconColorCheckTeleOp(color, colorSensorLeft);
-            }
-
-            if (direction.equals("Backward"))
-            {
-                //Beacon 3 to beacon 1 red team
-                leftShiftAutonomous(power, 500);
-
-                rightTurnAutonomous(power, 2400);
-
-                rightShiftAutonomous(power, 1000);
-
-                beaconColorCheckTeleOp(color, colorSensorLeft);
-            }
-        }
-
-    }
-
-    /**
-     * TWO CASES
-     * @param direction
-     * @param color
-     */
-    public void evenBeacons(String direction, String color)
-    {
-        float power = (float) 0.5;
-
-        if (color.equals("Red"))
-        {
-            if (direction.equals("Forward"))
-            {
-                //Beacon 2 to beacon 4 blue team
-                leftShiftAutonomous(power, 5000);
-
-                leftTurnAutonomous(power, 2400);
-
-                rightShiftAutonomous(power, 700);
-
-                beaconColorCheckTeleOp(color, colorSensorRight);
-            }
-
-            if (direction.equals("Backward"))
-            {
-                //Beacon 4 to beacon 2 blue team
-                leftShiftAutonomous(power, 2500);
-
-                rightTurnAutonomous(power, 2400);
-
-                rightShiftAutonomous(power, 5000);
-
-                beaconColorCheckTeleOp(color, colorSensorRight);
-            }
-        }
-
-        if (color.equals("Blue"))
-        {
-            if (direction.equals("Forward"))
-            {
-                //Beacon 2 to beacon 4 red team
-                rightShiftAutonomous(power, 5000);
-
-                rightTurnAutonomous(power, 2400);
-
-                rightShiftAutonomous(power, 500);
-
-                beaconColorCheckTeleOp(color, colorSensorLeft);
-            }
-
-            if (direction.equals("Backward"))
-            {
-                //Beacon 4 to beacon 2 red team
-                rightShiftAutonomous(power, 2000);
-
-                leftTurnAutonomous(power, 2400);
-
-                rightShiftAutonomous(power, 5000);
-
-                beaconColorCheckTeleOp(color, colorSensorLeft);
-            }
-        }
-    }
-
-    public void closeCrossBeacons(String direction, String color)
-    {
-        float power = (float) 0.5;
-
-        if (color.equals("Red"))
-        {
-            if (direction.equals("Forward"))
-            {
-                //Beacon 2 to beacon 3 blue team
-                leftShiftAutonomous(power, 2500);
-
-                //Turn to third beacon
-                leftTurnAutonomous(power, 2400);
-
-                //Align on wall
-                rightShiftAutonomous(power, 3300);
-
-                //Go to third beacon
-                driveAutonomous(power, 1000);
-
-                //If we see the color (in this case, "blue") shift and hit the beacon
-                beaconColorCheckTeleOp(color, colorSensorRight);
-            }
-
-            if (direction.equals("Backward"))
-            {
-                //Beacon 4 to beacon 2 blue team
-                leftShiftAutonomous(power, 2500);
-
-                rightTurnAutonomous(power, 2400);
-
-                rightShiftAutonomous(power, 700);
-
-                beaconColorCheckTeleOp(color, colorSensorRight);
-            }
-        }
-
-        if (color.equals("Blue"))
-        {
-            if (direction.equals("Forward"))
-            {
-                //Beacon 2 to beacon 3 red team
-                rightShiftAutonomous(power, 5000);
-
-                rightTurnAutonomous(power, 2400);
-
-                rightShiftAutonomous(power, 500);
-
-                beaconColorCheckTeleOp(color, colorSensorLeft);
-            }
-
-            if (direction.equals("Backward"))
-            {
-                //Beacon 4 to beacon 2 red team
-                rightShiftAutonomous(power, 2000);
-
-                leftTurnAutonomous(power, 2400);
-
-                rightShiftAutonomous(power, 5000);
-
-                beaconColorCheckTeleOp(color, colorSensorLeft);
-            }
-        }
-    }
-
-    public int whatStartBeacon() {
-    //Default currentBecaon = 1
-    int startBeacon = 1;
-
-    //Set current beacon number by dPad
-    if (gamepad1.dpad_left) {
-        startBeacon = 1;
-    }
-
-    if (gamepad1.dpad_up){
-        startBeacon = 2;
-    }
-
-    if (gamepad1.dpad_right) {
-        startBeacon = 3;
-    }
-
-    if (gamepad1.dpad_down) {
-        startBeacon = 4;
-    }
-
-    return startBeacon;
-}
-
-
-    public int whatEndBeacon() {
-        int endBeacon = 1;
-
-        if (gamepad1.x) {
-            endBeacon = 1;
-        }
-
-        if (gamepad1.y){
-            endBeacon = 2;
-        }
-
-        if (gamepad1.b) {
-            endBeacon = 3;
-        }
-
-        if (gamepad1.a) {
-            endBeacon = 4;
-        }
-
-        return endBeacon;
-    }
-
-
-    public void gotToBeacon(int startBeacon, int endBeacon){
-
-    }
-
-
     //Empty main
     @Override
-    public void runOpMode ( ) throws InterruptedException
+    public void runOpMode() throws InterruptedException
     {
 
     }

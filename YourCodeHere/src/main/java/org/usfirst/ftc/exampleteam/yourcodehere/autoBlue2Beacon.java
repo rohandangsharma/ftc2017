@@ -74,22 +74,26 @@ public class autoBlue2Beacon extends LinearOpMode //CLASS START
         functions.rightShiftAutonomous(shiftPower, 3000);
 
         //Become aligned with beacon
-        functions.driveAutonomous(drivePower, 2000);
+        functions.driveAutonomous(drivePower, 1500);
 
         //Shift next to beacon
         functions.rightShiftAutonomous(shiftPower, 3000);
 
+        functions.whiteLineStop(drivePower / 2);
+
         //If we see the color (in this case, "blue") shift and hit the beacon
-        functions.beaconColorCheckAutonomous(color, colorSensorRight);
+        functions.beaconColorCheck(color, colorSensorRight);
 
         //Come off of wall
         functions.leftShiftAutonomous(shiftPower, 300);
 
         //Drive to second beacon
-        functions.driveAutonomous(drivePower, 4400);
+        functions.driveAutonomous(drivePower, 4000);
+
+        functions.whiteLineStop(drivePower / 2);
 
         //If we see the color (in this case, "blue") shift and hit the beacon
-        functions.beaconColorCheckAutonomous(color, colorSensorRight);
+        functions.beaconColorCheck(color, colorSensorRight);
 
         //Come off wall
         functions.leftShiftAutonomous(shiftPower, 300);
