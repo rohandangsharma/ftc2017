@@ -16,9 +16,10 @@ public class Teleop extends SynchronousOpMode //CLASS START
     DcMotor rightMotorFront;
     DcMotor leftMotorBack;
     DcMotor rightMotorBack;
-    DcMotor spinner;
     DcMotor shooterLeft;
     DcMotor shooterRight;
+    DcMotor spinnerLeft;
+    DcMotor spinnerRight;
 
     //Define an int to use as the spinner's mode
     int spinnerMode = 0;
@@ -41,31 +42,31 @@ public class Teleop extends SynchronousOpMode //CLASS START
     @Override
     public void main() throws InterruptedException
     {
+        //Get references to the DC motors from the hardware map
         leftMotorFront = hardwareMap.dcMotor.get("leftMotorFront");
         rightMotorFront = hardwareMap.dcMotor.get("rightMotorFront");
         leftMotorBack = hardwareMap.dcMotor.get("leftMotorBack");
         rightMotorBack = hardwareMap.dcMotor.get("rightMotorBack");
-
-        spinner = hardwareMap.dcMotor.get("spinner");
+        spinnerLeft = hardwareMap.dcMotor.get("spinnerLeft");
+        spinnerRight = hardwareMap.dcMotor.get("spinnerRight");
         shooterLeft = hardwareMap.dcMotor.get("shooterLeft");
         shooterRight = hardwareMap.dcMotor.get("shooterRight");
 
-        //Get references to the sensors from the hardware map
+        //Get references to the sensors and the CDI from the hardware map
         colorSensorBottom = hardwareMap.colorSensor.get("colorSensorBottom");
         colorSensorLeft = hardwareMap.colorSensor.get("colorSensorLeft");
         colorSensorRight = hardwareMap.colorSensor.get("colorSensorRight");
         CDI = hardwareMap.deviceInterfaceModule.get("CDI");
 
-        DriveFunctions functions = new DriveFunctions(leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack, spinner, shooterLeft, shooterRight, colorSensorLeft, colorSensorRight, colorSensorBottom, CDI);
+        //Set up the DriveFunctions class and give it all the necessary components (motors, sensors, CDI)
+        DriveFunctions functions = new DriveFunctions(leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack, spinnerLeft, spinnerRight, shooterLeft, shooterRight, colorSensorLeft, colorSensorRight, colorSensorBottom, CDI);
 
         //Set the sensors to the modes that we want, and set their addresses. Also set the directions of the motors
         functions.initializeMotorsAndSensors();
 
         //Wait for start button to be clicked
-        waitForStart();
-
-//***********************************************************************************************************
-//LOOP BELOW
+        waitForStart();//***********************************************************************************************************
+    //LOOP BELOW
         //While the op mode is active, do anything within the loop
         //Note we use opModeIsActive() as our loop condition because it is an interruptible method.
         while (opModeIsActive())
@@ -74,7 +75,7 @@ public class Teleop extends SynchronousOpMode //CLASS START
             if (updateGamepads())
             {
                 //Set float variables as the inputs from the joysticks and the triggers
-                drive = gamepad1.left_stick_y;
+                drive = -gamepad1.left_stick_y;
                 shift = - gamepad1.left_stick_x;
                 leftTurn = gamepad1.left_trigger;
                 rightTurn = gamepad1.right_trigger;

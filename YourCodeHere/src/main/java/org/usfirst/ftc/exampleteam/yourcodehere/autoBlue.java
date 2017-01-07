@@ -1,23 +1,18 @@
-//This is the main autonomous program with encoders for FTC Velocity Vortex 2016
-//Authors: FTC team [11212??], The Lexington Legoheads
-//In case of questions email anupendra@gmail.com (coach)
-//**********************************************************************************************************
-//Run from the necessary package
+//Run from the package
 package org.usfirst.ftc.exampleteam.yourcodehere;
 
 //Import necessary items
-
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DeviceInterfaceModule;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 
 //***************************************************************************************************************************
-@Disabled //We don't want this class to show up in the list, it is just here for reference
-@Autonomous(name="2 Beacon Red Team") //Name the program
-public class autoRed2Beacon extends LinearOpMode //CLASS START
+//@Disabled //We don't want this class to show up in the list, it is just here for reference
+@Autonomous(name="Auto Blue") //Name the program
+public class autoBlue extends LinearOpMode //CLASS START
 {
     //Define DC Motors
     DcMotor leftMotorFront;
@@ -26,7 +21,8 @@ public class autoRed2Beacon extends LinearOpMode //CLASS START
     DcMotor rightMotorBack;
     DcMotor shooterLeft;
     DcMotor shooterRight;
-    DcMotor spinner;
+    DcMotor spinnerLeft;
+    DcMotor spinnerRight;
 
     //Define Sensors and the CDI
     ColorSensor colorSensorLeft;
@@ -34,25 +30,25 @@ public class autoRed2Beacon extends LinearOpMode //CLASS START
     ColorSensor colorSensorBottom;
     DeviceInterfaceModule CDI;
 
-    //Define a string to use as the color, and set it to red, since we are red team
-    String color = "Red";
+    //Define a string to use as the color, and set it to blue, since we are blue team
+    String color = "Blue";
 
     //Set up drive powers to avoid magic numbers
     float drivePower = (float) 0.5;
     float shiftPower = (float) 0.4;
     float turnPower = (float) 0.4;
 
-//***************************************************************************************************************************
+    //***************************************************************************************************************************
     //MAIN BELOW
     @Override
-    public void runOpMode() throws InterruptedException
-    {
+    public void runOpMode() throws InterruptedException {
         //Get references to the DC motors from the hardware map
         leftMotorFront = hardwareMap.dcMotor.get("leftMotorFront");
         rightMotorFront = hardwareMap.dcMotor.get("rightMotorFront");
         leftMotorBack = hardwareMap.dcMotor.get("leftMotorBack");
         rightMotorBack = hardwareMap.dcMotor.get("rightMotorBack");
-        spinner = hardwareMap.dcMotor.get("spinner");
+        spinnerLeft = hardwareMap.dcMotor.get("spinnerLeft");
+        spinnerRight = hardwareMap.dcMotor.get("spinnerRight");
         shooterLeft = hardwareMap.dcMotor.get("shooterLeft");
         shooterRight = hardwareMap.dcMotor.get("shooterRight");
 
@@ -63,57 +59,64 @@ public class autoRed2Beacon extends LinearOpMode //CLASS START
         CDI = hardwareMap.deviceInterfaceModule.get("CDI");
 
         //Set up the DriveFunctions class and give it all the necessary components (motors, sensors, CDI)
-        DriveFunctions functions = new DriveFunctions(leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack, spinner, shooterLeft, shooterRight, colorSensorLeft, colorSensorRight, colorSensorBottom, CDI);
+        DriveFunctions functions = new DriveFunctions(leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack, spinnerLeft, spinnerRight, shooterLeft, shooterRight, colorSensorLeft, colorSensorRight, colorSensorBottom, CDI);
 
         //Set the sensors to the modes that we want, and set their addresses. Also set the directions of the motors
         functions.initializeMotorsAndSensors();
 
+
         //Wait for start button to be clicked
         waitForStart();
 
-//***************************************************************************************************************************
+        while (opModeIsActive()) {
 
         //Drive toward the center vortex
-        functions.driveAutonomous(drivePower, 2700);
+        functions.driveAutonomous(-drivePower, -3000);
 
         //Shift towards beacon
         functions.leftShiftAutonomous(shiftPower, 3000);
 
         //Become aligned with beacon
-        functions.driveAutonomous(drivePower,2000);
+        functions.driveAutonomous(-drivePower, -1500);
 
         //Shift next to beacon
         functions.leftShiftAutonomous(shiftPower, 3000);
 
-        //If we see the color (in this case, "red") shift and hit the beacon
+        functions.whiteLineStop(-drivePower / 2);
+
+        //If we see the color (in this case, "blue") shift and hit the beacon
         functions.beaconColorCheck(color, colorSensorLeft);
 
         //Come off of wall
         functions.rightShiftAutonomous(shiftPower, 300);
 
         //Drive to second beacon
-        functions.driveAutonomous(drivePower, 4400);
+        functions.driveAutonomous(-drivePower, -4000);
 
-        //If we see the color (in this case, "red") shift and hit the beacon
+        functions.whiteLineStop(-drivePower / 2);
+
+        //If we see the color (in this case, "blue") shift and hit the beacon
         functions.beaconColorCheck(color, colorSensorLeft);
 
         //Come off wall
         functions.rightShiftAutonomous(shiftPower, 300);
 
         //Turn to Center Vortex
-        functions.rightTurnAutonomous(turnPower, 3800);
+        functions.rightTurnAutonomous(turnPower, 1267);
 
         //Drive to Center Vortex
-        functions.driveAutonomous(drivePower, 5400);
+        functions.driveAutonomous(drivePower, 6500);
 
-        //Turn to ramp
-        functions.rightTurnAutonomous(turnPower, 2000);
+//        //Turn to ramp
+//        functions.leftTurnAutonomous(turnPower, 2000);
+//
+//        //Drive up ramp
+//        functions.driveAutonomous(drivePowerForward, 6000);
 
-        //Drive up ramp
-        functions.driveAutonomous(drivePower, 6000);
-
-        //Shoot balls that are in the robot
-        spinner.setPower(1.0);
-
-    } //Close "run Opmode" loop
-} //Close class and end program
+            //Shoot balls that are in the robot
+//        spinner.setPower(1.0);
+            idle();
+            break;
+        } //Close "run Opmode" loop
+    } //Close class and end program
+}

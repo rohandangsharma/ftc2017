@@ -21,7 +21,8 @@ public class dataLogging extends LinearOpMode //CLASS START
     DcMotor rightMotorBack;
     DcMotor shooterLeft;
     DcMotor shooterRight;
-    DcMotor spinner;
+    DcMotor spinnerLeft;
+    DcMotor spinnerRight;
 
     //Define Sensors and the CDI
     ColorSensor colorSensorLeft;
@@ -39,7 +40,8 @@ public class dataLogging extends LinearOpMode //CLASS START
         rightMotorFront = hardwareMap.dcMotor.get("rightMotorFront");
         leftMotorBack = hardwareMap.dcMotor.get("leftMotorBack");
         rightMotorBack = hardwareMap.dcMotor.get("rightMotorBack");
-        spinner = hardwareMap.dcMotor.get("spinner");
+        spinnerLeft = hardwareMap.dcMotor.get("spinnerLeft");
+        spinnerRight = hardwareMap.dcMotor.get("spinnerRight");
         shooterLeft = hardwareMap.dcMotor.get("shooterLeft");
         shooterRight = hardwareMap.dcMotor.get("shooterRight");
 
@@ -50,13 +52,14 @@ public class dataLogging extends LinearOpMode //CLASS START
         CDI = hardwareMap.deviceInterfaceModule.get("CDI");
 
         //Set up the DriveFunctions class and give it all the necessary components (motors, sensors, CDI)
-        DriveFunctions functions = new DriveFunctions(leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack, spinner, shooterLeft, shooterRight, colorSensorLeft, colorSensorRight, colorSensorBottom, CDI);
+        DriveFunctions functions = new DriveFunctions(leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack, spinnerLeft, spinnerRight, shooterLeft, shooterRight, colorSensorLeft, colorSensorRight, colorSensorBottom, CDI);
 
         //Set the sensors to the modes that we want, and set their addresses. Also set the directions of the motors
         functions.initializeMotorsAndSensors();
 
         //Wait for start button to be clicked
         waitForStart();
+
 //***************************************************************************************************************************
 
         //While the op mode is active, loop and read the RGB data.

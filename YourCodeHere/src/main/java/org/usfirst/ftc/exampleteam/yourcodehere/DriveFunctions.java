@@ -19,7 +19,8 @@ public class DriveFunctions extends LinearOpMode
     DcMotor rightMotorFront;
     DcMotor leftMotorBack;
     DcMotor rightMotorBack;
-    DcMotor spinner;
+    DcMotor spinnerLeft;
+    DcMotor spinnerRight;
     DcMotor shooterLeft;
     DcMotor shooterRight;
 
@@ -33,7 +34,7 @@ public class DriveFunctions extends LinearOpMode
      * Initialize all the harware all the hardware
      * It creates a data type DriveFunctions to store all the hardware devices
      */
-    public DriveFunctions(DcMotor leftMotorFront, DcMotor rightMotorFront, DcMotor leftMotorBack, DcMotor rightMotorBack, DcMotor spinner, DcMotor shooterLeft, DcMotor shooterRight, ColorSensor colorSensorLeft, ColorSensor colorSensorRight, ColorSensor colorSensorBottom, DeviceInterfaceModule CDI)
+    public DriveFunctions(DcMotor leftMotorFront, DcMotor rightMotorFront, DcMotor leftMotorBack, DcMotor rightMotorBack, DcMotor spinnerLeft, DcMotor spinnerRight, DcMotor shooterLeft, DcMotor shooterRight, ColorSensor colorSensorLeft, ColorSensor colorSensorRight, ColorSensor colorSensorBottom, DeviceInterfaceModule CDI)
     {
         //These lines enable us to store the motors, sensors and CDI without having to write them over and over again
         //Initialize DC motors
@@ -41,7 +42,8 @@ public class DriveFunctions extends LinearOpMode
         this.leftMotorBack = leftMotorBack;
         this.rightMotorFront = rightMotorFront;
         this.rightMotorBack = rightMotorBack;
-        this.spinner = spinner;
+        this.spinnerLeft = spinnerLeft;
+        this.spinnerRight = spinnerRight;
         this.shooterLeft = shooterLeft;
         this.shooterRight = shooterRight;
 
@@ -60,7 +62,7 @@ public class DriveFunctions extends LinearOpMode
         //Set the sensors to the modes that we want, and set their addresses
         colorSensorBottom.enableLed(true);
         colorSensorBottom.setI2cAddress(I2cAddr.create8bit(0x3a));
-        colorSensorLeft.enableLed(true);
+        colorSensorLeft.enableLed(false);
         colorSensorLeft.setI2cAddress(I2cAddr.create8bit(0x3c));
         colorSensorRight.enableLed(false);
         colorSensorRight.setI2cAddress(I2cAddr.create8bit(0x3e));
@@ -70,6 +72,10 @@ public class DriveFunctions extends LinearOpMode
         leftMotorBack.setDirection(DcMotorSimple.Direction.FORWARD);
         rightMotorFront.setDirection(DcMotorSimple.Direction.FORWARD);
         rightMotorBack.setDirection(DcMotorSimple.Direction.REVERSE);
+
+//        //Illuminate all three colors of the CDI
+//        CDI.setLED(0, true);
+//        CDI.setLED(1, true);
     }
 
     /**
@@ -96,7 +102,8 @@ public class DriveFunctions extends LinearOpMode
      */
     public void stopAttachments()
     {
-        spinner.setPower(0.0);
+        spinnerLeft.setPower(0.0);
+        spinnerRight.setPower(0.0);
         shooterRight.setPower(0.0);
         shooterLeft.setPower(0.0);
     }
@@ -116,7 +123,7 @@ public class DriveFunctions extends LinearOpMode
     public void driveTeleop(float drive)
     {
         //Send all the motors in the same direction
-        setDriveMotorPowers(drive, drive, drive, drive);
+        setDriveMotorPowers(-drive, -drive, -drive, -drive);
     }
 
     /**
@@ -154,15 +161,15 @@ public class DriveFunctions extends LinearOpMode
     {
         if (spinnerMode % 3 == 0)
         {
-            spinner.setPower(0.0);
+            spinnerLeft.setPower(0.0);
         }
         if (spinnerMode % 3 == 1)
         {
-            spinner.setPower(power);
+            spinnerLeft.setPower(power);
         }
         if (spinnerMode % 3 == 2)
         {
-            spinner.setPower(-power);
+            spinnerLeft.setPower(-power);
         }
     }
 
@@ -324,37 +331,34 @@ public class DriveFunctions extends LinearOpMode
      * @param color take in our teams color, as that is the color that needs to be pressed
      * @param colorSensor take in the correct color sensor
      */
-    public void beaconColorCheck(String color, ColorSensor colorSensor)
-    {
+    public void beaconColorCheck(String color, ColorSensor colorSensor) {
         //Define some constants to use and avoid magic numbers
         float drivePower = (float) 0.2;
         float shiftPower = (float) 0.4;
-        int alignBeaconDistance = 400;
+        int alignBeaconDistance = 100;
         int shiftDistance = 800;
 
         //While we do not see the beacon, drive forward
-        while (!iSeeAColor(colorSensor))
-        {
-            driveTeleop(drivePower);
+        while (!iSeeAColor(colorSensor)) {
+            driveTeleop(-drivePower);
         }
 
         //Now we see a color, but possibly not the target color
         //While we don't see the target color, drive forward
-        while (!whatColor(colorSensor).equals(color))
-        {
-            driveTeleop(drivePower);
+        while (!whatColor(colorSensor).equals(color)) {
+            driveTeleop(-drivePower);
         }
 
         //Now we see the target color, drive forward a tiny bit so cardboard is aligned
         driveAutonomous(drivePower, alignBeaconDistance);
 
         //The robot is aligned to the button of the target color, shift into the button to press it
-        if (color.equals("Blue"))
+        if (color.equals("Red"))
         {
             rightShiftAutonomous(shiftPower, shiftDistance);
         }
 
-        if (color.equals("Red"))
+        if (color.equals("Blue"))
         {
             leftShiftAutonomous(shiftPower, shiftDistance);
         }
@@ -370,12 +374,10 @@ public class DriveFunctions extends LinearOpMode
         //If the alpha value is less than 20, drive forward
         //The alpha value of the mat is close to zero, and the alpha value of the line is above 50
         //This means that if the below condition is true, we are not on the line
-        while (colorSensorLeft.alpha() < 20)
+        while (colorSensorBottom.alpha() < 20)
         {
-            driveTeleop(-drivePower);
+            driveTeleop(drivePower);
         }
-
-        driveAutonomous(-drivePower * 2, -400);
 
         //When the above condition is no longer true, stop the robot, after which it will be on the line
         stopDriving();
@@ -383,8 +385,7 @@ public class DriveFunctions extends LinearOpMode
 
     //Empty main
     @Override
-    public void runOpMode() throws InterruptedException
-    {
+    public void runOpMode() throws InterruptedException {
 
     }
 } //CLOSE CLASS
