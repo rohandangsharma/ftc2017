@@ -21,8 +21,8 @@ public class autoBlue extends LinearOpMode //CLASS START
     DcMotor rightMotorBack;
     DcMotor shooterLeft;
     DcMotor shooterRight;
-    DcMotor spinnerLeft;
-    DcMotor spinnerRight;
+    DcMotor spinnerTop;
+    DcMotor spinnerBottom;
 
     //Define Sensors and the CDI
     ColorSensor colorSensorLeft;
@@ -47,10 +47,10 @@ public class autoBlue extends LinearOpMode //CLASS START
         rightMotorFront = hardwareMap.dcMotor.get("rightMotorFront");
         leftMotorBack = hardwareMap.dcMotor.get("leftMotorBack");
         rightMotorBack = hardwareMap.dcMotor.get("rightMotorBack");
-        spinnerLeft = hardwareMap.dcMotor.get("spinnerLeft");
-        spinnerRight = hardwareMap.dcMotor.get("spinnerRight");
-        shooterLeft = hardwareMap.dcMotor.get("shooterLeft");
-        shooterRight = hardwareMap.dcMotor.get("shooterRight");
+        spinnerTop = hardwareMap.dcMotor.get("spinnerLeft");
+        spinnerBottom = hardwareMap.dcMotor.get("spinnerRight");
+        shooterLeft = hardwareMap.dcMotor.get("shooterTop");
+        shooterRight = hardwareMap.dcMotor.get("shooterBottom");
 
         //Get references to the sensors and the CDI from the hardware map
         colorSensorBottom = hardwareMap.colorSensor.get("colorSensorBottom");
@@ -59,7 +59,7 @@ public class autoBlue extends LinearOpMode //CLASS START
         CDI = hardwareMap.deviceInterfaceModule.get("CDI");
 
         //Set up the DriveFunctions class and give it all the necessary components (motors, sensors, CDI)
-        DriveFunctions functions = new DriveFunctions(leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack, spinnerLeft, spinnerRight, shooterLeft, shooterRight, colorSensorLeft, colorSensorRight, colorSensorBottom, CDI);
+        DriveFunctions functions = new DriveFunctions(leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack, spinnerTop, spinnerBottom, shooterLeft, shooterRight, colorSensorLeft, colorSensorRight, colorSensorBottom, CDI);
 
         //Set the sensors to the modes that we want, and set their addresses. Also set the directions of the motors
         functions.initializeMotorsAndSensors();
@@ -106,15 +106,6 @@ public class autoBlue extends LinearOpMode //CLASS START
 
         //Drive to Center Vortex
         functions.driveAutonomous(drivePower, 6500);
-
-//        //Turn to ramp
-//        functions.leftTurnAutonomous(turnPower, 2000);
-//
-//        //Drive up ramp
-//        functions.driveAutonomous(drivePowerForward, 6000);
-
-            //Shoot balls that are in the robot
-//        spinner.setPower(1.0);
             idle();
             break;
         } //Close "run Opmode" loop

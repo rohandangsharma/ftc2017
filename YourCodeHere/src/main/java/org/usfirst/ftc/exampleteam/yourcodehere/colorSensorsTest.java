@@ -22,8 +22,8 @@ public class colorSensorsTest extends LinearOpMode //CLASS START
     DcMotor rightMotorBack;
     DcMotor shooterLeft;
     DcMotor shooterRight;
-    DcMotor spinnerLeft;
-    DcMotor spinnerRight;
+    DcMotor spinnerTop;
+    DcMotor spinnerBottom;
 
     //Define Sensors and the CDI
     ColorSensor colorSensorLeft;
@@ -46,8 +46,8 @@ public class colorSensorsTest extends LinearOpMode //CLASS START
         rightMotorFront = hardwareMap.dcMotor.get("rightMotorFront");
         leftMotorBack = hardwareMap.dcMotor.get("leftMotorBack");
         rightMotorBack = hardwareMap.dcMotor.get("rightMotorBack");
-        spinnerLeft = hardwareMap.dcMotor.get("spinnerLeft");
-        spinnerRight = hardwareMap.dcMotor.get("spinnerRight");
+        spinnerTop = hardwareMap.dcMotor.get("spinnerTop");
+        spinnerBottom = hardwareMap.dcMotor.get("spinnerBottom");
         shooterLeft = hardwareMap.dcMotor.get("shooterLeft");
         shooterRight = hardwareMap.dcMotor.get("shooterRight");
 
@@ -58,7 +58,7 @@ public class colorSensorsTest extends LinearOpMode //CLASS START
         CDI = hardwareMap.deviceInterfaceModule.get("CDI");
 
         //Set up the DriveFunctions class and give it all the necessary components (motors, sensors, CDI)
-        DriveFunctions functions = new DriveFunctions(leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack, spinnerLeft, spinnerRight, shooterLeft, shooterRight, colorSensorLeft, colorSensorRight, colorSensorBottom, CDI);
+        DriveFunctions functions = new DriveFunctions(leftMotorFront, rightMotorFront, leftMotorBack, rightMotorBack, spinnerTop, spinnerBottom, shooterLeft, shooterRight, colorSensorLeft, colorSensorRight, colorSensorBottom, CDI);
 
         //Set the sensors to the modes that we want, and set their addresses. Also set the directions of the motors
         functions.initializeMotorsAndSensors();

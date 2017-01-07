@@ -64,10 +64,8 @@ public class dataLogging extends LinearOpMode //CLASS START
 
         //While the op mode is active, loop and read the RGB data.
         //Note we use opModeIsActive() as our loop condition because it is an interruptible method.
-        while (opModeIsActive())
-        {
-            if (gamepad1.b)
-            {
+        while (opModeIsActive()) {
+            if (gamepad1.b) {
                 //If "b" is pressed, reset the encoders
                 leftMotorFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 leftMotorBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);

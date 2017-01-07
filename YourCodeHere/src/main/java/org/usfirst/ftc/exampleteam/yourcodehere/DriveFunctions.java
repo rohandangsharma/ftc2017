@@ -19,8 +19,8 @@ public class DriveFunctions extends LinearOpMode
     DcMotor rightMotorFront;
     DcMotor leftMotorBack;
     DcMotor rightMotorBack;
-    DcMotor spinnerLeft;
-    DcMotor spinnerRight;
+    DcMotor spinnerTop;
+    DcMotor spinnerBottom;
     DcMotor shooterLeft;
     DcMotor shooterRight;
 
@@ -34,7 +34,7 @@ public class DriveFunctions extends LinearOpMode
      * Initialize all the harware all the hardware
      * It creates a data type DriveFunctions to store all the hardware devices
      */
-    public DriveFunctions(DcMotor leftMotorFront, DcMotor rightMotorFront, DcMotor leftMotorBack, DcMotor rightMotorBack, DcMotor spinnerLeft, DcMotor spinnerRight, DcMotor shooterLeft, DcMotor shooterRight, ColorSensor colorSensorLeft, ColorSensor colorSensorRight, ColorSensor colorSensorBottom, DeviceInterfaceModule CDI)
+    public DriveFunctions(DcMotor leftMotorFront, DcMotor rightMotorFront, DcMotor leftMotorBack, DcMotor rightMotorBack, DcMotor spinnerTop, DcMotor spinnerBottom, DcMotor shooterLeft, DcMotor shooterRight, ColorSensor colorSensorLeft, ColorSensor colorSensorRight, ColorSensor colorSensorBottom, DeviceInterfaceModule CDI)
     {
         //These lines enable us to store the motors, sensors and CDI without having to write them over and over again
         //Initialize DC motors
@@ -42,8 +42,8 @@ public class DriveFunctions extends LinearOpMode
         this.leftMotorBack = leftMotorBack;
         this.rightMotorFront = rightMotorFront;
         this.rightMotorBack = rightMotorBack;
-        this.spinnerLeft = spinnerLeft;
-        this.spinnerRight = spinnerRight;
+        this.spinnerTop = spinnerTop;
+        this.spinnerBottom = spinnerBottom;
         this.shooterLeft = shooterLeft;
         this.shooterRight = shooterRight;
 
@@ -73,9 +73,10 @@ public class DriveFunctions extends LinearOpMode
         rightMotorFront.setDirection(DcMotorSimple.Direction.FORWARD);
         rightMotorBack.setDirection(DcMotorSimple.Direction.REVERSE);
 
-//        //Illuminate all three colors of the CDI
-//        CDI.setLED(0, true);
-//        CDI.setLED(1, true);
+        //Illuminate all three colors of the CDI
+        CDI.setLED(0, true);
+        CDI.setLED(1, true);
+
     }
 
     /**
@@ -100,10 +101,9 @@ public class DriveFunctions extends LinearOpMode
     /**
      * If this function is called, stop the attachments
      */
-    public void stopAttachments()
-    {
-        spinnerLeft.setPower(0.0);
-        spinnerRight.setPower(0.0);
+    public void stopAttachments() {
+        spinnerTop.setPower(0.0);
+        spinnerBottom.setPower(0.0);
         shooterRight.setPower(0.0);
         shooterLeft.setPower(0.0);
     }
@@ -111,8 +111,7 @@ public class DriveFunctions extends LinearOpMode
     /**
      * If this function is called, stop everything
      */
-    public void stopEverything()
-    {
+    public void stopEverything() {
         stopDriving();
         stopAttachments();
     }
@@ -120,8 +119,7 @@ public class DriveFunctions extends LinearOpMode
     /**
      * If this function is called, turn on the drive motors at the given powers to make it drive forward or backwards
      */
-    public void driveTeleop(float drive)
-    {
+    public void driveTeleop(float drive) {
         //Send all the motors in the same direction
         setDriveMotorPowers(-drive, -drive, -drive, -drive);
     }
@@ -129,8 +127,7 @@ public class DriveFunctions extends LinearOpMode
     /**
      * If this function is called, turn on the drive motors at the given powers, to make it tank turn right
      */
-    public void rightTurnTeleop(float turn)
-    {
+    public void rightTurnTeleop(float turn) {
         //Turn the right motors backwards and the left motors forward so that it turns right
         setDriveMotorPowers(turn, turn, -turn, -turn);
     }
@@ -138,8 +135,7 @@ public class DriveFunctions extends LinearOpMode
     /**
      * If this function is called, turn on the drive motors at the given powers, to make it tank turn left
      */
-    public void leftTurnTeleop(float turn)
-    {
+    public void leftTurnTeleop(float turn) {
         //Turn the left motors backwards and the right motors forward so that it turns left
         setDriveMotorPowers(-turn, -turn, turn, turn);
     }
@@ -147,40 +143,44 @@ public class DriveFunctions extends LinearOpMode
     /**
      * If this function is called, turn on the drive motors at the given powers, to make it shift in the desired direction
      */
-    public void shiftTeleop(float shift)
-    {
+    public void shiftTeleop(float shift) {
         //This sequence of backwards, forwards, forwards, backwards makes the robot shift
         setDriveMotorPowers(-shift, shift, shift, -shift);
     }
 
     /**
      * Toggle the spinner to make it stop, go forwards, and go backwards whenever we want
-     * @param spinnerMode tells the mode of the spinner, that is set in the teleop program
+     * @param spinnerCount tells the mode of the spinner, that is set in the teleop program
      */
-    public void toggleSpinner(int spinnerMode, float power)
-    {
-        if (spinnerMode % 3 == 0)
-        {
-            spinnerLeft.setPower(0.0);
+    public void spinner(int spinnerCount, float power) {
+        if (spinnerCount % 3 == 0) {
+            spinnerTop.setPower(0.0);
+            spinnerBottom.setPower(0.0);
         }
-        if (spinnerMode % 3 == 1)
-        {
-            spinnerLeft.setPower(power);
+        if (spinnerCount % 3 == 1) {
+            spinnerTop.setPower(-power);
+            spinnerBottom.setPower(power);
         }
-        if (spinnerMode % 3 == 2)
-        {
-            spinnerLeft.setPower(-power);
+        if (spinnerCount % 3 == 2) {
+            spinnerTop.setPower(power);
+            spinnerBottom.setPower(-power);
         }
     }
 
     /**
      * @param power power for shooter to move at
      */
-    public void shootBall(float power)
-    {
+    public void shooter(int shooterCount, float power) {
         //Turn on the two wheels in opposite directions
-        shooterLeft.setPower(-power);
-        shooterRight.setPower(power);
+        if (shooterCount % 2 == 0) {
+            shooterLeft.setPower(0.0);
+            shooterRight.setPower(0.0);
+        }
+
+        if (shooterCount % 2 == 1) {
+            shooterLeft.setPower(-power);
+            shooterRight.setPower(power);
+        }
     }
 
     /**
