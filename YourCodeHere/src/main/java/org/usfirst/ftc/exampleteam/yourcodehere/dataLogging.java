@@ -12,10 +12,9 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 //***************************************************************************************************************************
 @Disabled //We don't want this class to show up in the list, it is just here for reference
 @TeleOp(name = "Data Logging Program") //Name the program
-public class dataLogging extends LinearOpMode //CLASS START
-{
+public class dataLogging extends LinearOpMode { //CLASS START
     //Define DC Motors
-    DcMotor leftMotorFront;
+    private DcMotor leftMotorFront;
     DcMotor rightMotorFront;
     DcMotor leftMotorBack;
     DcMotor rightMotorBack;

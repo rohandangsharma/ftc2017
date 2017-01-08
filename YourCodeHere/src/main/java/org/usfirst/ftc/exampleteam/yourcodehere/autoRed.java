@@ -71,42 +71,36 @@ public class autoRed extends LinearOpMode { //CLASS START
 
         while (opModeIsActive()) {
 
-        //Drive toward the center vortex
-        functions.driveAutonomous(-drivePower, -3000);
+            //Drive toward the center vortex
+            functions.driveAutonomous(-drivePower, -3000);
 
-        //Shift towards beacon
-        functions.rightShiftAutonomous(shiftPower, 3000);
+            //Shift towards beacon
+            functions.rightShiftAutonomous(shiftPower, 3000);
 
-        //Become aligned with beacon
-        functions.driveAutonomous(-drivePower, -1500);
+            //Become aligned with beacon
+            functions.driveAutonomous(-drivePower, -1500);
 
-        //Shift next to beacon
-        functions.rightShiftAutonomous(shiftPower, 3000);
+            //Shift next to beacon
+            functions.rightShiftAutonomous(shiftPower, 3000);
 
-        functions.whiteLineStop(-drivePower / 2);
+            functions.whiteLineStop(-drivePower / 2);
 
-        //If we see the color (in this case, "red") shift and hit the beacon
-        functions.beaconColorCheck(color, colorSensorRight);
+            //If we see the color (in this case, "red") shift and hit the beacon
+            functions.beaconColorCheck(color, colorSensorRight);
 
-        //Come off of wall
-        functions.leftShiftAutonomous(shiftPower, 300);
+            //Drive to second beacon
+            functions.driveAutonomous(-drivePower, -4000);
 
-        //Drive to second beacon
-        functions.driveAutonomous(-drivePower, -4000);
+            functions.whiteLineStop(-drivePower / 2);
 
-        functions.whiteLineStop(-drivePower / 2);
+            //If we see the color (in this case, "red") shift and hit the beacon
+            functions.beaconColorCheck(color, colorSensorRight);
 
-        //If we see the color (in this case, "red") shift and hit the beacon
-        functions.beaconColorCheck(color, colorSensorRight);
+            //Turn to Center Vortex
+            functions.leftTurnAutonomous(turnPower, 1267);
 
-        //Come off wall
-        functions.leftShiftAutonomous(shiftPower, 300);
-
-        //Turn to Center Vortex
-        functions.leftTurnAutonomous(turnPower, 1267);
-
-        //Drive to Center Vortex
-        functions.driveAutonomous(drivePower, 5600);
+            //Drive to Center Vortex
+            functions.driveAutonomous(drivePower, 5600);
 
             idle();
             break;

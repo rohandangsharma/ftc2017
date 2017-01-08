@@ -108,11 +108,11 @@ public class Teleop extends SynchronousOpMode //CLASS START
 
                 //If the "a" button on the second gamepad is pressed, start the spinner forward
                 if (gamepad2.dpad_down) {
-                    functions.spinner(1, (float) 1.0);
+                    functions.spinner(1, (float) 0.75);
                 }
                 ////If the "x" button on the second gamepad is pressed, start the spinner backwards
                 if (gamepad2.dpad_up) {
-                    functions.spinner(2, (float) 1.0);
+                    functions.spinner(2, (float) 0.75);
                 }
 
                 if (gamepad2.dpad_left || gamepad2.dpad_right) {

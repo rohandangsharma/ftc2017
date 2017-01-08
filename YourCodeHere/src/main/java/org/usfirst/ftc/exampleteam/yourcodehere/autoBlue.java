@@ -64,48 +64,41 @@ public class autoBlue extends LinearOpMode //CLASS START
         //Set the sensors to the modes that we want, and set their addresses. Also set the directions of the motors
         functions.initializeMotorsAndSensors();
 
-
         //Wait for start button to be clicked
         waitForStart();
 
         while (opModeIsActive()) {
 
-        //Drive toward the center vortex
-        functions.driveAutonomous(-drivePower, -3000);
+            //Drive toward the center vortex
+            functions.driveAutonomous(-drivePower, -3000);
 
-        //Shift towards beacon
-        functions.leftShiftAutonomous(shiftPower, 3000);
+            //Shift towards beacon
+            functions.leftShiftAutonomous(shiftPower, 3000);
 
-        //Become aligned with beacon
-        functions.driveAutonomous(-drivePower, -1500);
+            //Become aligned with beacon
+            functions.driveAutonomous(-drivePower, -1500);
 
-        //Shift next to beacon
-        functions.leftShiftAutonomous(shiftPower, 3000);
+            //Shift next to beacon
+            functions.leftShiftAutonomous(shiftPower, 3000);
 
-        functions.whiteLineStop(-drivePower / 2);
+            functions.whiteLineStop(-drivePower / 2);
 
-        //If we see the color (in this case, "blue") shift and hit the beacon
-        functions.beaconColorCheck(color, colorSensorLeft);
+            //If we see the color (in this case, "blue") shift and hit the beacon
+            functions.beaconColorCheck(color, colorSensorLeft);
 
-        //Come off of wall
-        functions.rightShiftAutonomous(shiftPower, 300);
+            //Drive to second beacon
+            functions.driveAutonomous(-drivePower, -4000);
 
-        //Drive to second beacon
-        functions.driveAutonomous(-drivePower, -4000);
+            functions.whiteLineStop(-drivePower / 2);
 
-        functions.whiteLineStop(-drivePower / 2);
+            //If we see the color (in this case, "blue") shift and hit the beacon
+            functions.beaconColorCheck(color, colorSensorLeft);
 
-        //If we see the color (in this case, "blue") shift and hit the beacon
-        functions.beaconColorCheck(color, colorSensorLeft);
+            //Turn to Center Vortex
+            functions.rightTurnAutonomous(turnPower, 1267);
 
-        //Come off wall
-        functions.rightShiftAutonomous(shiftPower, 300);
-
-        //Turn to Center Vortex
-        functions.rightTurnAutonomous(turnPower, 1267);
-
-        //Drive to Center Vortex
-        functions.driveAutonomous(drivePower, 6500);
+            //Drive to Center Vortex
+            functions.driveAutonomous(drivePower, 6500);
             idle();
             break;
         } //Close "run Opmode" loop

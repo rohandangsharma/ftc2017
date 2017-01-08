@@ -12,8 +12,7 @@ import com.qualcomm.robotcore.hardware.I2cAddr;
 import com.qualcomm.robotcore.hardware.DeviceInterfaceModule;
 
 @Disabled
-public class DriveFunctions extends LinearOpMode
-{ //START CLASS
+public class DriveFunctions extends LinearOpMode { //START CLASS
     //Define DC motors
     DcMotor leftMotorFront;
     DcMotor rightMotorFront;
@@ -337,6 +336,7 @@ public class DriveFunctions extends LinearOpMode
         float shiftPower = (float) 0.4;
         int alignBeaconDistance = 100;
         int shiftDistance = 800;
+        int leaveBeaconDistance = 300;
 
         //While we do not see the beacon, drive forward
         while (!iSeeAColor(colorSensor)) {
@@ -353,14 +353,14 @@ public class DriveFunctions extends LinearOpMode
         driveAutonomous(drivePower, alignBeaconDistance);
 
         //The robot is aligned to the button of the target color, shift into the button to press it
-        if (color.equals("Red"))
-        {
+        if (color.equals("Red")) {
             rightShiftAutonomous(shiftPower, shiftDistance);
+            leftShiftAutonomous(shiftPower, leaveBeaconDistance);
         }
 
-        if (color.equals("Blue"))
-        {
+        if (color.equals("Blue")) {
             leftShiftAutonomous(shiftPower, shiftDistance);
+            rightShiftAutonomous(shiftPower, leaveBeaconDistance);
         }
     }
     /**
