@@ -3,15 +3,12 @@ package org.usfirst.ftc.exampleteam.yourcodehere;
 
 //Import necessary items
 import android.graphics.Color;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DeviceInterfaceModule;
 
-//***************************************************************************************************************************
-@Disabled //We don't want this class to show up in the list, it is just here for reference
 @TeleOp(name = "Test All Color Sensors") //Name the program
 public class colorSensorsTest extends LinearOpMode //CLASS START
 {
@@ -31,16 +28,16 @@ public class colorSensorsTest extends LinearOpMode //CLASS START
     ColorSensor colorSensorBottom;
     DeviceInterfaceModule CDI;
 
+    //These are arrays that will hold the hue, saturation, and value information for all three sensors.
+    float hsvValuesBottom[] = {0F,0F,0F};
+    float hsvValuesLeft[] = {0F,0F,0F};
+    float hsvValuesRight[] = {0F,0F,0F};
+
 //***************************************************************************************************************************
     //MAIN BELOW
     @Override
     public void runOpMode() throws InterruptedException
     {
-        //These are arrays that will hold the hue, saturation, and value information for all three sensors.
-        float hsvValuesBottom[] = {0F,0F,0F};
-        float hsvValuesLeft[] = {0F,0F,0F};
-        float hsvValuesRight[] = {0F,0F,0F};
-
         //Get references to the DC motors from the hardware map
         leftMotorFront = hardwareMap.dcMotor.get("leftMotorFront");
         rightMotorFront = hardwareMap.dcMotor.get("rightMotorFront");
@@ -67,7 +64,6 @@ public class colorSensorsTest extends LinearOpMode //CLASS START
         waitForStart();
 
 //***************************************************************************************************************************
-
         //While the op mode is active, loop and read the RGB data from all three sensors.
         //Note we use opModeIsActive() as our loop condition because it is an interruptible method.
         while (opModeIsActive())

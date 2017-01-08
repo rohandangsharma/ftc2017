@@ -12,7 +12,8 @@ import com.qualcomm.robotcore.hardware.I2cAddr;
 import com.qualcomm.robotcore.hardware.DeviceInterfaceModule;
 
 @Disabled
-public class DriveFunctions extends LinearOpMode { //START CLASS
+public class DriveFunctions extends LinearOpMode
+{
     //Define DC motors
     DcMotor leftMotorFront;
     DcMotor rightMotorFront;
@@ -31,7 +32,7 @@ public class DriveFunctions extends LinearOpMode { //START CLASS
 
     /**
      * Initialize all the harware all the hardware
-     * It creates a data type DriveFunctions to store all the hardware devices
+     * This creates a data type DriveFunctions to store all the hardware devices
      */
     public DriveFunctions(DcMotor leftMotorFront, DcMotor rightMotorFront, DcMotor leftMotorBack, DcMotor rightMotorBack, DcMotor spinnerTop, DcMotor spinnerBottom, DcMotor shooterLeft, DcMotor shooterRight, ColorSensor colorSensorLeft, ColorSensor colorSensorRight, ColorSensor colorSensorBottom, DeviceInterfaceModule CDI)
     {
@@ -75,7 +76,6 @@ public class DriveFunctions extends LinearOpMode { //START CLASS
         //Illuminate all three colors of the CDI
         CDI.setLED(0, true);
         CDI.setLED(1, true);
-
     }
 
     /**
@@ -89,18 +89,22 @@ public class DriveFunctions extends LinearOpMode { //START CLASS
         rightMotorFront.setPower(rightFrontPower);
         rightMotorBack.setPower(rightBackPower);
     }
+
     /**
      * If this function is called, stop the drive motors
      */
     public void stopDriving()
     {
+        //Set all drive motor powers as zero
         setDriveMotorPowers((float) 0.0, (float) 0.0, (float) 0.0, (float) 0.0);
     }
 
     /**
      * If this function is called, stop the attachments
      */
-    public void stopAttachments() {
+    public void stopAttachments()
+    {
+        //Set all attachment motor powers to zero
         spinnerTop.setPower(0.0);
         spinnerBottom.setPower(0.0);
         shooterRight.setPower(0.0);
@@ -110,7 +114,9 @@ public class DriveFunctions extends LinearOpMode { //START CLASS
     /**
      * If this function is called, stop everything
      */
-    public void stopEverything() {
+    public void stopEverything()
+    {
+        //Stop attachments and the drive motors
         stopDriving();
         stopAttachments();
     }
@@ -118,7 +124,8 @@ public class DriveFunctions extends LinearOpMode { //START CLASS
     /**
      * If this function is called, turn on the drive motors at the given powers to make it drive forward or backwards
      */
-    public void driveTeleop(float drive) {
+    public void driveTeleop(float drive)
+    {
         //Send all the motors in the same direction
         setDriveMotorPowers(-drive, -drive, -drive, -drive);
     }
@@ -126,7 +133,8 @@ public class DriveFunctions extends LinearOpMode { //START CLASS
     /**
      * If this function is called, turn on the drive motors at the given powers, to make it tank turn right
      */
-    public void rightTurnTeleop(float turn) {
+    public void rightTurnTeleop(float turn)
+    {
         //Turn the right motors backwards and the left motors forward so that it turns right
         setDriveMotorPowers(turn, turn, -turn, -turn);
     }
@@ -134,7 +142,8 @@ public class DriveFunctions extends LinearOpMode { //START CLASS
     /**
      * If this function is called, turn on the drive motors at the given powers, to make it tank turn left
      */
-    public void leftTurnTeleop(float turn) {
+    public void leftTurnTeleop(float turn)
+    {
         //Turn the left motors backwards and the right motors forward so that it turns left
         setDriveMotorPowers(-turn, -turn, turn, turn);
     }
@@ -142,49 +151,83 @@ public class DriveFunctions extends LinearOpMode { //START CLASS
     /**
      * If this function is called, turn on the drive motors at the given powers, to make it shift in the desired direction
      */
-    public void shiftTeleop(float shift) {
+    public void shiftTeleop(float shift)
+    {
         //This sequence of backwards, forwards, forwards, backwards makes the robot shift
         setDriveMotorPowers(-shift, shift, shift, -shift);
     }
 
     /**
      * Toggle the spinner to make it stop, go forwards, and go backwards whenever we want
-     * @param spinnerCount tells the mode of the spinner, that is set in the teleop program
+     * @param spinnerMode tells the mode of the spinner, that is set in the teleop program
      */
-    public void spinner(int spinnerCount, float power) {
-        if (spinnerCount % 3 == 0) {
+    public void spinner(int spinnerMode)
+    {
+        if (spinnerMode == 0)
+        {
+            //If the spinner mode is 0, stop both spinners
             spinnerTop.setPower(0.0);
             spinnerBottom.setPower(0.0);
         }
-        if (spinnerCount % 3 == 1) {
-            spinnerTop.setPower(-power);
-            spinnerBottom.setPower(power);
+        if (spinnerMode == 1)
+        {
+            //If the spinner mode is 1, send the top spinner forwards, and the bottom spinner backwards
+            //The top spinner is purposely slower because otherwise it hits the ball too hard
+            spinnerTop.setPower(0.35);
+            spinnerBottom.setPower(-1.0);
+
         }
-        if (spinnerCount % 3 == 2) {
-            spinnerTop.setPower(power);
-            spinnerBottom.setPower(-power);
+        if (spinnerMode % 3 == 2)
+        {
+            //If the spinner mode is 1, send the top spinner backwards, and the bottom spinner forwards
+            //The top spinner is purposely slower because otherwise it hits the ball too hard
+            spinnerTop.setPower(-0.35);
+            spinnerBottom.setPower(1.0);
         }
     }
 
     /**
-     * @param power power for shooter to move at
+     * Toggle the shooter
+     * @param shooterMode enables us to toggle the shooter
      */
-    public void shooter(int shooterCount, float power) {
-        //Turn on the two wheels in opposite directions
-        if (shooterCount % 2 == 0) {
+    public void shooterTeleOp(int shooterMode)
+    {
+        if (shooterMode == 0)
+        {
+            //If the shooter mode is 0, stop both shooter wheels
             shooterLeft.setPower(0.0);
             shooterRight.setPower(0.0);
         }
 
-        if (shooterCount % 2 == 1) {
-            shooterLeft.setPower(-power);
-            shooterRight.setPower(power);
+        if (shooterMode == 1)
+        {
+            //If the shooter mode is 1, set the left shooter backwards and the right shooter forwards, both at max power
+            shooterLeft.setPower(-1.0);
+            shooterRight.setPower(1.0);
         }
     }
 
     /**
+     * @param time time for shooter to spin
+     * @throws InterruptedException allows us to use the Thread.sleep function
+     */
+    public void shooterAutonomous(int time) throws InterruptedException
+    {
+        //Turn on the left shooter backwards and the right shooter forwards, both at max power
+        shooterLeft.setPower(-1.0);
+        shooterRight.setPower(1.0);
+
+        //Use the Thread.sleep function, which will run the above two lines for the entered time
+        Thread.sleep(time);
+
+        //After the time has passed by, stop the shooter
+        shooterLeft.setPower(0.0);
+        shooterRight.setPower(0.0);
+    }
+
+    /**
      * Takes in powers for 4 drive motors, as well as 4 encoder distances
-     * //Allows us to run at the entered power, for the entered distance
+     * Allows us to run at the entered power, for the entered distance
      */
     public void moveDriveMotorsWithEncoders(int leftFrontDegrees, int leftBackDegrees, int rightFrontDegrees, int rightBackDegrees, float leftFrontPower, float leftBackPower, float rightFrontPower, float rightBackPower)
     {
@@ -200,13 +243,13 @@ public class DriveFunctions extends LinearOpMode { //START CLASS
         rightMotorFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         rightMotorBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        //Sets the target postition as the corresponding values entered
+        //Sets the target position as the corresponding values entered
         leftMotorFront.setTargetPosition(leftFrontDegrees);
         leftMotorBack.setTargetPosition(leftBackDegrees);
         rightMotorFront.setTargetPosition(rightFrontDegrees);
         rightMotorBack.setTargetPosition(rightBackDegrees);
 
-        //Turn on the motors at the given powers
+        //Turn on the motors at the corresponding powers
         setDriveMotorPowers(leftFrontPower, leftBackPower, rightFrontPower, rightBackPower);
 
         //Empty while loop while the motors are moving
@@ -274,6 +317,7 @@ public class DriveFunctions extends LinearOpMode { //START CLASS
     }
 
     /**
+     * @param colorSensor take in the correct color sensor
      * @return returns true if the supplied ColorSensor either red or blue.  False otherwise
      */
     public boolean iSeeAColor(ColorSensor colorSensor)
@@ -323,57 +367,66 @@ public class DriveFunctions extends LinearOpMode { //START CLASS
         return "Red";
     }
 
-
     /**
      * Drives forward slowly until the target color is seen, then shifts into the beacon to press
      * the button of the correct color
      * @param color take in our teams color, as that is the color that needs to be pressed
      * @param colorSensor take in the correct color sensor
      */
-    public void beaconColorCheck(String color, ColorSensor colorSensor) {
+    public void beaconColorCheck(String color, ColorSensor colorSensor)
+    {
         //Define some constants to use and avoid magic numbers
         float drivePower = (float) 0.2;
-        float shiftPower = (float) 0.4;
-        int alignBeaconDistance = 100;
-        int shiftDistance = 800;
-        int leaveBeaconDistance = 300;
+        float shiftPower = (float) 0.2;
+        int alignBeaconDistance = 200;
+        int shiftDistance = 1400;
+        int leaveBeaconDistance = 800;
 
         //While we do not see the beacon, drive forward
-        while (!iSeeAColor(colorSensor)) {
+        while (!iSeeAColor(colorSensor))
+        {
             driveTeleop(-drivePower);
         }
 
         //Now we see a color, but possibly not the target color
         //While we don't see the target color, drive forward
-        while (!whatColor(colorSensor).equals(color)) {
+        while (!whatColor(colorSensor).equals(color))
+        {
             driveTeleop(-drivePower);
         }
 
-        //Now we see the target color, drive forward a tiny bit so cardboard is aligned
         driveAutonomous(drivePower, alignBeaconDistance);
 
         //The robot is aligned to the button of the target color, shift into the button to press it
-        if (color.equals("Red")) {
+        if (color.equals("Red"))
+        {
+            //If we are on red team, right shifting will press the button
             rightShiftAutonomous(shiftPower, shiftDistance);
+
+            //Come off the beacon
             leftShiftAutonomous(shiftPower, leaveBeaconDistance);
         }
 
-        if (color.equals("Blue")) {
+        if (color.equals("Blue"))
+        {
+            //If we are on blue team, left shifting will press the button
             leftShiftAutonomous(shiftPower, shiftDistance);
+
+            //Come off the beacon
             rightShiftAutonomous(shiftPower, leaveBeaconDistance);
         }
     }
+
     /**
      * Stops on the white line
      * Take in a drive power
+     * Use the alpha value, because it measures luminosity, and the white line has a much higher luminosity compared to the mat
+     * The alpha value of the mat is close to zero, and the alpha value of the line is above 50
      */
     public void whiteLineStop(float drivePower)
     {
-        //Switch the direction that is entered to make it correct
-        //Use the alpha value, because it measures luminosity, and the white line has a much higher luminosity compared to the mat
         //If the alpha value is less than 20, drive forward
-        //The alpha value of the mat is close to zero, and the alpha value of the line is above 50
-        //This means that if the below condition is true, we are not on the line
+        //If the below condition is true, we are not on the line
         while (colorSensorBottom.alpha() < 20)
         {
             driveTeleop(drivePower);
@@ -385,8 +438,9 @@ public class DriveFunctions extends LinearOpMode { //START CLASS
 
     //Empty main
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode() throws InterruptedException
+    {
 
     }
-} //CLOSE CLASS
+} //Close class and end program
 

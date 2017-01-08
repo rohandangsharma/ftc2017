@@ -2,14 +2,14 @@
 package org.usfirst.ftc.exampleteam.yourcodehere;
 
 //Import necessary items
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DeviceInterfaceModule;
-import org.swerverobotics.library.SynchronousOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 
 @TeleOp (name="Legoheads TeleOp ") //Name the class
-public class Teleop extends SynchronousOpMode //CLASS START
+public class Teleop extends LinearOpMode
 {
     //Define DC Motors
     DcMotor leftMotorFront;
@@ -21,7 +21,9 @@ public class Teleop extends SynchronousOpMode //CLASS START
     DcMotor spinnerTop;
     DcMotor spinnerBottom;
 
-    //Define an int to use as the spinner's mode
+    //Define an int to use as the spinner's mode, and an int to use as the shooters mode
+    int spinnerMode = 1;
+    int shooterMode = 1;
 
     //Define Sensors and the CDI
     ColorSensor colorSensorLeft;
@@ -29,18 +31,16 @@ public class Teleop extends SynchronousOpMode //CLASS START
     ColorSensor colorSensorBottom;
     DeviceInterfaceModule CDI;
 
-    //Define floats to be used as joystick and trigger inputs, as well as a float for maximum power to avoid magic numbers
+    //Define floats to be used as joystick and trigger inputs
     float drive;
     float shift;
     float rightTurn;
     float leftTurn;
 
-    int shooterCount = 0;
-
 //***********************************************************************************************************
     //MAIN BELOW
     @Override
-    public void main() throws InterruptedException
+    public void runOpMode() throws InterruptedException
     {
         //Get references to the DC motors from the hardware map
         leftMotorFront = hardwareMap.dcMotor.get("leftMotorFront");
@@ -67,75 +67,88 @@ public class Teleop extends SynchronousOpMode //CLASS START
         //Wait for start button to be clicked
         waitForStart();
 
-
+//***********************************************************************************************************
     //LOOP BELOW
         //While the op mode is active, do anything within the loop
         //Note we use opModeIsActive() as our loop condition because it is an interruptible method.
-        while (opModeIsActive()) {
-            //If the gamepads are changed
-            if (updateGamepads()) {
-                //Set float variables as the inputs from the joysticks and the triggers
-                drive = -gamepad1.left_stick_y;
-                shift = - gamepad1.left_stick_x;
-                leftTurn = gamepad1.left_trigger;
-                rightTurn = gamepad1.right_trigger;
+        while (opModeIsActive())
+        {
+            //Set float variables as the inputs from the joysticks and the triggers
+            drive = -gamepad1.left_stick_y;
+            shift = - gamepad1.left_stick_x;
+            leftTurn = gamepad1.left_trigger;
+            rightTurn = gamepad1.right_trigger;
 
-                //Drive vs Shift on left joystick:
-                //Do nothing if joystick is stationary
-                if (Math.abs(drive) == Math.abs(shift)) {
-                    functions.stopDriving();
-                }
+            //Drive vs Shift on left joystick:
+            //Do nothing if joystick is stationary
+            if (Math.abs(drive) == Math.abs(shift))
+            {
+                functions.stopDriving();
+            }
 
-                //Shift if pushed more on X than Y
-                if (Math.abs(shift) > Math.abs(drive)) {
-                    functions.shiftTeleop(shift);
-                }
+            //Shift if pushed more on X than Y
+            if (Math.abs(shift) > Math.abs(drive))
+            {
+                functions.shiftTeleop(shift);
+            }
 
-                //Drive if joystick pushed more Y than X
-                if (Math.abs(drive) > Math.abs(shift)) {
-                    functions.driveTeleop(drive);
-                }
+            //Drive if joystick pushed more Y than X
+            if (Math.abs(drive) > Math.abs(shift))
+            {
+                functions.driveTeleop(drive);
+            }
 
-                //If the left trigger is pushed, turn left at that power
-                if (leftTurn > 0) {
-                    functions.leftTurnTeleop(leftTurn);
-                }
 
-                //If the right trigger is pushed, turn right at that power
-                if (rightTurn > 0) {
-                    functions.rightTurnTeleop(rightTurn);
-                }
+            //If the left trigger is pushed, turn left at that power
+            if (leftTurn > 0)
+            {
+                functions.leftTurnTeleop(leftTurn);
+            }
 
-                //If the "a" button on the second gamepad is pressed, start the spinner forward
-                if (gamepad2.dpad_down) {
-                    functions.spinner(1, (float) 0.75);
-                }
-                ////If the "x" button on the second gamepad is pressed, start the spinner backwards
-                if (gamepad2.dpad_up) {
-                    functions.spinner(2, (float) 0.75);
-                }
+            //If the right trigger is pushed, turn right at that power
+            if (rightTurn > 0)
+            {
+                functions.rightTurnTeleop(rightTurn);
+            }
 
-                if (gamepad2.dpad_left || gamepad2.dpad_right) {
-                    functions.spinner(0, (float) 0.0);
-                }
 
-                //If the "y" button is pressed, shoot the ball
-                if (gamepad2.y) {
-                    shooterCount+=1;
-                    functions.shooter(shooterCount, (float) 0.75);
-                }
+            //If the dpad is pushed left or right, stop the spinner
+            if (gamepad2.dpad_left || gamepad2.dpad_right)
+            {
+                spinnerMode = 0;
+                functions.spinner(spinnerMode);
+            }
+            //If the dpad is pressed down, start the spinner forward
+            if (gamepad2.dpad_down)
+            {
+                spinnerMode = 1;
+                functions.spinner(spinnerMode);
+            }
+            //If the dpad is pressed up, start the spinner backward
+            if (gamepad2.dpad_up)
+            {
+                spinnerMode = 2;
+                functions.spinner(spinnerMode);
+            }
 
-                //Stop all motors when any bumper is pressed
-                if ((gamepad1.right_bumper) || (gamepad2.right_bumper) || (gamepad1.left_bumper) || (gamepad2.left_bumper) || (gamepad1.b) || (gamepad2.b)) {
-                    functions.stopEverything();
-                 }
-            } //Close inside "if" loop
 
-            //Update data
+            //If the "y" button is pressed, shoot the ball
+            if (gamepad2.y)
+            {
+                functions.shooterTeleOp(shooterMode);
+            }
+
+
+            //Stop all motors when any bumper is pressed
+            if ((gamepad1.b) || (gamepad2.b))
+            {
+                functions.stopEverything();
+            }
+
+            //Update the data
             telemetry.update();
-            waitOneFullHardwareCycle();
 
-            // Always call idle() at the bottom of your while(opModeIsActive()) loop
+            //Always call idle() at the bottom of your while(opModeIsActive()) loop
             idle();
         } //Close "while (opModeIsActive())" loop
     } //Close main
