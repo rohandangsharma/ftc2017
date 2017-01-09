@@ -30,14 +30,14 @@ public class autoRed extends LinearOpMode
     //Define a string to use as the color, and set it to blue, since we are blue team
     String color = "Red";
 
-    //Define an int for the time that the shooter will be on
-    int shootTime = 3000;
+//    //Define an int for the time that the shooter will be on
+//    int shootTime = 3000;
 
-    //Set up drive powers to avoid magic numbers
-    float drivePower= (float) 0.5;
+    //Define up drive powers to avoid magic numbers
+    float drivePower = (float) 0.8;
     float stopOnLinePower = (float) 0.25;
-    float shiftPower = (float) 0.4;
-    float turnPower = (float) 0.4;
+    float shiftPower = (float) 0.6;
+    float turnPower = (float) 0.6;
 
 //***************************************************************************************************************************
     //MAIN BELOW
@@ -72,8 +72,15 @@ public class autoRed extends LinearOpMode
 //***************************************************************************************************************************
         while (opModeIsActive())
         {
-            //Shoot twice
-            functions.shooterAutonomous(shootTime);
+            functions.shooterTeleOp(1, (float)1.0);
+            Thread.sleep(1000);
+
+            spinnerTop.setPower(0.1);
+            Thread.sleep(800);
+            spinnerTop.setPower(0.0);
+
+
+            functions.shooterTeleOp(0, (float) 0.0);
 
             //Drive toward the center vortex
             functions.driveAutonomous(-drivePower, -3000);
@@ -103,7 +110,7 @@ public class autoRed extends LinearOpMode
             functions.beaconColorCheck(color, colorSensorRight);
 
             //Turn to Center Vortex
-            functions.leftTurnAutonomous(turnPower, 1267);
+            functions.leftTurnAutonomous(turnPower, 12000);
 
             //Drive to Center Vortex
             functions.driveAutonomous(drivePower, 5600);

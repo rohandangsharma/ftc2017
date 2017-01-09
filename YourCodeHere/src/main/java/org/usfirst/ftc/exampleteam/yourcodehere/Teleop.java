@@ -22,8 +22,8 @@ public class Teleop extends LinearOpMode
     DcMotor spinnerBottom;
 
     //Define an int to use as the spinner's mode, and an int to use as the shooters mode
-    int spinnerMode = 1;
-    int shooterMode = 1;
+    int spinnerCount = 1;
+    int shooterCount = 1;
 
     //Define Sensors and the CDI
     ColorSensor colorSensorLeft;
@@ -71,17 +71,16 @@ public class Teleop extends LinearOpMode
     //LOOP BELOW
         //While the op mode is active, do anything within the loop
         //Note we use opModeIsActive() as our loop condition because it is an interruptible method.
-        while (opModeIsActive())
-        {
+        while (opModeIsActive()) {
             //Set float variables as the inputs from the joysticks and the triggers
             drive = -gamepad1.left_stick_y;
             shift = - gamepad1.left_stick_x;
             leftTurn = gamepad1.left_trigger;
             rightTurn = gamepad1.right_trigger;
 
-            //Drive vs Shift on left joystick:
             //Do nothing if joystick is stationary
-            if (Math.abs(drive) == Math.abs(shift))
+            //Drive vs Shift on left joystick:
+            if ((drive == 0) && (shift == 0) && (leftTurn == 0) && (rightTurn == 0))
             {
                 functions.stopDriving();
             }
@@ -115,27 +114,28 @@ public class Teleop extends LinearOpMode
             //If the dpad is pushed left or right, stop the spinner
             if (gamepad2.dpad_left || gamepad2.dpad_right)
             {
-                spinnerMode = 0;
-                functions.spinner(spinnerMode);
+                spinnerCount = 0;
+                functions.spinner(spinnerCount);
             }
             //If the dpad is pressed down, start the spinner forward
             if (gamepad2.dpad_down)
             {
-                spinnerMode = 1;
-                functions.spinner(spinnerMode);
+                spinnerCount = 1;
+                functions.spinner(spinnerCount);
             }
             //If the dpad is pressed up, start the spinner backward
             if (gamepad2.dpad_up)
             {
-                spinnerMode = 2;
-                functions.spinner(spinnerMode);
+                spinnerCount = 2;
+                functions.spinner(spinnerCount);
             }
 
 
             //If the "y" button is pressed, shoot the ball
             if (gamepad2.y)
             {
-                functions.shooterTeleOp(shooterMode);
+                shooterCount+=1;
+                functions.shooterTeleOp(shooterCount, (float) 1.0);
             }
 
 

@@ -3,6 +3,7 @@ package org.usfirst.ftc.exampleteam.yourcodehere;
 
 //Import necessary items
 import android.graphics.Color;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.ColorSensor;

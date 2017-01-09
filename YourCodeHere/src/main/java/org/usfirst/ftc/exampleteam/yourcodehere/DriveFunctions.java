@@ -81,8 +81,7 @@ public class DriveFunctions extends LinearOpMode
     /**
      * Takes in motor powers for 4 drive motors
      */
-    public void setDriveMotorPowers(float leftFrontPower, float leftBackPower, float rightFrontPower, float rightBackPower)
-    {
+    public void setDriveMotorPowers(float leftFrontPower, float leftBackPower, float rightFrontPower, float rightBackPower) {
         //Use the entered powers and feed them to the motors
         leftMotorFront.setPower(leftFrontPower);
         leftMotorBack.setPower(leftBackPower);
@@ -133,23 +132,24 @@ public class DriveFunctions extends LinearOpMode
     /**
      * If this function is called, turn on the drive motors at the given powers, to make it tank turn right
      */
-    public void rightTurnTeleop(float turn)
+    public void rightTurnTeleop(float power)
     {
         //Turn the right motors backwards and the left motors forward so that it turns right
-        setDriveMotorPowers(turn, turn, -turn, -turn);
+        setDriveMotorPowers(power, power, -power, -power);
     }
 
     /**
      * If this function is called, turn on the drive motors at the given powers, to make it tank turn left
      */
-    public void leftTurnTeleop(float turn)
+    public void leftTurnTeleop(float power)
     {
         //Turn the left motors backwards and the right motors forward so that it turns left
-        setDriveMotorPowers(-turn, -turn, turn, turn);
+        setDriveMotorPowers(-power, -power, power, power);
     }
 
     /**
-     * If this function is called, turn on the drive motors at the given powers, to make it shift in the desired direction
+     * If this function is called, turn on the drive motors at the
+     * given powers, to make it shift in the desired direction
      */
     public void shiftTeleop(float shift)
     {
@@ -188,22 +188,17 @@ public class DriveFunctions extends LinearOpMode
 
     /**
      * Toggle the shooter
-     * @param shooterMode enables us to toggle the shooter
+     * @param shooterCount enables us to toggle the shooter
      */
-    public void shooterTeleOp(int shooterMode)
-    {
-        if (shooterMode == 0)
-        {
-            //If the shooter mode is 0, stop both shooter wheels
+    public void shooterTeleOp(int shooterCount, float power) {
+        if (shooterCount % 2 == 0) {
             shooterLeft.setPower(0.0);
             shooterRight.setPower(0.0);
         }
 
-        if (shooterMode == 1)
-        {
-            //If the shooter mode is 1, set the left shooter backwards and the right shooter forwards, both at max power
-            shooterLeft.setPower(-1.0);
-            shooterRight.setPower(1.0);
+        if (shooterCount % 2 == 1) {
+            shooterLeft.setPower(power);
+            shooterLeft.setPower(-power);
         }
     }
 
@@ -211,8 +206,7 @@ public class DriveFunctions extends LinearOpMode
      * @param time time for shooter to spin
      * @throws InterruptedException allows us to use the Thread.sleep function
      */
-    public void shooterAutonomous(int time) throws InterruptedException
-    {
+    public void shooterAutonomous(int time) throws InterruptedException {
         //Turn on the left shooter backwards and the right shooter forwards, both at max power
         shooterLeft.setPower(-1.0);
         shooterRight.setPower(1.0);
@@ -270,8 +264,7 @@ public class DriveFunctions extends LinearOpMode
      * Drive for the given distance at the given power
      * @param degrees distance
      */
-    public void driveAutonomous(float power, int degrees)
-    {
+    public void driveAutonomous(float power, int degrees) {
         //Everything in the same direction creates linear driving
         moveDriveMotorsWithEncoders(-degrees, -degrees, -degrees, -degrees, -power, -power, -power, -power);
     }
@@ -280,8 +273,7 @@ public class DriveFunctions extends LinearOpMode
      * Turn left for the given distance at the given power
      * @param degrees distance
      */
-    public void leftTurnAutonomous(float power, int degrees)
-    {
+    public void leftTurnAutonomous(float power, int degrees) {
         //Left motors backwards and right motors forwards gives us a left turn
         moveDriveMotorsWithEncoders(-degrees, -degrees, degrees, degrees, -power, -power, power, power);
     }
@@ -290,8 +282,7 @@ public class DriveFunctions extends LinearOpMode
      * Turn right for the given distance at the given power
      * @param degrees distance
      */
-    public void rightTurnAutonomous(float power, int degrees)
-    {
+    public void rightTurnAutonomous(float power, int degrees) {
         //Right motors backwards and left motors forwards gives us a right turn
         moveDriveMotorsWithEncoders(degrees, degrees, -degrees, -degrees, power, power, -power, -power);
     }
@@ -300,8 +291,7 @@ public class DriveFunctions extends LinearOpMode
      * Shift left for the given distance at the given power
      * @param degrees distance
      */
-    public void leftShiftAutonomous(float power, int degrees)
-    {
+    public void leftShiftAutonomous(float power, int degrees) {
         //This sequence of backwards, forwards, forwards, backwards makes the robot shift left
         moveDriveMotorsWithEncoders(-degrees, degrees, degrees, -degrees, -power, power, power, -power);
     }
@@ -310,8 +300,7 @@ public class DriveFunctions extends LinearOpMode
      * Shift right for the given distance at the given power
      * @param degrees distance
      */
-    public void rightShiftAutonomous(float power, int degrees)
-    {
+    public void rightShiftAutonomous(float power, int degrees) {
         //This sequence of forwards, backwards, backwards, forwards makes the robot shift right
         moveDriveMotorsWithEncoders(degrees, -degrees, -degrees, degrees, power, -power, -power, power);
     }
@@ -320,8 +309,7 @@ public class DriveFunctions extends LinearOpMode
      * @param colorSensor take in the correct color sensor
      * @return returns true if the supplied ColorSensor either red or blue.  False otherwise
      */
-    public boolean iSeeAColor(ColorSensor colorSensor)
-    {
+    public boolean iSeeAColor(ColorSensor colorSensor) {
         //This is an array that stores the hue[0], saturation[1], and value[2], values
         float[] hsvValues = {0F, 0F, 0F};
 
@@ -336,6 +324,34 @@ public class DriveFunctions extends LinearOpMode
 
         //Otherwise return true
         return true;
+    }
+
+    /**
+     *
+     * @param colorSensor use the correct color sensor
+     * @return true if we are not seeing purple, false if we are
+     */
+    public boolean noPurple(ColorSensor colorSensor)
+    {
+        //Define a float for value
+        float value;
+
+        //This is an array that stores the hue[0], saturation[1], and value[2], values
+        float[] hsvValues = {0F, 0F, 0F};
+
+        //Convert from RGB to HSV (red-green-blue to hue-saturation-value)
+        Color.RGBToHSV(colorSensor.red() * 8, colorSensor.green() * 8, colorSensor.blue() * 8, hsvValues);
+
+        value = hsvValues[2];
+
+        if (value <= 0.09)
+        {
+
+            return false;
+        }
+
+        return true;
+
     }
 
     /**
@@ -377,13 +393,20 @@ public class DriveFunctions extends LinearOpMode
     {
         //Define some constants to use and avoid magic numbers
         float drivePower = (float) 0.2;
-        float shiftPower = (float) 0.2;
+        float shiftPower = (float) 0.1;
+        float shiftPowerFast = (float) 0.5;
         int alignBeaconDistance = 200;
         int shiftDistance = 1400;
         int leaveBeaconDistance = 800;
 
         //While we do not see the beacon, drive forward
         while (!iSeeAColor(colorSensor))
+        {
+            driveTeleop(-drivePower);
+        }
+
+
+        while (!noPurple(colorSensor))
         {
             driveTeleop(-drivePower);
         }
@@ -404,7 +427,7 @@ public class DriveFunctions extends LinearOpMode
             rightShiftAutonomous(shiftPower, shiftDistance);
 
             //Come off the beacon
-            leftShiftAutonomous(shiftPower, leaveBeaconDistance);
+            leftShiftAutonomous(shiftPowerFast, leaveBeaconDistance);
         }
 
         if (color.equals("Blue"))
@@ -413,7 +436,7 @@ public class DriveFunctions extends LinearOpMode
             leftShiftAutonomous(shiftPower, shiftDistance);
 
             //Come off the beacon
-            rightShiftAutonomous(shiftPower, leaveBeaconDistance);
+            rightShiftAutonomous(shiftPowerFast, leaveBeaconDistance);
         }
     }
 

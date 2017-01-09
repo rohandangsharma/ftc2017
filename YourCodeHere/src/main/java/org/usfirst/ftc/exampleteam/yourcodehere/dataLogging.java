@@ -2,12 +2,14 @@
 package org.usfirst.ftc.exampleteam.yourcodehere;
 
 //Import necessary items
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DeviceInterfaceModule;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 
+@Disabled
 @TeleOp(name = "Data Logging Program") //Name the program
 public class dataLogging extends LinearOpMode
 {
